@@ -10,7 +10,7 @@ I've set up my Ethereum local environment as follows:
   - Run a full node by geth on the localhost and created two accounts.
   - For the sake of experimenting, I've installed an ethereum wallet UI, which I then connected to the above node.
   - Created two accounts by the geth command line and got them some Ethers on the Rinkeby testnet, https://faucet.rinkeby.io/. 
-  - Fully synchronized on both main and testnets but connected the web application to the testnet only.
+  - Fully synchronized on both mainnet and testnet but connected the web application to the testnet only.
   
 ## Development environment and tools
 - Ubuntu 16.04.3 LTS.
