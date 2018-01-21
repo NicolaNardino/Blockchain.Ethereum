@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="EthereumDAPP_PoCEAR">
+        <wb-resource deploy-path="/" source-path="/" tag="defaultRootSource"/>
+        <dependent-module archiveName="EthereumDAPP_PoC.war" deploy-path="/" handle="module:/resource/EthereumDAPP_PoC/EthereumDAPP_PoC">
+            <dependent-object>Module_1515947561233</dependent-object>
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+    </wb-module>
+</project-modules>
