@@ -1,6 +1,6 @@
 RemoteSystemsTempFiles/
 .recommenders/
 .metadata/
-EthereumDAPP_PoC/log/
-EthereumDAPP_PoC/target/
-ethereum/
+EthereumDAPP_PoC/log
+EthereumDAPP_PoC/target
+testEthereumPoC/
