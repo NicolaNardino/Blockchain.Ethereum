@@ -9,8 +9,8 @@ For the time being its key features are:
 I've set up my Ethereum local environment as follows:
   - Run a full node by geth on the localhost and created two accounts.
   - For the sake of experimenting, I've installed an ethereum wallet UI, which I then connected to the above node.
-  - I've created two accounts by the geth command line and got them some Ethers on the Rinkeby testnet, https://faucet.rinkeby.io/. 
-  - I've fully synchronized both main and testnets but I've only connected my web application to the testnet.
+  - Created two accounts by the geth command line and got them some Ethers on the Rinkeby testnet, https://faucet.rinkeby.io/. 
+  - Fully synchronized on both main and testnets but connected the web application to the testnet only.
   
 ## Development environment and tools
 - Ubuntu 16.04.3 LTS.
@@ -19,4 +19,5 @@ I've set up my Ethereum local environment as follows:
 
 ## Roadmap
 
-1. Add smart contracts.
+1. Add a back end to the web application, possibly NoSQL.
+2. Add smart contracts.
