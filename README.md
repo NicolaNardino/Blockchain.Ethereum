@@ -1,5 +1,5 @@
 # Welcome to Blockchain.Ethereum Web Application PoC
-Simple web application interacting with the Ethereum network, meant to become a DAPP as soon as I'll introduce smart contracts.
+Simple Java web application interacting with the Ethereum network, meant to become a DAPP as soon as I'll introduce smart contracts.
 
 For the time being its key features are:
   - Connection to the Ethereum Network via a node running on localhost.
