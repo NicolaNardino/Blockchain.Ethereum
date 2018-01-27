@@ -63,13 +63,12 @@ public final class EthereumNodeConnectorServlet extends HttpServlet {
 			writer.println("Accounts/ PKs in "+nodeURL);
 			ethAccounts.getAccounts().stream().forEach(account -> writer.println("\t"+account));
 			final Credentials credentials = WalletUtils.loadCredentials(accountPassword, walletFilePath);
-			//writer.println(credentials.getAddress() + "/ " + credentials.getEcKeyPair().getPublicKey() + "/ "+ credentials.getEcKeyPair().getPrivateKey());
 			final long startTime = System.currentTimeMillis();
 			final TransactionReceipt transferReceipt = Transfer
 					.sendFunds(web3j, credentials, targetAccount, transferAmount, Convert.Unit.fromString(transferUnit))
 					.send();// Convert.Unit.fromString(transferUnit)
-			writer.println("Transaction completed in: " + (System.currentTimeMillis() - startTime) + " ms.\n"
-					+ "Details can be see at https://rinkeby.etherscan.io/tx/ " + transferReceipt.getTransactionHash());
+			writer.println("Transaction completed in: " + (System.currentTimeMillis() - startTime) + " ms. "
+					+ "Details at https://rinkeby.etherscan.io/tx/" + transferReceipt.getTransactionHash());
 			writer.close();
 		} catch (final Exception e) {
 			e.printStackTrace();
@@ -77,8 +76,7 @@ public final class EthereumNodeConnectorServlet extends HttpServlet {
 	}
 
 	public static void main(String[] args) {
-		run(new PrintWriter(System.out), "http://localhost:8545", "xxx", "xxx",
-				"0x9142A699d088be61C993Ace813829D3D25DeAc2d", new BigDecimal("7"), "WEI");
+		run(new PrintWriter(System.out), "http://localhost:8545", "xxx", "xxx", "0x9142A699d088be61C993Ace813829D3D25DeAc2d", new BigDecimal("7"), "WEI");
 	}
 
 }
