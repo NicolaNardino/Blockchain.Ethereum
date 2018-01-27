@@ -19,5 +19,5 @@ I've set up my Ethereum local environment as follows:
 
 ## Roadmap
 
-1. Add a back end to the web application, possibly NoSQL.
+1. Add a back end storage layer to the web application, possibly NoSQL.
 2. Add smart contracts.
