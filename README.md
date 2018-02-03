@@ -7,11 +7,13 @@ For the time being its key features are:
   - Transaction monitoring.
 
 I've set up my Ethereum local environment as follows:
-  - Run a full node by geth on the localhost and created two accounts.
+  - Run a full node by geth on the localhost and created two accounts: geth --rpcapi "personal,db,eth,net,web3" --rpc --rinkeby). Most notable here is the --rpc option by which it gets enabled the HTTP-RPC server on the node, then used by web3j to establish the connection from the web application.
   - For the sake of experimenting, I've installed an ethereum wallet UI, which I then connected to the above node.
   - Created two accounts by the geth command line and got them some Ethers on the Rinkeby testnet, https://faucet.rinkeby.io/. 
   - Fully synchronized on both mainnet and testnet but connected the web application to the testnet only.
   
+Web3j is used to interact with the Ethereum Network.
+
 ## Development environment and tools
 - Ubuntu 16.04.3 LTS.
 - Eclipse Neon.
