@@ -39,7 +39,7 @@ public final class EthereumNodeConnectorServlet extends HttpServlet {
 	 *      response)
 	 */
 	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+	protected void doGet(final HttpServletRequest request, final HttpServletResponse response)
 			throws ServletException, IOException {
 		final String nodeURL = request.getServletContext().getInitParameter("NodeURL");
 		final String accountPassword = request.getServletContext().getInitParameter("AccountPassword");
@@ -69,7 +69,6 @@ public final class EthereumNodeConnectorServlet extends HttpServlet {
 					.send();// Convert.Unit.fromString(transferUnit)
 			writer.println("Transaction completed in: " + (System.currentTimeMillis() - startTime) + " ms. "
 					+ "Details at https://rinkeby.etherscan.io/tx/" + transferReceipt.getTransactionHash());
-			writer.close();
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
