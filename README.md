@@ -15,8 +15,8 @@ I've set up my Ethereum local environment as follows:
 Web3j is used to interact with the Ethereum Network.
 I've added a smart contract, not yet integrated in the web app, based on a well-known contract, named Coin. I've extended it by adding inheritance and another event. By Web3j one can deploy and interact with smart contracts within the JVM once a Java wrapper in created from the Solidity bytecode.
 Given the CoinManager.sol contract in the resources folder, with the following steps one creates a Java wrapper:
-  - "solc --overwrite CoinManager.sol --bin --abi --gas --optimize -o .". Please, pay attentio to the --gas option, which will let you know a rough estimate gas required to create the contract and transact with its methods.
-  - web3j solidity generate <your_path>/SmartContracts/src/main/resources/contracts/coinManager/CoinManager.bin   <your_path>/SmartContracts/src/main/resources/contracts/coinManager/CoinManager.abi -o <your_path>/SmartContracts/src/main/java -p com.projects.blockchain.ethereum.smart_contracts
+  - "solc --overwrite CoinManager.sol --bin --abi --gas --optimize -o .". Please, pay attention to the --gas option, which will let you know a rough estimate gas required to create the contract and transact with its methods.
+  - "web3j solidity generate <your_path>/SmartContracts/src/main/resources/contracts/coinManager/CoinManager.bin   <your_path>/SmartContracts/src/main/resources/contracts/coinManager/CoinManager.abi -o <your_path>/SmartContracts/src/main/java -p com.projects.blockchain.ethereum.smart_contracts".
 
 The above requires to have the Solidity compiler (solc) and the Web3j command line tools.
 A JUnit test class is available to exercise the various smart contract features.
