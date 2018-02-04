@@ -13,6 +13,13 @@ I've set up my Ethereum local environment as follows:
   - Fully synchronized on both mainnet and testnet but connected the web application to the testnet only.
   
 Web3j is used to interact with the Ethereum Network.
+I've added a smart contract, not yet integrated in the web app, based on a well-known contract, named Coin. I've extended it by adding inheritance and another event. By Web3j one can deploy and interact with smart contracts within the JVM once a Java wrapper in created from the Solidity bytecode.
+Given the CoinManager.sol contract in the resources folder, with the following steps one creates a Java wrapper:
+  - solc --overwrite CoinManager.sol --bin --abi --optimize -o .
+  - web3j solidity generate <your_path>/SmartContracts/src/main/resources/contracts/coinManager/CoinManager.bin   <your_path>//SmartContracts/src/main/resources/contracts/coinManager/CoinManager.abi -o <your_path>//SmartContracts/src/main/java -p com.projects.blockchain.ethereum.smart_contracts
+
+The above requires to have the Solidity compiler (solc) and the Web3j command line tools.
+A JUnit test class is available to exercise the various smart contract features.
 
 ## Development environment and tools
 - Ubuntu 16.04.3 LTS.
@@ -22,4 +29,3 @@ Web3j is used to interact with the Ethereum Network.
 ## Roadmap
 
 1. Add a back end storage layer to the web application, possibly NoSQL.
-2. Add smart contracts.
