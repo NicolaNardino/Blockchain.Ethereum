@@ -25,7 +25,7 @@ At the moment, I've set up two externally controlled accounts and one smart cont
 
 - 0x99fedc28c33a8d00f7f0602baca0d24c3a17d9f6
 - 0x9142a699d088be61c993ace813829d3d25deac2d
-- 0xc2016d9b5e071ef4bd1142977bad4c07501acb28 --> smart contract.
+- 0xf4729c2807fd0f4431004146ecfc4a47578aaeea --> smart contract.
 
 ## Development environment and tools
 - Ubuntu 16.04.3 LTS.
