@@ -1,10 +1,12 @@
 # Welcome to Blockchain.Ethereum Web Application PoC
-Simple Java web application interacting with the Ethereum network, meant to become a DAPP as soon as I'll introduce smart contracts.
+Simple Java web application interacting with the Ethereum network.
 
 For the time being its key features are:
   - Connection to the Ethereum Network via a node running on localhost.
-  - Transfer funds between wallet accounts.
+  - Transfer ethers between wallet accounts.
   - Transaction monitoring.
+  - CoinManager Smart Contract, which is able to create its own coin, mint coins and transfer such coins between accounts.   Developed in Solidity, it also uses inheritance.
+  - Java Servlets to transfer ethers and exercise the CoinManager.
 
 I've set up my Ethereum local environment as follows:
   - Run a full node by geth on the localhost and created two accounts: geth --rpcapi "personal,db,eth,net,web3" --rpc --rinkeby). Most notable here is the --rpc option by which it gets enabled the HTTP-RPC server on the node, then used by web3j to establish the connection from the web application.
@@ -35,3 +37,4 @@ At the moment, I've set up two externally controlled accounts and one smart cont
 ## Roadmap
 
 1. Add a back end storage layer to the web application, possibly NoSQL.
+2. Add a UI.
