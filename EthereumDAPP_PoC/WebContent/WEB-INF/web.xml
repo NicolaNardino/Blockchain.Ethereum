@@ -12,11 +12,11 @@
     </context-param>
     <context-param>
     	<param-name>AccountPassword</param-name>
-    	<param-value>Enter Your Password</param-value>
+    	<param-value>xxx</param-value>
     </context-param>
     <context-param>
     	<param-name>WalletFilePath</param-name>
-    	<param-value>Enter Your Wallet File Path</param-value>
+    	<param-value>xxx</param-value>
     </context-param>
     <context-param>
     	<param-name>SenderAccount</param-name>

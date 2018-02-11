@@ -24,14 +24,14 @@ import org.web3j.utils.Convert;
  * Node URL, Account Password, Wallet File Path and Sender Account (PK) are set as web application context parameters.
  * Target Account, Transfer Amount and Unit (WEI, ETH, ...) are passed as request parameters.
  */
-@WebServlet("/EthereumNodeConnectorServlet")
-public final class EthereumNodeConnectorServlet extends HttpServlet {
+@WebServlet("/EtherTransferServlet")
+public final class EtherTransferServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	/**
 	 * Default constructor.
 	 */
-	public EthereumNodeConnectorServlet() {
+	public EtherTransferServlet() {
 	}
 
 	/**

@@ -3,6 +3,7 @@
 	<name>EthereumDAPP_PoC</name>
 	<comment></comment>
 	<projects>
+		<project>SmartContracts</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

@@ -3,8 +3,16 @@ pragma solidity ^0.4.0;
 contract BaseCoinManager {
     address public owner;
     string message;
+    string coinName;
     
-    function BaseCoinManager() { owner = msg.sender; }
+    function BaseCoinManager(string _coinName) public { 
+    	owner = msg.sender; 
+    	coinName = _coinName;
+    }
+    
+    function getCoinName() public constant returns (string) {
+    	return coinName;
+    }
     
     function getMessage() public constant returns (string) {
     	return message;
@@ -19,10 +27,13 @@ contract BaseCoinManager {
 
 contract CoinManager is BaseCoinManager {
     mapping (address => uint) public balances;
-
+	
     event Sent(address from, address to, uint amount);
     event Mint(address from, address to, uint amount);
 
+	function CoinManager(string _coinName) BaseCoinManager(_coinName) public { 
+    }
+    
     function mint(address receiver, uint amount) public {
         if (msg.sender != owner) return;
         balances[receiver] += amount;

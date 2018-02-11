@@ -7,6 +7,7 @@ import java.util.Properties;
 import java.util.Random;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.WalletUtils;
@@ -17,19 +18,20 @@ import com.projects.blockchain.ethereum.smart_contracts.CoinManager;
 import com.projects.blockchain.ethereum.smart_contracts.utility.Utility;
 
 public final class CoinManagerTest {
+	private static Web3j web3j; 
 	private static CoinManager coinManager;
 	private static final Random random = new Random();
-	private static final String contractAddress = "0xc2016d9b5e071ef4bd1142977bad4c07501acb28";
 	
 	@BeforeClass
 	public static void classSetup() throws Exception {
 		final Properties properties = Utility.getApplicationProperties("smartContracts.properties");
-		final Web3j web3j = Web3j.build(new HttpService(properties.getProperty("nodeURL")));
+		web3j = Web3j.build(new HttpService(properties.getProperty("nodeURL")));
 		final Credentials credentials = WalletUtils.loadCredentials(properties.getProperty("accountPassword"), properties.getProperty("walletFilePath"));
-		coinManager = Utility.loadCoinManager(web3j, credentials, contractAddress);
+		coinManager = Utility.loadCoinManager(web3j, credentials, Utility.CoinManagerAddress);
 	}
 	
 	@Test
+	@Ignore
 	public void testMessage() throws Exception {
 		final String testMessage = String.valueOf(random.nextInt(999));
 		coinManager.setMessage(testMessage).send();
@@ -38,14 +40,18 @@ public final class CoinManagerTest {
 	
 	@Test
 	public void testMint() throws Exception {
-		final String testReceiver = String.valueOf(random.nextInt(999));
+		final String testReceiver = String.valueOf(random.nextInt(9999));
 		final BigInteger amount = BigInteger.valueOf(random.nextInt(999));
-		final BigInteger testReceiverBalance = coinManager.balances(testReceiver).send();
+		final BigInteger testReceiverInitialBalance = coinManager.balances(testReceiver).send();
 		coinManager.mint(testReceiver, amount).send();
-		assertEquals(amount.add(testReceiverBalance), coinManager.balances(testReceiver).send());
+		final BigInteger testReceiverFinalBalance = coinManager.balances(testReceiver).send();
+		System.out.println("TestReceiver: "+testReceiver+", TestReceiverBalance: "+testReceiverFinalBalance+", RandomAmount credited: "+amount);
+		assertEquals(amount.add(testReceiverInitialBalance), testReceiverFinalBalance);
+		
 	}
 	
 	@Test
+	@Ignore
 	public void testSend() throws Exception {
 		final String senderAccount = "0x99fedc28c33a8d00f7f0602baca0d24c3a17d9f6";
 		final String receiverAccount = "0x9142A699d088be61C993Ace813829D3D25DeAc2d";
@@ -57,5 +63,5 @@ public final class CoinManagerTest {
 		coinManager.send(receiverAccount, receiverAmount).send();
 		assertEquals(senderBalance.subtract(receiverAmount), coinManager.balances(senderAccount).send());
 		assertEquals(receiverBalance.add(receiverAmount), coinManager.balances(receiverAccount).send());
-	}
+	}	
 }
