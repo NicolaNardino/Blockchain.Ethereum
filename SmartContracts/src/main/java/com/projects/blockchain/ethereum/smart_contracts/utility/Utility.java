@@ -28,7 +28,7 @@ public final class Utility {
 		final long startTime = System.currentTimeMillis();
 		final CoinManager contract = CoinManager.deploy(web3j, credentials, ManagedTransaction.GAS_PRICE, Contract.GAS_LIMIT, coinName).send();
 		final StringBuilder sb = new StringBuilder(); 
-		sb.append("Deployed contract address: "+ contract.getContractAddress())
+		sb.append("Deployed contract, address: "+ contract.getContractAddress())
 		  .append("\nOwner: "+contract.owner().send())
 		  .append("\nTime taken: "+(System.currentTimeMillis() - startTime)+" ms.")
 		  .append("\nDetails available at: https://rinkeby.etherscan.io/address/"+contract.getContractAddress());
@@ -40,7 +40,7 @@ public final class Utility {
 		final long startTime = System.currentTimeMillis();
 		final CoinManager contract = CoinManager.load(contractAddress, web3j, credentials, ManagedTransaction.GAS_PRICE, Contract.GAS_LIMIT);
 		final StringBuilder sb = new StringBuilder(); 
-		sb.append("\nLoaded contract address: "+contractAddress)
+		sb.append("\nLoaded contract, address: "+contractAddress)
 		  .append("\nOwner: "+contract.owner().send())
 		  .append("\nIs valid: "+contract.isValid())
 		  .append("\nTime taken: "+(System.currentTimeMillis() - startTime)+" ms.");

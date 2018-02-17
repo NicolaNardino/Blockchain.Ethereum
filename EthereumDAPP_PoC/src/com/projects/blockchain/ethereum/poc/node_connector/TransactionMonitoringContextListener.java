@@ -7,10 +7,17 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
+import org.web3j.crypto.Credentials;
+import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.response.Transaction;
 import org.web3j.protocol.http.HttpService;
+
+import com.projects.blockchain.ethereum.poc.node_connector.util.ServletContextAttribute;
+import com.projects.blockchain.ethereum.poc.node_connector.util.Web3jContainer;
+import com.projects.blockchain.ethereum.smart_contracts.CoinManager;
+import com.projects.blockchain.ethereum.smart_contracts.utility.Utility;
 
 import rx.Observable;
 import rx.Subscription;
@@ -19,6 +26,7 @@ import rx.Subscription;
  *
  *When initializing the servlet context, it establishes a subscription to monitor all transactions executed on a sender account 
  *defined as web application context parameter.
+ *Furthermore, it publishes to the servlet context instances of <code>Web3j</code>, <code>CoinManager</code> and <code>Credentials</code>. 
  *
  *The subscription gets removed when the context gets destroyed. 
  */
@@ -29,11 +37,12 @@ public final class TransactionMonitoringContextListener implements ServletContex
 
     @Override
 	public void contextInitialized(final ServletContextEvent sce) {
-    	final ServletContext servletContext = sce.getServletContext();
-		web3j = Web3j.build(new HttpService(servletContext.getInitParameter("NodeURL")));
+    	final ServletContext sc = sce.getServletContext();
+    	final Web3jContainer web3jContainer = buildWeb3jContainer(sc);
+		sc.setAttribute(ServletContextAttribute.Web3jContainer.toString(), web3jContainer);
         final Observable<Transaction> observable = web3j.catchUpToLatestAndSubscribeToNewTransactionsObservable(DefaultBlockParameterName.LATEST);
 		subscription = observable
-                .filter(tx -> tx.getFrom().equals(servletContext.getInitParameter("SenderAccount")))
+                .filter(tx -> tx.getFrom().equals(sc.getInitParameter("SenderAccount")))
                 .subscribe(tx -> PrintTransaction(tx), Throwable::printStackTrace, TransactionMonitoringContextListener::onComplete);
 	}
     
@@ -51,6 +60,18 @@ public final class TransactionMonitoringContextListener implements ServletContex
 			e.printStackTrace();
 		}
     	System.out.println(sb.toString());
+    }
+    
+    private Web3jContainer buildWeb3jContainer(final ServletContext sc) {
+    	web3j = Web3j.build(new HttpService(sc.getInitParameter("NodeURL")));
+		try {
+			final Credentials credentials = WalletUtils.loadCredentials(sc.getInitParameter("AccountPassword"), sc.getInitParameter("WalletFilePath"));
+			final CoinManager coinManager = Utility.loadCoinManager(web3j, credentials, Utility.CoinManagerAddress);
+			return new Web3jContainer(web3j, credentials, coinManager);	
+		}
+    	catch (final Exception e) {
+    		throw new RuntimeException(e);
+    	}
     }
     
 	@Override

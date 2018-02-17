@@ -11,13 +11,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.web3j.crypto.Credentials;
-import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.EthAccounts;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
-import org.web3j.protocol.http.HttpService;
 import org.web3j.tx.Transfer;
 import org.web3j.utils.Convert;
+
+import com.projects.blockchain.ethereum.poc.node_connector.util.ServletContextAttribute;
+import com.projects.blockchain.ethereum.poc.node_connector.util.Web3jContainer;
 
 /**
  * This servlet establishes the connection to an Ethereum mode, connects to a wallet account and then transfers some ethers to a target account.
@@ -41,28 +42,24 @@ public final class EtherTransferServlet extends HttpServlet {
 	@Override
 	protected void doGet(final HttpServletRequest request, final HttpServletResponse response)
 			throws ServletException, IOException {
-		final String nodeURL = request.getServletContext().getInitParameter("NodeURL");
-		final String accountPassword = request.getServletContext().getInitParameter("AccountPassword");
-		final String walletFilePath = request.getServletContext().getInitParameter("WalletFilePath");
+		final Web3jContainer web3jContainer = (Web3jContainer)request.getServletContext().getAttribute(ServletContextAttribute.Web3jContainer.toString());
 		final String targetAccount = request.getParameter("TargetAccount");
 		final BigDecimal transferAmount = new BigDecimal(request.getParameter("TransferAmount"));
 		final String transferUnit = request.getParameter("TransferUnit");
 		response.setContentType("text/plain");
-		run(response.getWriter(), nodeURL, accountPassword, walletFilePath, targetAccount, transferAmount,
-				transferUnit);
+		run(response.getWriter(), web3jContainer, targetAccount, transferAmount, transferUnit);
 	}
 
-	private static void run(final PrintWriter writer, final String nodeURL, final String accountPassword,
-			final String walletFilePath, final String targetAccount, final BigDecimal transferAmount,
+	private static void run(final PrintWriter writer, final Web3jContainer web3jContainer, final String targetAccount, final BigDecimal transferAmount,
 			final String transferUnit) {
 		//Connects to an Ethereum node, most probably running on the localhost.
-		final Web3j web3j = Web3j.build(new HttpService(nodeURL));
 		try {
+			final Web3j web3j = web3jContainer.getWeb3j();
 			writer.println("Connected to Ethereum client version: " + web3j.web3ClientVersion().send().getWeb3ClientVersion());
 			final EthAccounts ethAccounts = web3j.ethAccounts().send();
-			writer.println("Accounts/ PKs in "+nodeURL);
+			writer.println("List of Accounts/ PKs");
 			ethAccounts.getAccounts().stream().forEach(account -> writer.println("\t"+account));
-			final Credentials credentials = WalletUtils.loadCredentials(accountPassword, walletFilePath);
+			final Credentials credentials = web3jContainer.getCredentials();
 			final long startTime = System.currentTimeMillis();
 			final TransactionReceipt transferReceipt = Transfer
 					.sendFunds(web3j, credentials, targetAccount, transferAmount, Convert.Unit.fromString(transferUnit))
@@ -73,9 +70,4 @@ public final class EtherTransferServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 	}
-
-	public static void main(String[] args) {
-		run(new PrintWriter(System.out), "http://localhost:8545", "xxx", "xxx", "0x9142A699d088be61C993Ace813829D3D25DeAc2d", new BigDecimal("7"), "WEI");
-	}
-
 }

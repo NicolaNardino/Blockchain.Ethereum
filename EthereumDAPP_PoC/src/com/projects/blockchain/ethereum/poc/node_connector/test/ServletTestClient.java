@@ -10,8 +10,9 @@ import java.util.stream.IntStream;
 /**
  * Allows for testing the interaction with the EthereumNodeConnectorServlet by sending requests and printing servlet replies.
  * */
-public final class EthereumNodeConnectorServletTestClient {
-	private static final String baseURL = "http://localhost:8080/EthereumDAPP_PoC/EthereumNodeConnectorServlet";
+public final class ServletTestClient {
+	private static final String baseURL = "http://localhost:8080/EthereumDAPP_PoC/EtherTransferServlet";
+	//CoinManagerSmartContractRaiseFundServlet --> TargetAccount=0x9142A699d088be61C993Ace813829D3D25DeAc2d&FundAmount=10
 	private static final int nrRequests = 5; 
 	private static final Random random = new Random();
 	
