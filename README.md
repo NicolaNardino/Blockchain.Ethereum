@@ -1,5 +1,5 @@
-# Welcome to Blockchain.Ethereum Web Application PoC
-Simple Java web application interacting with the Ethereum network.
+# Welcome to Blockchain.Ethereum Web Application DApp PoC
+Java web application interacting with the Ethereum network.
 
 For the time being its key features are:
   - Connection to the Ethereum Network via a node running on localhost.
@@ -23,10 +23,11 @@ Given the CoinManager.sol contract in the resources folder, with the following s
 The above requires to have the Solidity compiler (solc) and the Web3j command line tools.
 A JUnit test class is available to exercise the various smart contract features.
 
-At the moment, I've set up two externally controlled accounts and one smart contract:
+At the moment, I've set up three externally controlled accounts and one smart contract:
 
 - 0x99fedc28c33a8d00f7f0602baca0d24c3a17d9f6
 - 0x9142a699d088be61c993ace813829d3d25deac2d
+- 0x0c3d6f479511F1AE5d8bee86E9e13965fB652157
 - 0xf4729c2807fd0f4431004146ecfc4a47578aaeea --> smart contract.
 
 ## How to run and test the DAPP
