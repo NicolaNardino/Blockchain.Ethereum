@@ -67,6 +67,7 @@ public final class EtherTransferServlet extends HttpServlet {
 			writer.println("Transaction completed in: " + (System.currentTimeMillis() - startTime) + " ms. "
 					+ "Details at https://rinkeby.etherscan.io/tx/" + transferReceipt.getTransactionHash());
 		} catch (final Exception e) {
+			writer.println("Error while processing EtherTransferServlet\n"+e.getMessage());
 			e.printStackTrace();
 		}
 	}

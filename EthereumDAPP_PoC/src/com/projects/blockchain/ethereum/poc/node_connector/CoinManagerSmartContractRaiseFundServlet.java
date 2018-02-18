@@ -52,6 +52,7 @@ public final class CoinManagerSmartContractRaiseFundServlet extends HttpServlet 
 					+ "Details at https://rinkeby.etherscan.io/tx/" + transferReceipt.getTransactionHash());
 		} catch (final Exception e) {
 			e.printStackTrace();
+			writer.println("Error while processing CoinManagerSmartContractRaiseFundServlet\n"+e.getMessage());
 		}
 	}
 }

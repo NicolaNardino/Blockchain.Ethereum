@@ -19,20 +19,22 @@ import com.projects.blockchain.ethereum.poc.node_connector.util.Web3jContainer;
 import com.projects.blockchain.ethereum.smart_contracts.CoinManager;
 import com.projects.blockchain.ethereum.smart_contracts.utility.Utility;
 
-import rx.Observable;
 import rx.Subscription;
 
 /***
+ *When servlet context gets initialized, it does the following:
+ *<ul>
+ *	<li>Subscribes to all transactions executed on the sender account.</li>
+ *  <li>Subscribes to Mint and Sent events raised by the smart contract CoinManager.</li>
+ *  <li>Publishes to the servlet context, instances of <code>Web3j</code>, <code>CoinManager</code> and <code>Credentials</code>, so to be re-used by all servlets.</li>
+ *</ul>  
  *
- *When initializing the servlet context, it establishes a subscription to monitor all transactions executed on a sender account 
- *defined as web application context parameter.
- *Furthermore, it publishes to the servlet context instances of <code>Web3j</code>, <code>CoinManager</code> and <code>Credentials</code>. 
- *
- *The subscription gets removed when the context gets destroyed. 
+ *Subscriptions get removed when the context gets destroyed. 
  */
 @WebListener
 public final class TransactionMonitoringContextListener implements ServletContextListener {
-    private Subscription subscription;
+    private Subscription etherTransactionsSubscription;
+    private Subscription coinManagerMintEventSubscription, coinManagerSentEventSubscription;
     private Web3j web3j;
 
     @Override
@@ -40,14 +42,19 @@ public final class TransactionMonitoringContextListener implements ServletContex
     	final ServletContext sc = sce.getServletContext();
     	final Web3jContainer web3jContainer = buildWeb3jContainer(sc);
 		sc.setAttribute(ServletContextAttribute.Web3jContainer.toString(), web3jContainer);
-        final Observable<Transaction> observable = web3j.catchUpToLatestAndSubscribeToNewTransactionsObservable(DefaultBlockParameterName.LATEST);
-		subscription = observable
+		etherTransactionsSubscription = web3j.catchUpToLatestAndSubscribeToNewTransactionsObservable(DefaultBlockParameterName.LATEST)
                 .filter(tx -> tx.getFrom().equals(sc.getInitParameter("SenderAccount")))
                 .subscribe(tx -> PrintTransaction(tx), Throwable::printStackTrace, TransactionMonitoringContextListener::onComplete);
+		coinManagerMintEventSubscription = web3jContainer.getCoinManager()
+				.mintEventObservable(DefaultBlockParameterName.LATEST, DefaultBlockParameterName.LATEST)
+				.subscribe(ser -> System.out.println("Mint Event\nFrom: "+ser.from+", To: "+ser.to+", Amount: "+ser.amount));
+		coinManagerSentEventSubscription = web3jContainer.getCoinManager()
+				.sentEventObservable(DefaultBlockParameterName.LATEST, DefaultBlockParameterName.LATEST)
+				.subscribe(ser -> System.out.println("Sent Event\nFrom: "+ser.from+", To: "+ser.to+", Amount: "+ser.amount));
 	}
     
     private void PrintTransaction(final Transaction tx) {
-    	final StringBuilder sb = new StringBuilder("\n");
+    	final StringBuilder sb = new StringBuilder("Transactions subscriber\n");
     	sb.append("From: "+tx.getFrom()).append(", To: "+tx.getTo()+"").append(", Value: "+tx.getValue())
     	.append(", Gas: "+tx.getGas()).append(", GasPrice: "+tx.getGasPrice()).append(", TxFee: "+tx.getGas().multiply(tx.getGasPrice()))
     	.append(", TxHash: "+tx.getHash());
@@ -57,6 +64,7 @@ public final class TransactionMonitoringContextListener implements ServletContex
 			.append("\nTarget account balance: "+web3j.ethGetBalance(tx.getTo(), DefaultBlockParameterName.LATEST).send().getBalance() + " WEIs.")
 			.append("\nTime take to get accounts balances: " + (System.currentTimeMillis() - startTime) + " ms.");
 		} catch (final IOException e) {
+			sb.append("\nUnable to get balances.\n"+e.getMessage());
 			e.printStackTrace();
 		}
     	System.out.println(sb.toString());
@@ -76,7 +84,9 @@ public final class TransactionMonitoringContextListener implements ServletContex
     
 	@Override
 	public void contextDestroyed(ServletContextEvent sce) {
-		subscription.unsubscribe();
+		etherTransactionsSubscription.unsubscribe();
+		coinManagerMintEventSubscription.unsubscribe();
+		coinManagerSentEventSubscription.unsubscribe();
 		System.out.println("Context Destroyed");
 	}
 	

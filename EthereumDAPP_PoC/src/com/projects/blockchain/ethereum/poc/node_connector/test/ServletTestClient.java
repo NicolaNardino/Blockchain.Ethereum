@@ -12,7 +12,8 @@ import java.util.stream.IntStream;
  * */
 public final class ServletTestClient {
 	private static final String baseURL = "http://localhost:8080/EthereumDAPP_PoC/EtherTransferServlet";
-	//CoinManagerSmartContractRaiseFundServlet --> TargetAccount=0x9142A699d088be61C993Ace813829D3D25DeAc2d&FundAmount=10
+	//CoinManagerSmartContractServlet --> OpType=FundRaise&TargetAccount=0x9142A699d088be61C993Ace813829D3D25DeAc2d&FundAmount=10
+	//CoinManagerSmartContractServlet --> OpType=TransferFund&TargetAccount=0x9142A699d088be61C993Ace813829D3D25DeAc2d&FundAmount=21
 	private static final int nrRequests = 5; 
 	private static final Random random = new Random();
 	
