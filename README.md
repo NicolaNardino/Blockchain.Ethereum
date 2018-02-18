@@ -29,6 +29,14 @@ At the moment, I've set up two externally controlled accounts and one smart cont
 - 0x9142a699d088be61c993ace813829d3d25deac2d
 - 0xf4729c2807fd0f4431004146ecfc4a47578aaeea --> smart contract.
 
+## How to run and test the DAPP
+There are two servlets that can be exercised by direct http requests as follows:
+1.  http://host:port/EthereumDAPP_PoC/EtherTransferServlet?TargetAccount=0x9142A699d088be61C993Ace813829D3D25DeAc2d&TransferAmount=10&TransferUnit=WEI : transfers 10 WEIs from the sender account (which is the one used to initialize the Credentials, defined by an account password and a wallet file path) and a target account, passed as servlet request parameter.
+2. http://host:port/EthereumDAPP_PoC/CoinManagerSmartContractServlet?OpType=TransferFund&TargetAccount=0x9142A699d088be61C993Ace813829D3D25DeAc2d&FundAmount=21 : this uses the CoinManager smart contract and deals with MyCoins. OpType can either be RaiseFund and TransferFund. The former can only makes sense if called by the smart contract owner and it's meant to create MyCoins out os thin air. The latter can then be used to transfer funds between accounts.
+
+The above two servlets can also be exercised by a test client, ServletTestClient, which can programmatically connect to the servlets and send (multiple) requests.
+Furthermore, CoinManagerTest can be used to unit-test the CoinManager.
+
 ## Development environment and tools
 - Ubuntu 16.04.3 LTS.
 - Eclipse Neon.
