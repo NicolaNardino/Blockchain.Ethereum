@@ -45,5 +45,5 @@ Furthermore, CoinManagerTest can be used to unit-test the CoinManager.
 
 ## Roadmap
 
-1. Add a back end storage layer to the web application, possibly NoSQL.
+1. Add a back end storage layer to the web application, possibly NoSQL. --> done
 2. Add a UI.
