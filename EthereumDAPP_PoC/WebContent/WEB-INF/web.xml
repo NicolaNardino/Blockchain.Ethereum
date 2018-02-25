@@ -15,7 +15,7 @@
     	<param-value>xxx</param-value>
     </context-param>
     <context-param>
-    	<param-name>x</param-name>
+    	<param-name>WalletFilePath</param-name>
     	<param-value>xxx</param-value>
     </context-param>
     <context-param>
