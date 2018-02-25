@@ -15,7 +15,8 @@ import org.web3j.protocol.Web3j;
 import org.web3j.protocol.http.HttpService;
 
 import com.projects.blockchain.ethereum.smart_contracts.CoinManager;
-import com.projects.blockchain.ethereum.smart_contracts.utility.Utility;
+import com.projects.blockchain.ethereum.smart_contracts.utility.SmartContractsUtility;
+import com.projects.blockchain.ethereum.utility.Utility;
 
 public final class CoinManagerTest {
 	private static Web3j web3j; 
@@ -27,7 +28,7 @@ public final class CoinManagerTest {
 		final Properties properties = Utility.getApplicationProperties("smartContracts.properties");
 		web3j = Web3j.build(new HttpService(properties.getProperty("nodeURL")));
 		final Credentials credentials = WalletUtils.loadCredentials(properties.getProperty("accountPassword"), properties.getProperty("walletFilePath"));
-		coinManager = Utility.loadCoinManager(web3j, credentials, Utility.CoinManagerAddress);
+		coinManager = SmartContractsUtility.loadCoinManager(web3j, credentials, SmartContractsUtility.CoinManagerAddress);
 	}
 	
 	@Test

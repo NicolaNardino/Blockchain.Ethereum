@@ -18,7 +18,8 @@ import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.request.EthFilter;
 import org.web3j.protocol.http.HttpService;
 
-import com.projects.blockchain.ethereum.smart_contracts.utility.Utility;
+import com.projects.blockchain.ethereum.smart_contracts.utility.SmartContractsUtility;
+import com.projects.blockchain.ethereum.utility.Utility;
 
 import rx.Subscription;
 
@@ -38,7 +39,7 @@ public final class SmartContractEventsSubscription {
 	private static void subscriptionWithSmartContractWrapper(final Web3j web3j, final String accountPassword,
 			final String walletFilePath) throws Exception {
 		final Credentials credentials = WalletUtils.loadCredentials(accountPassword, walletFilePath);
-		final CoinManager coinManager = Utility.loadCoinManager(web3j, credentials, Utility.CoinManagerAddress);
+		final CoinManager coinManager = SmartContractsUtility.loadCoinManager(web3j, credentials, SmartContractsUtility.CoinManagerAddress);
 		final Subscription subscription = coinManager
 				.sentEventObservable(DefaultBlockParameterName.LATEST, DefaultBlockParameterName.LATEST)
 				.subscribe(ser -> System.out.println(ReflectionToStringBuilder.toString(ser)));
@@ -49,7 +50,7 @@ public final class SmartContractEventsSubscription {
 
 	private static void subscriptionWithouSmartContractWrapper(final Web3j web3j) throws InterruptedException {
 		final EthFilter filter = new EthFilter(DefaultBlockParameterName.LATEST, DefaultBlockParameterName.LATEST,
-				Utility.CoinManagerAddress);
+				SmartContractsUtility.CoinManagerAddress);
 		final Event event = new Event("Mint", Arrays.<TypeReference<?>>asList(),
 				Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {
 				}, new TypeReference<Address>() {

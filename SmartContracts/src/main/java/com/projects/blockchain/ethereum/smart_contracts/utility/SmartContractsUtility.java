@@ -1,10 +1,5 @@
 package com.projects.blockchain.ethereum.smart_contracts.utility;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
-
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.tx.Contract;
@@ -12,17 +7,9 @@ import org.web3j.tx.ManagedTransaction;
 
 import com.projects.blockchain.ethereum.smart_contracts.CoinManager;
 
-public final class Utility {
+public final class SmartContractsUtility {
 	
 	public static final String CoinManagerAddress = "0xf4729c2807fd0f4431004146ecfc4a47578aaeea";
-	
-	public static Properties getApplicationProperties(final String propertiesFileName) throws FileNotFoundException, IOException {
-		final Properties p = new Properties();
-		try(final InputStream inputStream = ClassLoader.getSystemResourceAsStream(propertiesFileName)) {
-			p.load(inputStream);
-			return p;
-		}
-	}
 	
 	public static CoinManager deployCoinManager(final Web3j web3j, final Credentials credentials, final String coinName) throws Exception {
 		final long startTime = System.currentTimeMillis();

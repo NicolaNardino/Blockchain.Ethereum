@@ -11,19 +11,24 @@ import java.util.stream.IntStream;
  * Allows for testing the interaction with the EthereumNodeConnectorServlet by sending requests and printing servlet replies.
  * */
 public final class ServletTestClient {
-	private static final String baseURL = "http://localhost:8080/EthereumDAPP_PoC/EtherTransferServlet";
-	//CoinManagerSmartContractServlet --> OpType=FundRaise&TargetAccount=0x9142A699d088be61C993Ace813829D3D25DeAc2d&FundAmount=10
+	private static final String baseURL = "http://localhost:8080/EthereumDAPP_PoC/CoinManagerSmartContractServlet";
+	//EtherTransferServlet --> TargetAccount=0x9142A699d088be61C993Ace813829D3D25DeAc2d&TransferAmount="+weis+"&TransferUnit=WEI
+	//CoinManagerSmartContractServlet --> OpType=RaiseFund&TargetAccount=0x9142A699d088be61C993Ace813829D3D25DeAc2d&FundAmount=10
 	//CoinManagerSmartContractServlet --> OpType=TransferFund&TargetAccount=0x9142A699d088be61C993Ace813829D3D25DeAc2d&FundAmount=21
-	private static final int nrRequests = 5; 
+	private static final int nrRequests = 12; 
 	private static final Random random = new Random();
 	
 	public static void main(final String[] args) {
 		IntStream.range(0,nrRequests).forEach(i->
 		{
-			final int weis = random.nextInt(10) + 1;
-			System.out.println("Sending request for "+weis+" WEIs.\n");
-	        System.out.println(servletCall(baseURL, "TargetAccount=0x9142A699d088be61C993Ace813829D3D25DeAc2d&TransferAmount="+weis+"&TransferUnit=WEI"));
+			System.out.println(servletCall(baseURL, "OpType=RaiseFund&TargetAccount=0x9142A699d088be61C993Ace813829D3D25DeAc2d&FundAmount=10"));
 	    });
+	}
+	
+	private static void testEtherTransferServlet() {
+		final int weis = random.nextInt(10) + 1;
+		System.out.println("Sending request for "+weis+" WEIs.\n");
+		System.out.println(servletCall(baseURL, "TargetAccount=0x9142A699d088be61C993Ace813829D3D25DeAc2d&TransferAmount="+weis+"&TransferUnit=WEI"));
 	}
 
 	public static String servletCall(final String baseURL, final String parameters) {

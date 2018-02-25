@@ -1,8 +1,9 @@
 RemoteSystemsTempFiles/
 .recommenders/
 .metadata/
-EthereumDAPP_PoC/log
 EthereumDAPP_PoC/target
+EthereumDAPP_PoCEAR/WebContent/WEB-INF/lib/*
 testEthereumPoC/
 EthereumDAPP_PoCEAR/
 SmartContracts/target
+Utility/target
