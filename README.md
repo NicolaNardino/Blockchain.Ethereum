@@ -7,6 +7,7 @@ For the time being its key features are:
   - Transaction monitoring.
   - CoinManager Smart Contract, which is able to create its own coin, mint coins and transfer such coins between accounts.   Developed in Solidity, it also uses inheritance.
   - Java Servlets to transfer ethers and exercise the CoinManager.
+  - MongoDB data store for Smart Contract and Ethereum events.
 
 I've set up my Ethereum local environment as follows:
   - Run a full node by geth on the localhost and created two accounts: geth --rpcapi "personal,db,eth,net,web3" --rpc --rinkeby). Most notable here is the --rpc option by which it gets enabled the HTTP-RPC server on the node, then used by web3j to establish the connection from the web application.
@@ -36,7 +37,8 @@ There are two servlets that can be exercised by direct http requests as follows:
 2. http://host:port/EthereumDAPP_PoC/CoinManagerSmartContractServlet?OpType=TransferFund&TargetAccount=0x9142A699d088be61C993Ace813829D3D25DeAc2d&FundAmount=21 : this uses the CoinManager smart contract and deals with MyCoins. OpType can either be RaiseFund and TransferFund. The former can only makes sense if called by the smart contract owner and it's meant to create MyCoins out os thin air. The latter can then be used to transfer funds between accounts.
 
 The above two servlets can also be exercised by a test client, ServletTestClient, which can programmatically connect to the servlets and send (multiple) requests.
-Furthermore, CoinManagerTest can be used to unit-test the CoinManager.
+CoinManagerTest can be used to unit-test the CoinManager.
+MongoDBEventsRetriever can be used to monitor the Smart Contract and Ethereum events stored by TransactionMonitoringContextListener.
 
 ## Development environment and tools
 - Ubuntu 16.04.3 LTS.
