@@ -22,21 +22,24 @@
     	<param-name>SenderAccount</param-name>
     	<param-value>0x99fedc28c33a8d00f7f0602baca0d24c3a17d9f6</param-value>
     </context-param>
-    
     <context-param>
-    	<param-name>mongodb_host</param-name>
+    	<param-name>mongoDBHost</param-name>
     	<param-value>localhost</param-value>
   	</context-param>
   	<context-param>
-    	<param-name>mongodb_port</param-name>
+    	<param-name>mongoDBPort</param-name>
     	<param-value>27017</param-value>
   	</context-param>
   	<context-param>
-    	<param-name>mongodb_database_name</param-name>
+    	<param-name>mongoDBDatabaseName</param-name>
     	<param-value>EventsDatabase</param-value>
   	</context-param>
   	<context-param>
-    	<param-name>mongodb_events_collection_name</param-name>
-    	<param-value>EventsCollection</param-value>
+    	<param-name>mongoDBSmartContractEventsCollectionName</param-name>
+    	<param-value>SmartContractEventsCollection</param-value>
+  	</context-param>
+  	<context-param>
+    	<param-name>mongoDBEtherTransferEventsCollectionName</param-name>
+    	<param-value>EtherTransferEventsCollection</param-value>
   	</context-param>
 </web-app>

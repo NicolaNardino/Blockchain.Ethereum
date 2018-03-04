@@ -18,7 +18,7 @@ import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.request.EthFilter;
 import org.web3j.protocol.http.HttpService;
 
-import com.projects.blockchain.ethereum.smart_contracts.utility.SmartContractsUtility;
+import com.projects.blockchain.ethereum.utility.SmartContractsUtility;
 import com.projects.blockchain.ethereum.utility.Utility;
 
 import rx.Subscription;

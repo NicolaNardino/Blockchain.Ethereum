@@ -1,4 +1,4 @@
-package com.projects.blockchain.ethereum.smart_contracts.utility;
+package com.projects.blockchain.ethereum.utility;
 
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
@@ -23,16 +23,22 @@ public final class SmartContractsUtility {
 		return contract;
 	}
 	
-	public static CoinManager loadCoinManager(final Web3j web3j, final Credentials credentials, final String contractAddress) throws Exception {
-		final long startTime = System.currentTimeMillis();
-		final CoinManager contract = CoinManager.load(contractAddress, web3j, credentials, ManagedTransaction.GAS_PRICE, Contract.GAS_LIMIT);
-		final StringBuilder sb = new StringBuilder(); 
-		sb.append("\nLoaded contract, address: "+contractAddress)
-		  .append("\nOwner: "+contract.owner().send())
-		  .append("\nIs valid: "+contract.isValid())
-		  .append("\nTime taken: "+(System.currentTimeMillis() - startTime)+" ms.");
-		System.out.println(sb.toString());
-		return contract;
+	public static CoinManager loadCoinManager(final Web3j web3j, final Credentials credentials, final String contractAddress) {
+		try {
+			final long startTime = System.currentTimeMillis();
+			final CoinManager contract = CoinManager.load(contractAddress, web3j, credentials, ManagedTransaction.GAS_PRICE, Contract.GAS_LIMIT);
+			final StringBuilder sb = new StringBuilder(); 
+			sb.append("\nLoaded contract, address: "+contractAddress)
+			  .append("\nOwner: "+contract.owner().send())
+			  .append("\nIs valid: "+contract.isValid())
+			  .append("\nTime taken: "+(System.currentTimeMillis() - startTime)+" ms.");
+			System.out.println(sb.toString());
+			return contract;	
+		}
+		catch(final Exception e) {
+			throw new RuntimeException(e);
+		}
+		
 	}
 	
 	public static CoinManager reDeployCoinManager(final Web3j web3j, final Credentials credentials, final String contractAddress, final String coinName) throws Exception {

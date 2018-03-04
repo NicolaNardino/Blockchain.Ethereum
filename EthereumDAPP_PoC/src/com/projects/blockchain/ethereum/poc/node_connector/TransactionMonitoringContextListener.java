@@ -15,23 +15,22 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
-import org.web3j.crypto.Credentials;
-import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.response.Transaction;
-import org.web3j.protocol.http.HttpService;
 
 import com.projects.blockchain.ethereum.mongodb.MongoDBConnection;
 import com.projects.blockchain.ethereum.mongodb.MongoDBImplementation;
 import com.projects.blockchain.ethereum.mongodb.MongoDBInterface;
 import com.projects.blockchain.ethereum.poc.node_connector.util.ServletContextAttribute;
-import com.projects.blockchain.ethereum.poc.node_connector.util.Web3jContainer;
 import com.projects.blockchain.ethereum.smart_contracts.CoinManager;
-import com.projects.blockchain.ethereum.smart_contracts.utility.SmartContractsUtility;
+import com.projects.blockchain.ethereum.utility.EtherTransferEventDetail;
 import com.projects.blockchain.ethereum.utility.EventDetail;
 import com.projects.blockchain.ethereum.utility.EventType;
+import com.projects.blockchain.ethereum.utility.SmartContractEventDetail;
+import com.projects.blockchain.ethereum.utility.SmartContractsUtility;
 import com.projects.blockchain.ethereum.utility.Utility;
+import com.projects.blockchain.ethereum.utility.Web3jContainer;
 
 import rx.Subscription;
 
@@ -50,38 +49,45 @@ import rx.Subscription;
 public final class TransactionMonitoringContextListener implements ServletContextListener {
     private Subscription etherTransactionsSubscription;
     private Subscription coinManagerMintEventSubscription, coinManagerSentEventSubscription;
-    private Web3j web3j;
-    private final BlockingQueue<EventDetail> eventsQueue = new LinkedBlockingQueue<EventDetail>();
     private MongoDBInterface mongoDB;
+    private final BlockingQueue<EventDetail> eventsQueue = new LinkedBlockingQueue<>();
     private final ScheduledExecutorService exec = Executors.newScheduledThreadPool(1);
     
     @Override
 	public void contextInitialized(final ServletContextEvent sce) {
     	final ServletContext sc = sce.getServletContext();
-    	final Web3jContainer web3jContainer = buildWeb3jContainer(sc);
-    	mongoDB = new MongoDBImplementation(new MongoDBConnection(sc.getInitParameter("mongodb_host"), 
-				Integer.valueOf(sc.getInitParameter("mongodb_port")), sc.getInitParameter("mongodb_database_name")), 
-				sc.getInitParameter("mongodb_events_collection_name"));
+    	final Web3jContainer web3jContainer = Utility.buildWeb3jContainer(sc.getInitParameter("NodeURL"), sc.getInitParameter("AccountPassword"), sc.getInitParameter("WalletFilePath"));
+    	final Web3j web3j = web3jContainer.getWeb3j();
+    	final CoinManager coinManager = SmartContractsUtility.loadCoinManager(web3j, web3jContainer.getCredentials(), SmartContractsUtility.CoinManagerAddress);
+    	mongoDB = new MongoDBImplementation(new MongoDBConnection(sc.getInitParameter("mongoDBHost"), 
+				Integer.valueOf(sc.getInitParameter("mongoDBPort")), sc.getInitParameter("mongoDBDatabaseName")), 
+				sc.getInitParameter("mongoDBSmartContractEventsCollectionName"), sc.getInitParameter("mongoDBEtherTransferEventsCollectionName"));
 		sc.setAttribute(ServletContextAttribute.Web3jContainer.toString(), web3jContainer);
+		sc.setAttribute(ServletContextAttribute.CoinManager.toString(), coinManager);
 		etherTransactionsSubscription = web3j.catchUpToLatestAndSubscribeToNewTransactionsObservable(DefaultBlockParameterName.LATEST)
                 .filter(tx -> tx.getFrom().equals(sc.getInitParameter("SenderAccount")))
-                .subscribe(tx -> PrintTransaction(tx), Throwable::printStackTrace, TransactionMonitoringContextListener::onComplete);
-		coinManagerMintEventSubscription = web3jContainer.getCoinManager()
+                .subscribe(tx -> {
+                	PrintTransaction(web3j, tx);
+                	eventsQueue.offer(new EtherTransferEventDetail(tx.getHash(), tx.getGas(), tx.getGasPrice(),  tx.getFrom(), tx.getTo(), 
+                			(tx.getValue() == null ? 0 :  tx.getValue().intValue()), new Date()));
+                }, 
+                		Throwable::printStackTrace, TransactionMonitoringContextListener::onComplete);
+		coinManagerMintEventSubscription = coinManager
 				.mintEventObservable(DefaultBlockParameterName.LATEST, DefaultBlockParameterName.LATEST)
 				.subscribe(ser -> {
 					System.out.println("Mint Event\nFrom: "+ser.from+", To: "+ser.to+", Amount: "+ser.amount);
-					eventsQueue.offer(new EventDetail(web3jContainer.getCoinManager().getContractAddress(), 
+					eventsQueue.offer(new SmartContractEventDetail(coinManager.getContractAddress(), 
 							ser.from, ser.to, ser.amount.intValue(), new Date(), EventType.Mint));
 				});
-		coinManagerSentEventSubscription = web3jContainer.getCoinManager()
+		coinManagerSentEventSubscription = coinManager
 				.sentEventObservable(DefaultBlockParameterName.LATEST, DefaultBlockParameterName.LATEST)
 				.subscribe(ser -> {
 					System.out.println("Sent Event\nFrom: "+ser.from+", To: "+ser.to+", Amount: "+ser.amount);
-					eventsQueue.offer(new EventDetail(web3jContainer.getCoinManager().getContractAddress(), 
+					eventsQueue.offer(new SmartContractEventDetail(coinManager.getContractAddress(), 
 							ser.from, ser.to, ser.amount.intValue(), new Date(), EventType.Sent));
 				});
 		exec.scheduleWithFixedDelay(() -> {
-			final List<EventDetail> events = new ArrayList<EventDetail>();
+			final List<EventDetail> events = new ArrayList<>();
 			eventsQueue.drainTo(events);
 			if (events.size() > 0)
 				System.out.println("Drained "+events.size()+" events.");
@@ -89,7 +95,7 @@ public final class TransactionMonitoringContextListener implements ServletContex
 		}, 1, 10, TimeUnit.SECONDS);
 	}
     
-    private void PrintTransaction(final Transaction tx) {
+    private static void PrintTransaction(final Web3j web3j, final Transaction tx) {
     	final StringBuilder sb = new StringBuilder("Transactions subscriber\n");
     	sb.append("From: "+tx.getFrom()).append(", To: "+tx.getTo()+"").append(", Value: "+tx.getValue())
     	.append(", Gas: "+tx.getGas()).append(", GasPrice: "+tx.getGasPrice()).append(", TxFee: "+tx.getGas().multiply(tx.getGasPrice()))
@@ -104,18 +110,6 @@ public final class TransactionMonitoringContextListener implements ServletContex
 			e.printStackTrace();
 		}
     	System.out.println(sb.toString());
-    }
-    
-    private Web3jContainer buildWeb3jContainer(final ServletContext sc) {
-    	web3j = Web3j.build(new HttpService(sc.getInitParameter("NodeURL")));
-		try {
-			final Credentials credentials = WalletUtils.loadCredentials(sc.getInitParameter("AccountPassword"), sc.getInitParameter("WalletFilePath"));
-			final CoinManager coinManager = SmartContractsUtility.loadCoinManager(web3j, credentials, SmartContractsUtility.CoinManagerAddress);
-			return new Web3jContainer(web3j, credentials, coinManager);	
-		}
-    	catch (final Exception e) {
-    		throw new RuntimeException(e);
-    	}
     }
     
 	@Override

@@ -9,26 +9,24 @@ import java.util.Random;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.web3j.crypto.Credentials;
-import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.Web3j;
-import org.web3j.protocol.http.HttpService;
 
 import com.projects.blockchain.ethereum.smart_contracts.CoinManager;
-import com.projects.blockchain.ethereum.smart_contracts.utility.SmartContractsUtility;
+import com.projects.blockchain.ethereum.utility.SmartContractsUtility;
 import com.projects.blockchain.ethereum.utility.Utility;
+import com.projects.blockchain.ethereum.utility.Web3jContainer;
 
 public final class CoinManagerTest {
-	private static Web3j web3j; 
+	private static Web3j web3j;
 	private static CoinManager coinManager;
 	private static final Random random = new Random();
 	
 	@BeforeClass
 	public static void classSetup() throws Exception {
 		final Properties properties = Utility.getApplicationProperties("smartContracts.properties");
-		web3j = Web3j.build(new HttpService(properties.getProperty("nodeURL")));
-		final Credentials credentials = WalletUtils.loadCredentials(properties.getProperty("accountPassword"), properties.getProperty("walletFilePath"));
-		coinManager = SmartContractsUtility.loadCoinManager(web3j, credentials, SmartContractsUtility.CoinManagerAddress);
+		final Web3jContainer web3jContainer = Utility.buildWeb3jContainer(properties.getProperty("nodeURL"), properties.getProperty("accountPassword"), properties.getProperty("walletFilePath"));
+		web3j = web3jContainer.getWeb3j();
+		coinManager = SmartContractsUtility.loadCoinManager(web3j, web3jContainer.getCredentials(), SmartContractsUtility.CoinManagerAddress);
 	}
 	
 	@Test
@@ -42,7 +40,7 @@ public final class CoinManagerTest {
 	@Test
 	@Ignore
 	public void testMint() throws Exception {
-		final String testReceiver = String.valueOf(random.nextInt(9999));
+		final String testReceiver = "0x99fedc28c33a8d00f7f0602baca0d24c3a17d9f6";//String.valueOf(random.nextInt(9999));
 		final BigInteger amount = BigInteger.valueOf(random.nextInt(999));
 		final BigInteger testReceiverInitialBalance = coinManager.balances(testReceiver).send();
 		coinManager.mint(testReceiver, amount).send();
@@ -53,6 +51,7 @@ public final class CoinManagerTest {
 	}
 	
 	@Test
+	@Ignore
 	public void testSend() throws Exception {
 		final String senderAccount = "0x99fedc28c33a8d00f7f0602baca0d24c3a17d9f6";
 		final String receiverAccount = "0x9142A699d088be61C993Ace813829D3D25DeAc2d";

@@ -12,7 +12,7 @@ import com.projects.blockchain.ethereum.mongodb.MongoDBImplementation;
 import com.projects.blockchain.ethereum.utility.Utility;
 
 /**
- * Every X seconds, it extracts prints out all <code>CoinManager</code> events retrieved from a MongoDB database.
+ * Every X seconds, it extracts prints out all <code>CoinManager</code> and EtherTransfer events retrieved from a MongoDB database.
  * */
 public final class MongoDBEventsRetriever implements AutoCloseable {
 
@@ -24,12 +24,16 @@ public final class MongoDBEventsRetriever implements AutoCloseable {
 		exec = Executors.newScheduledThreadPool(1);
 		mongoDB = new MongoDBImplementation(
 				new MongoDBConnection(properties.getProperty("host"), Integer.valueOf(properties.getProperty("port")), 
-				properties.getProperty("eventsDatabaseName")), properties.getProperty("eventsCollectionName"));
+				properties.getProperty("eventsDatabaseName")), 
+				properties.getProperty("smartContractEventsCollectionName"), properties.getProperty("etherTransferEventsCollectionName"));
 	}
 	
 	public void start(final int period, final int runtimeInSeconds) {
 		try {
-			exec.scheduleAtFixedRate(() -> mongoDB.getEvents().stream().forEach(System.out::println) , 1, period, TimeUnit.SECONDS);
+			exec.scheduleAtFixedRate(() -> {
+				mongoDB.getSmartContractEvents().stream().forEach(System.out::println);
+				mongoDB.getEtherTransferEvents().stream().forEach(System.out::println);	
+			}, 1, period, TimeUnit.SECONDS);
 			TimeUnit.SECONDS.sleep(runtimeInSeconds);	
 		}
 		catch(final Exception e) {

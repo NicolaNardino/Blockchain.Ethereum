@@ -18,7 +18,8 @@ import org.web3j.tx.Transfer;
 import org.web3j.utils.Convert;
 
 import com.projects.blockchain.ethereum.poc.node_connector.util.ServletContextAttribute;
-import com.projects.blockchain.ethereum.poc.node_connector.util.Web3jContainer;
+import com.projects.blockchain.ethereum.utility.Utility;
+import com.projects.blockchain.ethereum.utility.Web3jContainer;
 
 /**
  * This servlet establishes the connection to an Ethereum mode, connects to a wallet account and then transfers some ethers to a target account.
@@ -61,9 +62,7 @@ public final class EtherTransferServlet extends HttpServlet {
 			ethAccounts.getAccounts().stream().forEach(account -> writer.println("\t"+account));
 			final Credentials credentials = web3jContainer.getCredentials();
 			final long startTime = System.currentTimeMillis();
-			final TransactionReceipt transferReceipt = Transfer
-					.sendFunds(web3j, credentials, targetAccount, transferAmount, Convert.Unit.fromString(transferUnit))
-					.send();// Convert.Unit.fromString(transferUnit)
+			final TransactionReceipt transferReceipt = Utility.ethTransferImplicitTransaction(web3j, credentials, targetAccount, transferAmount, 100, 200, Convert.Unit.fromString(transferUnit));
 			writer.println("Transaction completed in: " + (System.currentTimeMillis() - startTime) + " ms. "
 					+ "Details at https://rinkeby.etherscan.io/tx/" + transferReceipt.getTransactionHash());
 		} catch (final Exception e) {

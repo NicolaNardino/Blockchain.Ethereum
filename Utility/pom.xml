@@ -9,6 +9,11 @@
         <artifactId>mongodb-driver</artifactId>
         <version>3.4.2</version>
     </dependency>
+    <dependency>
+  		<groupId>org.web3j</groupId>
+  		<artifactId>core</artifactId>
+  		<version>3.2.0</version>
+	</dependency>
   </dependencies>
   <build>
     <sourceDirectory>src</sourceDirectory>

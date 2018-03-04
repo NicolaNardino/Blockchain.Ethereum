@@ -2,10 +2,12 @@ package com.projects.blockchain.ethereum.mongodb;
 
 import java.util.List;
 
+import com.projects.blockchain.ethereum.utility.EtherTransferEventDetail;
 import com.projects.blockchain.ethereum.utility.EventDetail;
+import com.projects.blockchain.ethereum.utility.SmartContractEventDetail;
 
 /**
- * It provides (a rather limited, for the moment) set of methods to interact with a MongoDB database.
+ * It provides set of methods to interact with a MongoDB database.
  * */
 public interface MongoDBInterface {
 
@@ -17,10 +19,16 @@ public interface MongoDBInterface {
 	void addEvents(List<EventDetail> events);
 	
 	/**
-	 * Gets all events out of EventsDatabase/EventsCollection.
+	 * Gets all events out of EventsDatabase/SmartContractEventDetailsCollection.
 	 * 
-	 * @return All events out of the EventsCollection. 
+	 * @return All events out of the SmartContractEventDetailsCollection. 
 	 * */
-	public List<EventDetail> getEvents(); 
-
+	public List<SmartContractEventDetail> getSmartContractEvents();
+	
+	/**
+	 * Gets all events out of EventsDatabase/EtherTransferEventDetailsCollection.
+	 * 
+	 * @return All events out of the EtherTransferEventDetailsCollection. 
+	 * */
+	public List<EtherTransferEventDetail> getEtherTransferEvents();
 }

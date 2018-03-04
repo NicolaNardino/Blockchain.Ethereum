@@ -14,8 +14,8 @@ import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
 import com.projects.blockchain.ethereum.poc.node_connector.util.OpType;
 import com.projects.blockchain.ethereum.poc.node_connector.util.ServletContextAttribute;
-import com.projects.blockchain.ethereum.poc.node_connector.util.Web3jContainer;
 import com.projects.blockchain.ethereum.smart_contracts.CoinManager;
+import com.projects.blockchain.ethereum.utility.Web3jContainer;
 
 /**
  * It exercises all the functionalities for the <code>CoinManager</code> smart contract: 
@@ -43,19 +43,19 @@ public final class CoinManagerSmartContractServlet extends HttpServlet {
 	protected void doGet(final HttpServletRequest request, final HttpServletResponse response)
 			throws ServletException, IOException {
 		final Web3jContainer web3jContainer = (Web3jContainer)request.getServletContext().getAttribute(ServletContextAttribute.Web3jContainer.toString());
+		final CoinManager coinManager = (CoinManager)request.getServletContext().getAttribute(ServletContextAttribute.CoinManager.toString());
 		final OpType opType = Enum.valueOf(OpType.class, request.getParameter("OpType"));
 		final String targetAccount = request.getParameter("TargetAccount");
 		final BigInteger fundAmount = new BigInteger(request.getParameter("FundAmount"));
 		response.setContentType("text/plain");
-		run(response.getWriter(), web3jContainer, opType, targetAccount, fundAmount);
+		run(response.getWriter(), web3jContainer, coinManager, opType, targetAccount, fundAmount);
 	}
 
-	private static void run(final PrintWriter writer, final Web3jContainer web3jContainer, final OpType opType,
+	private static void run(final PrintWriter writer, final Web3jContainer web3jContainer, final CoinManager coinManager, final OpType opType,
 			final String targetAccount, final BigInteger transferAmount) {
 		try {
 			writer.println("Connected to Ethereum client version: " + web3jContainer.getWeb3j().web3ClientVersion().send().getWeb3ClientVersion());
 			final long startTime = System.currentTimeMillis();
-			final CoinManager coinManager = web3jContainer.getCoinManager();
 			final TransactionReceipt transferReceipt;
 			switch(opType) {
 				case RaiseFund: transferReceipt = coinManager.mint(targetAccount, transferAmount).send(); break;
