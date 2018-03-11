@@ -14,7 +14,6 @@ import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.EthAccounts;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
-import org.web3j.tx.Transfer;
 import org.web3j.utils.Convert;
 
 import com.projects.blockchain.ethereum.poc.node_connector.util.ServletContextAttribute;
@@ -62,7 +61,7 @@ public final class EtherTransferServlet extends HttpServlet {
 			ethAccounts.getAccounts().stream().forEach(account -> writer.println("\t"+account));
 			final Credentials credentials = web3jContainer.getCredentials();
 			final long startTime = System.currentTimeMillis();
-			final TransactionReceipt transferReceipt = Utility.ethTransferImplicitTransaction(web3j, credentials, targetAccount, transferAmount, 100, 200, Convert.Unit.fromString(transferUnit));
+			final TransactionReceipt transferReceipt = Utility.ethTransferImplicitTransaction(web3j, credentials, targetAccount, transferAmount, 10, 150, Convert.Unit.fromString(transferUnit));
 			writer.println("Transaction completed in: " + (System.currentTimeMillis() - startTime) + " ms. "
 					+ "Details at https://rinkeby.etherscan.io/tx/" + transferReceipt.getTransactionHash());
 		} catch (final Exception e) {

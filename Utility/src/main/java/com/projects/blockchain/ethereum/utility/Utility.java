@@ -1,10 +1,14 @@
 package com.projects.blockchain.ethereum.utility;
 
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -87,5 +91,28 @@ public final class Utility {
 		final EthSendTransaction tr = web3j.ethSendRawTransaction(Numeric.toHexString(TransactionEncoder.signMessage(rawTransaction, credentials))).send();
 		final PollingTransactionReceiptProcessor trp = new PollingTransactionReceiptProcessor(web3j, trReceiptAttempts, trReceiptSleepTime);
 		return trp.waitForTransactionReceipt(tr.getTransactionHash());
+	}
+	
+	/**
+	 * Calls a servlet and prints its outcome.
+	 * */
+	public static String servletCall(final String baseURL, final String parameters) {
+		HttpURLConnection con = null;
+		try {
+			final StringBuilder response = new StringBuilder();
+			try (final BufferedReader responseStream = new BufferedReader(new InputStreamReader(new URL(baseURL + "?" + parameters).openStream()))) {
+				String line;
+				while ((line = responseStream.readLine()) != null) 
+					response.append(line).append('\r');
+			}
+			return response.toString();
+		} catch (final Exception e) {
+			e.printStackTrace();
+			return null;
+
+		} finally {
+			if (con != null)
+				con.disconnect();
+		}
 	}
 }

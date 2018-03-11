@@ -86,14 +86,16 @@ public final class TransactionMonitoringContextListener implements ServletContex
 					eventsQueue.offer(new SmartContractEventDetail(coinManager.getContractAddress(), 
 							ser.from, ser.to, ser.amount.intValue(), new Date(), EventType.Sent));
 				});
-		exec.scheduleWithFixedDelay(() -> {
-			final List<EventDetail> events = new ArrayList<>();
-			eventsQueue.drainTo(events);
-			if (events.size() > 0)
-				System.out.println("Drained "+events.size()+" events.");
-			mongoDB.addEvents(events);
-		}, 1, 10, TimeUnit.SECONDS);
+		exec.scheduleWithFixedDelay(this::addEventsToMongoDB, 1, 10, TimeUnit.SECONDS);
 	}
+    
+    private void addEventsToMongoDB() {
+    	final List<EventDetail> events = new ArrayList<>();
+		eventsQueue.drainTo(events);
+		if (events.size() > 0)
+			System.out.println("Drained "+events.size()+" events.");
+		mongoDB.addEvents(events);
+    }
     
     private static void PrintTransaction(final Web3j web3j, final Transaction tx) {
     	final StringBuilder sb = new StringBuilder("Transactions subscriber\n");

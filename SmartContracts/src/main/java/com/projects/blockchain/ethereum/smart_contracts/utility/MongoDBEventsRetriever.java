@@ -2,13 +2,19 @@ package com.projects.blockchain.ethereum.smart_contracts.utility;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.projects.blockchain.ethereum.mongodb.MongoDBConnection;
 import com.projects.blockchain.ethereum.mongodb.MongoDBImplementation;
+import com.projects.blockchain.ethereum.utility.EventType;
+import com.projects.blockchain.ethereum.utility.SmartContractEventDetail;
 import com.projects.blockchain.ethereum.utility.Utility;
 
 /**
@@ -30,16 +36,24 @@ public final class MongoDBEventsRetriever implements AutoCloseable {
 	
 	public void start(final int period, final int runtimeInSeconds) {
 		try {
-			exec.scheduleAtFixedRate(() -> {
-				mongoDB.getSmartContractEvents().stream().forEach(System.out::println);
-				mongoDB.getEtherTransferEvents().stream().forEach(System.out::println);	
-			}, 1, period, TimeUnit.SECONDS);
+			exec.scheduleAtFixedRate(this::printEvents, 1, period, TimeUnit.SECONDS);
 			TimeUnit.SECONDS.sleep(runtimeInSeconds);	
 		}
 		catch(final Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
+	}
+	
+	private void printEvents() {
+		System.out.println("Ether transfer events.");
+		mongoDB.getEtherTransferEvents().stream().forEach(System.out::println);
+		final Stream<SmartContractEventDetail> smartContractEvents = mongoDB.getSmartContractEvents().stream().filter(e -> e.getEventType() != null);
+		final Map<EventType, List<SmartContractEventDetail>> smartContractEventsGroupByEventType = smartContractEvents.collect(Collectors.groupingBy(SmartContractEventDetail::getEventType));
+		System.out.println("Coin Manager raise fund events.");
+		smartContractEventsGroupByEventType.get(EventType.Mint).stream().forEach(System.out::println);
+		System.out.println("Coin Manager transfer fund events.");
+		smartContractEventsGroupByEventType.get(EventType.Sent).stream().forEach(System.out::println);
 	}
 	
 	public void stop() throws Exception {
