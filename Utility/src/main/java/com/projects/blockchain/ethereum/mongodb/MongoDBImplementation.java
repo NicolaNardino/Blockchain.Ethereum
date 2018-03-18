@@ -15,6 +15,9 @@ import com.projects.blockchain.ethereum.utility.EventType;
 import com.projects.blockchain.ethereum.utility.SmartContractEventDetail;
 
 public final class MongoDBImplementation implements AutoCloseable, MongoDBInterface {
+	public static enum CollectionType {
+		EtherTransfer, CoinManager
+	}
 	
 	private final MongoDBConnection mongoDBConnection;
 	private final MongoCollection<Document> smartContractEventsCollection;
@@ -51,7 +54,9 @@ public final class MongoDBImplementation implements AutoCloseable, MongoDBInterf
 		    	final Document doc = cursor.next();
 		    	final String eventType = doc.getString("EventType");
 		    	events.add(new SmartContractEventDetail(
-		    			doc.getString("SmartContractAddress"), doc.getString("SourceAccount"), doc.getString("TargetAccount"), 
+		    			doc.getString("SmartContractAddress"), doc.getString("SourceAccount"), doc.getString("TargetAccount"),
+		    			BigInteger.valueOf(doc.getInteger("SourceAccountBalance").intValue()), 
+		    			BigInteger.valueOf(doc.getInteger("TargetAccountBalance").intValue()),
 		    			doc.getInteger("Amount"), doc.getDate("EventDate"), eventType == null ? null : EventType.getEventType(eventType)));
 		    }
 		} finally {
@@ -70,7 +75,11 @@ public final class MongoDBImplementation implements AutoCloseable, MongoDBInterf
 		    while (cursor.hasNext()) {
 		    	final Document doc = cursor.next();
 		    	events.add(new EtherTransferEventDetail(
-		    			doc.getString("TxHash"), BigInteger.valueOf(doc.getInteger("Gas").intValue()), BigInteger.valueOf(doc.getInteger("GasPrice").intValue()), doc.getString("SourceAccount"), doc.getString("TargetAccount"), 
+		    			doc.getString("TxHash"), BigInteger.valueOf(doc.getInteger("Gas").intValue()), 
+		    			BigInteger.valueOf(doc.getInteger("GasPrice").intValue()), 
+		    			doc.getString("SourceAccount"), doc.getString("TargetAccount"), 
+		    			BigInteger.valueOf(doc.getInteger("SourceAccountBalance").intValue()), 
+		    			BigInteger.valueOf(doc.getInteger("TargetAccountBalance").intValue()),  
 		    			doc.getInteger("Amount"), doc.getDate("EventDate")));
 		    }
 		} finally {
@@ -78,6 +87,16 @@ public final class MongoDBImplementation implements AutoCloseable, MongoDBInterf
 		}
 		System.out.println("Time taken to retrieve "+events.size()+" EtherTransferEventDetails: "+(System.currentTimeMillis() - startTime)+" ms.");
 		return events;
+	}
+	
+	@Override
+	public long deleteCollection(final CollectionType collectionType) {
+		switch(collectionType) {
+			case EtherTransfer: return etherTransferEventsCollection.deleteMany(new Document()).getDeletedCount();
+			case CoinManager: return smartContractEventsCollection.deleteMany(new Document()).getDeletedCount();
+			default:  
+				throw new IllegalArgumentException(collectionType + "isn't an allowed collection type");
+		}
 	}
 	
 	private void addSmartContractEventDetails(final List<SmartContractEventDetail> smartContractEventDetails) {
@@ -89,6 +108,8 @@ public final class MongoDBImplementation implements AutoCloseable, MongoDBInterf
 				new Document("SmartContractAddress", event.getSmartContractAddress())
 		        .append("SourceAccount", event.getSourceAccount())
 		        .append("TargetAccount",event.getTargetAccount())
+		        .append("SourceAccountBalance", event.getSourceAccountBalance().intValue())
+		        .append("TargetAccountBalance",event.getTargetAccountBalance().intValue())
 				.append("Amount", event.getAmount())
 				.append("EventType", event.getEventType().getCode())
 				.append("EventDate", event.getEventDate())));
@@ -107,6 +128,8 @@ public final class MongoDBImplementation implements AutoCloseable, MongoDBInterf
 				.append("GasPrice", event.getGasPrice().intValue())
 		        .append("SourceAccount", event.getSourceAccount())
 		        .append("TargetAccount",event.getTargetAccount())
+		        .append("SourceAccountBalance", event.getSourceAccountBalance().intValue())
+		        .append("TargetAccountBalance",event.getTargetAccountBalance().intValue())
 				.append("Amount", event.getAmount())
 				.append("EventDate", event.getEventDate())));
 		etherTransferEventsCollection.insertMany(docs);

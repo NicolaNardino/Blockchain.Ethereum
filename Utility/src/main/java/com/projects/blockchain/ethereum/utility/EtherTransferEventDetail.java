@@ -8,9 +8,10 @@ public final class EtherTransferEventDetail extends EventDetail {
 	private final BigInteger gas;
 	private final BigInteger gasPrice;
 	
-	public EtherTransferEventDetail(final String txHash, final BigInteger gas, final BigInteger gasPrice, final String sourceAccount, final String targetAccount, final int amount,
-			final Date eventDate) {
-		super(sourceAccount, targetAccount, amount, eventDate);
+	public EtherTransferEventDetail(final String txHash, final BigInteger gas, final BigInteger gasPrice, 
+			final String sourceAccount, final String targetAccount, final BigInteger sourceAccountBalance, final BigInteger targetAccountBalance, 
+			final int amount, final Date eventDate) {
+		super(sourceAccount, targetAccount, amount, eventDate, sourceAccountBalance, targetAccountBalance);
 		this.txHash = txHash;
 		this.gas = gas;
 		this.gasPrice = gas;
@@ -27,11 +28,10 @@ public final class EtherTransferEventDetail extends EventDetail {
 	public BigInteger getGasPrice() {
 		return gasPrice;
 	}
-	
+
 	@Override
 	public String toString() {
-		return "EtherTransferEventDetail [txHash=" + txHash + ", gas=" + gas + ", gasPrice=" + gasPrice + ", sourceAccount=" + getSourceAccount()
-				+ ", targetAccount=" + getTargetAccount() + ", amount=" + getAmount() + ", eventDate="
-				+ getEventDate() + "]";
+		return "EtherTransferEventDetail [txHash=" + txHash + ", gas=" + gas + ", gasPrice=" + gasPrice
+				+ ", " + super.toString() + "]";
 	}
 }

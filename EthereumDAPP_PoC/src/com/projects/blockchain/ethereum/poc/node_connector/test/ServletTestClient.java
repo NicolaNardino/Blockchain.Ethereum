@@ -15,9 +15,9 @@ public final class ServletTestClient {
 	
 	public static void main(final String[] args) {
 		//parallelRuns(10, 9, 0, 0);
-		testEtherTransferServlet(5);
+		//testEtherTransferServlet(10);
 		testCoinManagerServlet(15, OpType.RaiseFund);
-		testCoinManagerServlet(15, OpType.TransferFund);
+		//testCoinManagerServlet(15, OpType.TransferFund);
 	}
 	
 	private static void testCoinManagerServlet(final int nrRequests, final OpType opType) {

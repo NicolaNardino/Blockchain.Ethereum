@@ -1,6 +1,7 @@
 package com.projects.blockchain.ethereum.poc.node_connector;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -69,6 +70,7 @@ public final class TransactionMonitoringContextListener implements ServletContex
                 .subscribe(tx -> {
                 	PrintTransaction(web3j, tx);
                 	eventsQueue.offer(new EtherTransferEventDetail(tx.getHash(), tx.getGas(), tx.getGasPrice(),  tx.getFrom(), tx.getTo(), 
+                			getEtherBalance(web3j, tx.getFrom()), getEtherBalance(web3j, tx.getTo()),
                 			(tx.getValue() == null ? 0 :  tx.getValue().intValue()), new Date()));
                 }, 
                 		Throwable::printStackTrace, TransactionMonitoringContextListener::onComplete);
@@ -77,14 +79,16 @@ public final class TransactionMonitoringContextListener implements ServletContex
 				.subscribe(ser -> {
 					System.out.println("Mint Event\nFrom: "+ser.from+", To: "+ser.to+", Amount: "+ser.amount);
 					eventsQueue.offer(new SmartContractEventDetail(coinManager.getContractAddress(), 
-							ser.from, ser.to, ser.amount.intValue(), new Date(), EventType.Mint));
+							ser.from, ser.to, getCoinManagerBalance(coinManager, ser.from), getCoinManagerBalance(coinManager, ser.to), 
+							ser.amount.intValue(), new Date(), EventType.Mint));
 				});
 		coinManagerSentEventSubscription = coinManager
 				.sentEventObservable(DefaultBlockParameterName.LATEST, DefaultBlockParameterName.LATEST)
 				.subscribe(ser -> {
 					System.out.println("Sent Event\nFrom: "+ser.from+", To: "+ser.to+", Amount: "+ser.amount);
 					eventsQueue.offer(new SmartContractEventDetail(coinManager.getContractAddress(), 
-							ser.from, ser.to, ser.amount.intValue(), new Date(), EventType.Sent));
+							ser.from, ser.to, getCoinManagerBalance(coinManager, ser.from), getCoinManagerBalance(coinManager, ser.to), 
+							ser.amount.intValue(), new Date(), EventType.Sent));
 				});
 		exec.scheduleWithFixedDelay(this::addEventsToMongoDB, 1, 10, TimeUnit.SECONDS);
 	}
@@ -92,9 +96,10 @@ public final class TransactionMonitoringContextListener implements ServletContex
     private void addEventsToMongoDB() {
     	final List<EventDetail> events = new ArrayList<>();
 		eventsQueue.drainTo(events);
-		if (events.size() > 0)
+		if (events.size() > 0) {
 			System.out.println("Drained "+events.size()+" events.");
-		mongoDB.addEvents(events);
+			mongoDB.addEvents(events);
+		}
     }
     
     private static void PrintTransaction(final Web3j web3j, final Transaction tx) {
@@ -126,4 +131,22 @@ public final class TransactionMonitoringContextListener implements ServletContex
 	private static void onComplete() {
 		System.out.println("Completed");
 	}
+	
+	private static BigInteger getCoinManagerBalance(final CoinManager coinManager, final String address) {
+    	try {
+			return coinManager.balances(address).send();
+		} catch (final Exception e) {
+			System.err.println("Unable to get CoinManager " + address+ "balance.");
+			return BigInteger.valueOf(-1);
+		}
+    }
+    
+    private static BigInteger getEtherBalance(final Web3j web3j, final String address) {
+    	try {
+			return web3j.ethGetBalance(address, DefaultBlockParameterName.LATEST).send().getBalance();
+		} catch (final Exception e) {
+			System.err.println("Unable to get Ethererum " + address+ "balance.");
+			return BigInteger.valueOf(-1);
+		}
+    }
 }

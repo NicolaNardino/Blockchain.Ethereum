@@ -2,6 +2,7 @@ package com.projects.blockchain.ethereum.mongodb;
 
 import java.util.List;
 
+import com.projects.blockchain.ethereum.mongodb.MongoDBImplementation.CollectionType;
 import com.projects.blockchain.ethereum.utility.EtherTransferEventDetail;
 import com.projects.blockchain.ethereum.utility.EventDetail;
 import com.projects.blockchain.ethereum.utility.SmartContractEventDetail;
@@ -31,4 +32,12 @@ public interface MongoDBInterface {
 	 * @return All events out of the EtherTransferEventDetailsCollection. 
 	 * */
 	public List<EtherTransferEventDetail> getEtherTransferEvents();
+
+	/**
+	 * Deletes the content of a given MongoDB collection.
+	 * 
+	 * @param collectionType Collection whose content will be removed.
+	 * @return Number of deleted items.
+	 */
+	long deleteCollection(final CollectionType collectionType);
 }

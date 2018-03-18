@@ -67,7 +67,7 @@ public final class Utility {
     }
 	
 	/**
-	 * It transfers Ethers from the Wallet identified by <code>Credentials</code> to a target account. Furthermore, it decides how long to wait
+	 * It transfers Ethers from the Wallet identified by {@link Credentials} to a target account. Furthermore, it decides how long to wait
 	 * for a transaction receipt and the polling interval.
 	 * It uses the <code>Transfer<code>, which wraps all the machinery of signing the transaction and getting the receipt.
 	 * */
