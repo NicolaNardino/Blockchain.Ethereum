@@ -9,7 +9,7 @@ import com.projects.blockchain.ethereum.smart_contracts.CoinManager;
 
 public final class SmartContractsUtility {
 	
-	public static final String CoinManagerAddress = "0xf4729c2807fd0f4431004146ecfc4a47578aaeea";
+	public static final String CoinManagerAddress = "0xd77bfb4912ef3f901eb7628b8b18c6cd03e248f6";
 	
 	public static CoinManager deployCoinManager(final Web3j web3j, final Credentials credentials, final String coinName) throws Exception {
 		final long startTime = System.currentTimeMillis();

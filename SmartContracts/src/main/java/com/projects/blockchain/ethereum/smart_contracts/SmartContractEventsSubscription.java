@@ -41,9 +41,9 @@ public final class SmartContractEventsSubscription {
 		final Credentials credentials = WalletUtils.loadCredentials(accountPassword, walletFilePath);
 		final CoinManager coinManager = SmartContractsUtility.loadCoinManager(web3j, credentials, SmartContractsUtility.CoinManagerAddress);
 		final Subscription subscription = coinManager
-				.sentEventObservable(DefaultBlockParameterName.LATEST, DefaultBlockParameterName.LATEST)
+				.weiDepositedEventObservable(DefaultBlockParameterName.LATEST, DefaultBlockParameterName.LATEST)
 				.subscribe(ser -> System.out.println(ReflectionToStringBuilder.toString(ser)));
-		TimeUnit.MINUTES.sleep(2);
+		TimeUnit.MINUTES.sleep(10);
 		subscription.unsubscribe();
 		System.exit(0);// needed due to the inner workings of Web3j.
 	}
@@ -62,7 +62,7 @@ public final class SmartContractEventsSubscription {
 			FunctionReturnDecoder.decode(log.getData(), event.getNonIndexedParameters()).stream()
 					.forEach(t -> System.out.println(t.getTypeAsString() + "/ " + t.getValue()));
 		});
-		TimeUnit.MINUTES.sleep(2);
+		TimeUnit.MINUTES.sleep(10);
 		subscription.unsubscribe();
 		System.exit(0);// needed due to the inner workings of Web3j.
 	}

@@ -26,6 +26,7 @@ import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.exceptions.TransactionException;
 import org.web3j.protocol.http.HttpService;
+import org.web3j.tx.Contract;
 import org.web3j.tx.RawTransactionManager;
 import org.web3j.tx.Transfer;
 import org.web3j.tx.response.PollingTransactionReceiptProcessor;
@@ -84,10 +85,9 @@ public final class Utility {
 	public static TransactionReceipt ethTransferExplicitTransaction(final Web3j web3j, final Credentials credentials, final String targetAccount, 
 			final BigInteger amount, final int trReceiptAttempts, final int trReceiptSleepTime) throws IOException, InterruptedException, ExecutionException, TransactionException {
 		final EthGasPrice ethGasPrice = web3j.ethGasPrice().send();
-		final EthGetTransactionCount ethGetTransactionCount = web3j.ethGetTransactionCount(targetAccount, DefaultBlockParameterName.PENDING).send();
+		final EthGetTransactionCount ethGetTransactionCount = web3j.ethGetTransactionCount(credentials.getAddress(), DefaultBlockParameterName.LATEST).send();
 		final BigInteger nonce = ethGetTransactionCount.getTransactionCount();
-		final RawTransaction rawTransaction  = RawTransaction.createEtherTransaction(nonce, ethGasPrice.getGasPrice(), Transfer.GAS_LIMIT, 
-				targetAccount, amount);
+		final RawTransaction rawTransaction  = RawTransaction.createEtherTransaction(nonce, ethGasPrice.getGasPrice(), Contract.GAS_LIMIT, targetAccount, amount);
 		final EthSendTransaction tr = web3j.ethSendRawTransaction(Numeric.toHexString(TransactionEncoder.signMessage(rawTransaction, credentials))).send();
 		final PollingTransactionReceiptProcessor trp = new PollingTransactionReceiptProcessor(web3j, trReceiptAttempts, trReceiptSleepTime);
 		return trp.waitForTransactionReceipt(tr.getTransactionHash());
