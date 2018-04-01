@@ -6,6 +6,7 @@ For the time being its key features are:
   - Transfer ethers between wallet accounts.
   - Transaction monitoring.
   - CoinManager Smart Contract, which is able to create its own coin, mint coins and transfer such coins between accounts.   Developed in Solidity, it also uses inheritance.
+  - CoinManager is able to receive payments (WEIs) by the means of a payable function.
   - Java Servlets to transfer ethers and exercise the CoinManager.
   - MongoDB data store for Smart Contract and Ethereum events.
 
