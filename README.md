@@ -29,7 +29,7 @@ At the moment, I've set up three externally controlled accounts and one smart co
 - 0x99fedc28c33a8d00f7f0602baca0d24c3a17d9f6
 - 0x9142a699d088be61c993ace813829d3d25deac2d
 - 0x0c3d6f479511F1AE5d8bee86E9e13965fB652157
-- 0xf4729c2807fd0f4431004146ecfc4a47578aaeea --> smart contract.
+- Smart contract address changes at every re-deployment.
 
 ## How to run and test the DAPP
 There are two servlets that can be exercised by direct http requests as follows:
