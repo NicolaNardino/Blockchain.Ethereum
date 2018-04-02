@@ -30,7 +30,7 @@ At the moment, I've set up three externally controlled accounts and one smart co
 - 0x99fedc28c33a8d00f7f0602baca0d24c3a17d9f6
 - 0x9142a699d088be61c993ace813829d3d25deac2d
 - 0x0c3d6f479511F1AE5d8bee86E9e13965fB652157
-- Smart contract address changes at every re-deployment.
+- Smart contract addresses change at every re-deployment. Currently,. CoinManager is at 0xd77bfb4912ef3f901eb7628b8b18c6cd03e248f6.
 
 ## How to run and test the DAPP
 There are two servlets that can be exercised by direct http requests as follows:
