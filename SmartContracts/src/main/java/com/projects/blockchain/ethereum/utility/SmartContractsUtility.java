@@ -9,11 +9,12 @@ import com.projects.blockchain.ethereum.smart_contracts.CoinManager;
 
 public final class SmartContractsUtility {
 	
-	public static final String CoinManagerAddress = "0xd77bfb4912ef3f901eb7628b8b18c6cd03e248f6";
+	public static final String CoinManagerAddress = "0x326704b84aaa3970400960d182610d69d162cdc9";
+	public static final String DepositManagerAddress = "0x8fb0dbe743127dbd20aab91a27d83576f5111990";
 	
 	public static CoinManager deployCoinManager(final Web3j web3j, final Credentials credentials, final String coinName) throws Exception {
 		final long startTime = System.currentTimeMillis();
-		final CoinManager contract = CoinManager.deploy(web3j, credentials, ManagedTransaction.GAS_PRICE, Contract.GAS_LIMIT, coinName).send();
+		final CoinManager contract = CoinManager.deploy(web3j, credentials, ManagedTransaction.GAS_PRICE, Contract.GAS_LIMIT, coinName, DepositManagerAddress).send();
 		final StringBuilder sb = new StringBuilder(); 
 		sb.append("Deployed contract, address: "+ contract.getContractAddress())
 		  .append("\nOwner: "+contract.owner().send())
@@ -38,7 +39,6 @@ public final class SmartContractsUtility {
 		catch(final Exception e) {
 			throw new RuntimeException(e);
 		}
-		
 	}
 	
 	public static CoinManager reDeployCoinManager(final Web3j web3j, final Credentials credentials, final String contractAddress, final String coinName) throws Exception {

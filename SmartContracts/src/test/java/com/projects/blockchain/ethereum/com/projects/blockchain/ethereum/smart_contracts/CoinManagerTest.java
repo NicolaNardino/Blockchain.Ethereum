@@ -69,6 +69,7 @@ public final class CoinManagerTest {
 	}
 	
 	@Test
+	@Ignore
 	public void testSendWeisToCoinManager() throws Exception {
 		final BigInteger initialBalance = coinManager.getBalance().send();
 		System.out.println("Initial balance: "+initialBalance+" weis.");
@@ -77,5 +78,11 @@ public final class CoinManagerTest {
 		final BigInteger finalBalance = coinManager.getBalance().send();
 		assertEquals(initialBalance.add(transferAmount), finalBalance);
 		System.out.println("Final balance: "+finalBalance+" weis.");
+	}
+	
+	@Test
+	public void testSendWeisToDepositManagerByCoinManager() throws Exception {
+		coinManager.sendToDepositManager(BigInteger.TEN).send();
+		//TODO: ...
 	}
 }

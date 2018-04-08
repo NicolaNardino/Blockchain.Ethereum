@@ -1,5 +1,11 @@
 pragma solidity ^0.4.0;
 
+contract DepositManager {
+ 	
+	function deposit(address sender) public payable {
+    }
+}
+
 contract BaseCoinManager {
     address public owner;
     string message;
@@ -10,20 +16,16 @@ contract BaseCoinManager {
     	coinName = _coinName;
     }
     
-    function getCoinName() public constant returns (string) {
+    function getCoinName() public view returns (string) {
     	return coinName;
     }
     
-    function getMessage() public constant returns (string) {
+    function getMessage() public view returns (string) {
     	return message;
     }
     
     function setMessage(string _message) public {
         message = _message;
-    }
-    
-    function getOwner() public constant returns (address) {
-    	return owner;	
     }
     
     function kill() public { if (msg.sender == owner) selfdestruct(owner); }
@@ -32,16 +34,19 @@ contract BaseCoinManager {
 contract CoinManager is BaseCoinManager {
     mapping (address => uint) public balances;
     mapping (address => uint) public weiDeposits;
+    DepositManager depositManager;
 	
     event Sent(address from, address to, uint amount);
     event Mint(address from, address to, uint amount);
     event WeiDeposited(address from, uint amount, uint balance);
+    event SentToDepositManager(address from, uint amount);
 
-	function CoinManager(string _coinName) BaseCoinManager(_coinName) public { 
+	function CoinManager(string _coinName, address _depositManager) BaseCoinManager(_coinName) public {
+		depositManager = DepositManager(_depositManager); 
     }
     
     function mint(address receiver, uint amount) public {
-        if (msg.sender != owner) return;
+        require(msg.sender != owner);
         balances[receiver] += amount;
         emit Mint(msg.sender, receiver, amount);
     }
@@ -58,8 +63,13 @@ contract CoinManager is BaseCoinManager {
     	return address(this).balance;
     }
     
-    function() payable {
+    function() public payable {
         weiDeposits[msg.sender] +=msg.value;
         emit WeiDeposited(msg.sender, msg.value, address(this).balance);
+    }
+    
+    function sendToDepositManager() public payable {
+        depositManager.deposit.value(msg.value)(msg.sender);
+        emit SentToDepositManager(msg.sender, msg.value);
     }
 }

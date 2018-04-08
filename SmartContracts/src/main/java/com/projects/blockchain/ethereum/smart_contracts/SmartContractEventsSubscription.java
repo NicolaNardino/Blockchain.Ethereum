@@ -41,7 +41,7 @@ public final class SmartContractEventsSubscription {
 		final Credentials credentials = WalletUtils.loadCredentials(accountPassword, walletFilePath);
 		final CoinManager coinManager = SmartContractsUtility.loadCoinManager(web3j, credentials, SmartContractsUtility.CoinManagerAddress);
 		final Subscription subscription = coinManager
-				.weiDepositedEventObservable(DefaultBlockParameterName.LATEST, DefaultBlockParameterName.LATEST)
+				.sentToDepositManagerEventObservable(DefaultBlockParameterName.LATEST, DefaultBlockParameterName.LATEST)
 				.subscribe(ser -> System.out.println(ReflectionToStringBuilder.toString(ser)));
 		TimeUnit.MINUTES.sleep(10);
 		subscription.unsubscribe();
