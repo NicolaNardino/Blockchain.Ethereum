@@ -1,7 +1,7 @@
 # Welcome to Blockchain.Ethereum Web Application DApp PoC
-Java web application interacting with the Ethereum network.
+Java web application backed by the Ethereum network.
 
-For the time being its key features are:
+Íts key features are:
   - Connection to the Ethereum Network via a node running on localhost.
   - Transfer ethers between wallet accounts.
   - Transaction monitoring.
