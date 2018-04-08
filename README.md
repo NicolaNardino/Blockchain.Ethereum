@@ -34,7 +34,7 @@ At the moment, I've set up three externally controlled accounts and one smart co
 - Smart contract addresses change at every re-deployment. Currently,. CoinManager is at 0x326704b84aaa3970400960d182610d69d162cdc9 and DepositManager at 0x8fb0dbe743127dbd20aab91a27d83576f5111990.
 
 ## Interactions between Smart Contracts
-CoinManager interacts with DepositManager by adding a DepositManager interface in CoinManager(.sol). Actually, the DepositManager type name in CoinManager could also be called differently because what it counts, it's the address of DepositManager that will be used at run-time. This link is established when CoinManager gets created, i.e., the DepositManager address gets passed in to CoinManager in its constructor. Alternatively, one could pass the address of DepositManager at run-time by adding an extra parameter to CoinManager.sendToDepositManager and casting it to DepositManager.
+CoinManager interacts with DepositManager by adding a DepositManager interface in CoinManager(.sol). Actually, the DepositManager type name in CoinManager could also be called differently, because what it counts is the address of DepositManager that will be used at run-time. This link is established when CoinManager gets created, i.e., the DepositManager address gets passed to CoinManager in its constructor. Alternatively, one could pass the address of DepositManager at run-time by adding an extra parameter to CoinManager.sendToDepositManager and casting it to DepositManager.
 
 ## How to run and test the DAPP
 There are two servlets that can be exercised by direct http requests as follows:
