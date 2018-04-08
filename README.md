@@ -1,13 +1,13 @@
 # Welcome to Blockchain.Ethereum Web Application DApp PoC
 Java web application backed by the Ethereum network.
 
-Íts key features are:
+Its key features are:
   - Connection to the Ethereum Network via a node running on localhost.
   - Transfer ethers between wallet accounts.
   - Transaction monitoring.
   - CoinManager Smart Contract, which is able to create its own coin, mint coins and transfer such coins between accounts.   Developed in Solidity, it also uses inheritance.
   - CoinManager is able to receive payments (WEIs) by the means of a fallback payable function.
-  - DepositManger smart contract, which can receive payments from CoinManager. For this purpose, a second payable function has been added to CoinManager.
+  - DepositManger Smart Contract, which can receive payments from CoinManager. For this purpose, a second payable function has been added to CoinManager.
   - Java Servlets to transfer ethers and exercise the CoinManager.
   - MongoDB data store for Smart Contract and Ethereum events.
 
@@ -32,6 +32,9 @@ At the moment, I've set up three externally controlled accounts and one smart co
 - 0x9142a699d088be61c993ace813829d3d25deac2d
 - 0x0c3d6f479511F1AE5d8bee86E9e13965fB652157
 - Smart contract addresses change at every re-deployment. Currently,. CoinManager is at 0x326704b84aaa3970400960d182610d69d162cdc9 and DepositManager at 0x8fb0dbe743127dbd20aab91a27d83576f5111990.
+
+## Interactions between Smart Contracts
+CoinManager interacts with DepositManager by adding a DepositManager interface in CoinManager(.sol). Actually, the DepositManager type name in CoinManager could also be called differently because what it counts, it's the address of DepositManager that will be used at run-time. This link is established when CoinManager gets created, i.e., the DepositManager address gets passed in to CoinManager in its constructor. Alternatively, one could pass the address of DepositManager at run-time by adding an extra parameter to CoinManager.sendToDepositManager and casting it to DepositManager.
 
 ## How to run and test the DAPP
 There are two servlets that can be exercised by direct http requests as follows:
