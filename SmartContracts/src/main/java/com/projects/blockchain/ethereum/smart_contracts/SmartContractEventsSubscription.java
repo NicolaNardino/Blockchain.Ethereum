@@ -18,6 +18,7 @@ import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.request.EthFilter;
 import org.web3j.protocol.http.HttpService;
 
+import com.projects.blockchain.ethereum.utility.SmartContractName;
 import com.projects.blockchain.ethereum.utility.SmartContractsUtility;
 import com.projects.blockchain.ethereum.utility.Utility;
 
@@ -31,26 +32,30 @@ public final class SmartContractEventsSubscription {
 	public static void main(String[] args) throws Exception {
 		final Properties properties = Utility.getApplicationProperties("smartContracts.properties");
 		final Web3j web3j = Web3j.build(new HttpService(properties.getProperty("nodeURL")));
-		subscriptionWithSmartContractWrapper(web3j, properties.getProperty("accountPassword"),
-				properties.getProperty("walletFilePath"));
+		subscriptionWithSmartContractWrapper(web3j, properties.getProperty("accountPassword"), properties.getProperty("walletFilePath"));
 		// subscriptionWithouSmartContractWrapper(web3j);
 	}
 
 	private static void subscriptionWithSmartContractWrapper(final Web3j web3j, final String accountPassword,
 			final String walletFilePath) throws Exception {
 		final Credentials credentials = WalletUtils.loadCredentials(accountPassword, walletFilePath);
-		final CoinManager coinManager = SmartContractsUtility.loadCoinManager(web3j, credentials, SmartContractsUtility.CoinManagerAddress);
-		final Subscription subscription = coinManager
-				.sentToDepositManagerEventObservable(DefaultBlockParameterName.LATEST, DefaultBlockParameterName.LATEST)
+		final CoinManager coinManager = (CoinManager)SmartContractsUtility.loadSmartContract(web3j, credentials, SmartContractName.CoinManager);
+		final DepositManager depositManager = (DepositManager)SmartContractsUtility.loadSmartContract(web3j, credentials, SmartContractName.DepositManager);
+		final Subscription depositManagerSubscription = depositManager
+				.weiReceivedEventObservable(DefaultBlockParameterName.LATEST, DefaultBlockParameterName.LATEST)
 				.subscribe(ser -> System.out.println(ReflectionToStringBuilder.toString(ser)));
+		final Subscription coinManagerSubscription = coinManager
+				.sentToDepositManagerEventObservable(DefaultBlockParameterName.LATEST, DefaultBlockParameterName.LATEST)
+				.subscribe(ser -> System.out.println(ReflectionToStringBuilder.toString(ser)));		
 		TimeUnit.MINUTES.sleep(10);
-		subscription.unsubscribe();
+		coinManagerSubscription.unsubscribe();
+		depositManagerSubscription.unsubscribe();
 		System.exit(0);// needed due to the inner workings of Web3j.
 	}
 
 	private static void subscriptionWithouSmartContractWrapper(final Web3j web3j) throws InterruptedException {
 		final EthFilter filter = new EthFilter(DefaultBlockParameterName.LATEST, DefaultBlockParameterName.LATEST,
-				SmartContractsUtility.CoinManagerAddress);
+				SmartContractName.CoinManager.getAddress());
 		final Event event = new Event("Mint", Arrays.<TypeReference<?>>asList(),
 				Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {
 				}, new TypeReference<Address>() {

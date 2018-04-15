@@ -29,6 +29,7 @@ import com.projects.blockchain.ethereum.utility.EtherTransferEventDetail;
 import com.projects.blockchain.ethereum.utility.EventDetail;
 import com.projects.blockchain.ethereum.utility.EventType;
 import com.projects.blockchain.ethereum.utility.SmartContractEventDetail;
+import com.projects.blockchain.ethereum.utility.SmartContractName;
 import com.projects.blockchain.ethereum.utility.SmartContractsUtility;
 import com.projects.blockchain.ethereum.utility.Utility;
 import com.projects.blockchain.ethereum.utility.Web3jContainer;
@@ -59,7 +60,7 @@ public final class TransactionMonitoringContextListener implements ServletContex
     	final ServletContext sc = sce.getServletContext();
     	final Web3jContainer web3jContainer = Utility.buildWeb3jContainer(sc.getInitParameter("NodeURL"), sc.getInitParameter("AccountPassword"), sc.getInitParameter("WalletFilePath"));
     	final Web3j web3j = web3jContainer.getWeb3j();
-    	final CoinManager coinManager = SmartContractsUtility.loadCoinManager(web3j, web3jContainer.getCredentials(), SmartContractsUtility.CoinManagerAddress);
+    	final CoinManager coinManager = (CoinManager)SmartContractsUtility.loadSmartContract(web3j, web3jContainer.getCredentials(), SmartContractName.CoinManager);
     	mongoDB = new MongoDBImplementation(new MongoDBConnection(sc.getInitParameter("mongoDBHost"), 
 				Integer.valueOf(sc.getInitParameter("mongoDBPort")), sc.getInitParameter("mongoDBDatabaseName")), 
 				sc.getInitParameter("mongoDBSmartContractEventsCollectionName"), sc.getInitParameter("mongoDBEtherTransferEventsCollectionName"));

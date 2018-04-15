@@ -28,7 +28,9 @@ contract BaseCoinManager {
         message = _message;
     }
     
-    function kill() public { if (msg.sender == owner) selfdestruct(owner); }
+    function kill() public { 
+    	if (msg.sender == owner) selfdestruct(owner); 
+    }
 }
 
 contract CoinManager is BaseCoinManager {

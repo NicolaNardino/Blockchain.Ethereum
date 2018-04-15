@@ -13,4 +13,12 @@ contract DepositManager {
         weiDeposits[sender] +=msg.value;
         emit WeiReceived(sender, msg.value, weiDeposits[sender]);
     }
+    
+    function getBalance() view public returns (uint) {
+    	return address(this).balance;
+    }
+    
+    function kill() public { 
+    	if (msg.sender == owner) selfdestruct(owner); 
+    }
 }

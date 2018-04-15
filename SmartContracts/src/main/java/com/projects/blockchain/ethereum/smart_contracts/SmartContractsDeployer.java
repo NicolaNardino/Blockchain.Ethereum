@@ -19,10 +19,9 @@ public final class SmartContractsDeployer {
 		try {
 			final Properties properties = Utility.getApplicationProperties("smartContracts.properties");
 			final Web3j web3j = Web3j.build(new HttpService(properties.getProperty("nodeURL")));
-			final Credentials credentials = WalletUtils.loadCredentials(properties.getProperty("accountPassword"), properties.getProperty("walletFilePath"));
-			//Utility.deployCoinManager(web3j, credentials, "MyCoin");
-			SmartContractsUtility.reDeployCoinManager(web3j, credentials, SmartContractsUtility.CoinManagerAddress, "MyCoin");
-			//SmartContractsUtility.deployDepositManager(web3j, credentials);
+			final Credentials credentials = WalletUtils.loadCredentials(properties.getProperty("accountPassword"), properties.getProperty("walletFilePath"));		
+			//SmartContractsUtility.deploySmartContract(web3j, credentials, SmartContractName.DepositManager);
+			SmartContractsUtility.reDeployDepositManager(web3j, credentials, "MyCoin");
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}

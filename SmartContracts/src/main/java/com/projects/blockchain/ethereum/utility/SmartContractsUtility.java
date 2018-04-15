@@ -6,43 +6,93 @@ import org.web3j.tx.Contract;
 import org.web3j.tx.ManagedTransaction;
 
 import com.projects.blockchain.ethereum.smart_contracts.CoinManager;
+import com.projects.blockchain.ethereum.smart_contracts.DepositManager;
 
 public final class SmartContractsUtility {
-	
-	public static final String CoinManagerAddress = "0x326704b84aaa3970400960d182610d69d162cdc9";
-	public static final String DepositManagerAddress = "0x8fb0dbe743127dbd20aab91a27d83576f5111990";
-	
-	public static CoinManager deployCoinManager(final Web3j web3j, final Credentials credentials, final String coinName) throws Exception {
-		final long startTime = System.currentTimeMillis();
-		final CoinManager contract = CoinManager.deploy(web3j, credentials, ManagedTransaction.GAS_PRICE, Contract.GAS_LIMIT, coinName, DepositManagerAddress).send();
-		final StringBuilder sb = new StringBuilder(); 
-		sb.append("Deployed contract, address: "+ contract.getContractAddress())
-		  .append("\nOwner: "+contract.owner().send())
-		  .append("\nTime taken: "+(System.currentTimeMillis() - startTime)+" ms.")
-		  .append("\nDetails available at: https://rinkeby.etherscan.io/address/"+contract.getContractAddress());
-		System.out.println(sb.toString());
-		return contract;
+
+	private enum OpType {
+		Load, Deploy
 	}
 	
-	public static CoinManager loadCoinManager(final Web3j web3j, final Credentials credentials, final String contractAddress) {
+	/**
+	 * Deploys one of the available smart contracts, CoinManager or DepositManager. 
+	 * In order for a smart contract to be deployable from its initial Solidity (.sol) representation, it'must have been:
+	 * <ul>
+	 * 	<li>compiled by solc, which produced bin and abi files.</li>
+	 *  <li>run the above bin and abi files with a web3j executable in order to produce the Java representation, which can be deployed.</li>
+	 * </ul>
+	 * 
+	 *  @param params List of arguments to be passed to the smart contract constructor.
+	 *  
+	 * */
+	public static Contract deploySmartContract(final Web3j web3j, final Credentials credentials, final SmartContractName scm, final String... params) throws Exception {
+		final long startTime = System.currentTimeMillis();
+		final Contract contract;
+		switch(scm) {
+		case CoinManager: 
+			contract = CoinManager.deploy(web3j, credentials, ManagedTransaction.GAS_PRICE, Contract.GAS_LIMIT, params[0], params[1]).send();
+			break;
+		case DepositManager: 
+			contract = DepositManager.deploy(web3j, credentials, ManagedTransaction.GAS_PRICE, Contract.GAS_LIMIT).send();
+			break;
+		default: throw new IllegalArgumentException("Unknown contract name: "+scm);
+		}
+		printInfo(OpType.Deploy, scm.toString(), contract.getContractAddress(), contract.isValid(), credentials.getAddress(), startTime);
+		return contract;
+	}
+
+	/**
+	 * Loads one of the available smart contracts, from the Ethereum network, into their Java representation.  
+	 * 
+	 * */
+	public static Contract loadSmartContract(final Web3j web3j, final Credentials credentials, final SmartContractName scm) {
 		try {
 			final long startTime = System.currentTimeMillis();
-			final CoinManager contract = CoinManager.load(contractAddress, web3j, credentials, ManagedTransaction.GAS_PRICE, Contract.GAS_LIMIT);
-			final StringBuilder sb = new StringBuilder(); 
-			sb.append("\nLoaded contract, address: "+contractAddress)
-			  .append("\nOwner: "+contract.owner().send())
-			  .append("\nIs valid: "+contract.isValid())
-			  .append("\nTime taken: "+(System.currentTimeMillis() - startTime)+" ms.");
-			System.out.println(sb.toString());
+			final Contract contract;
+			switch(scm) {
+			case CoinManager: 
+				contract = CoinManager.load(scm.getAddress(), web3j, credentials, ManagedTransaction.GAS_PRICE, Contract.GAS_LIMIT);
+				break;
+			case DepositManager: 
+				contract = DepositManager.load(scm.getAddress(), web3j, credentials, ManagedTransaction.GAS_PRICE, Contract.GAS_LIMIT);
+				break;
+			default: throw new IllegalArgumentException("Unknown contract name: "+scm);
+			}
+			printInfo(OpType.Load, scm.toString(), contract.getContractAddress(), contract.isValid(), credentials.getAddress(), startTime);
 			return contract;	
 		}
 		catch(final Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
+
+	/**
+	 * Redeploys CoinManager, by first loading and killing it.
+	 * */
+	public static CoinManager reDeployCoinManager(final Web3j web3j, final Credentials credentials, final String coinName, final String depositManagerAddress) throws Exception {
+		((CoinManager)loadSmartContract(web3j, credentials, SmartContractName.CoinManager)).kill();
+		return (CoinManager)deploySmartContract(web3j, credentials, SmartContractName.CoinManager, coinName, depositManagerAddress);
+	}
+
+	/**
+	 * Redeploys DepositManager, by first loading and killing it. Once it's been redeployed, also CoinManager must be.
+	 * In fact, the latter holds a reference to the address of DepositManager. 
+	 * */
+	public static DepositManager reDeployDepositManager(final Web3j web3j, final Credentials credentials, final String coinName) throws Exception {
+		((DepositManager)loadSmartContract(web3j, credentials, SmartContractName.DepositManager)).kill();
+		final Contract depositManager = deploySmartContract(web3j, credentials, SmartContractName.DepositManager);
+		reDeployCoinManager(web3j, credentials, coinName, depositManager.getContractAddress());
+		return (DepositManager)depositManager;
+	}
 	
-	public static CoinManager reDeployCoinManager(final Web3j web3j, final Credentials credentials, final String contractAddress, final String coinName) throws Exception {
-		loadCoinManager(web3j, credentials, contractAddress).kill();
-		return deployCoinManager(web3j, credentials, coinName);
+	private static void printInfo(final OpType opType, final String name, final String address, final boolean isValid, final String owner, final long startTime) {
+		final StringBuilder sb = new StringBuilder();
+		sb.append("OpType: "+opType+"\n")
+		.append("Contract: "+name+", address: "+ address+"\n")
+		.append("Owner: "+owner+"\n")
+		.append("Is valid: "+isValid+"\n")
+		.append("Time taken: "+(System.currentTimeMillis() - startTime)+" ms.\n")
+		.append("Details available at: https://rinkeby.etherscan.io/address/"+address+"\n\n");
+		System.out.println(sb.toString());
 	}
 }
