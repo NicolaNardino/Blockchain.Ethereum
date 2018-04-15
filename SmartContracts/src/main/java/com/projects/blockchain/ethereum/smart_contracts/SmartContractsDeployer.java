@@ -7,7 +7,6 @@ import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.http.HttpService;
 
-import com.projects.blockchain.ethereum.utility.SmartContractsUtility;
 import com.projects.blockchain.ethereum.utility.Utility;
 
 /**
@@ -21,7 +20,7 @@ public final class SmartContractsDeployer {
 			final Web3j web3j = Web3j.build(new HttpService(properties.getProperty("nodeURL")));
 			final Credentials credentials = WalletUtils.loadCredentials(properties.getProperty("accountPassword"), properties.getProperty("walletFilePath"));		
 			//SmartContractsUtility.deploySmartContract(web3j, credentials, SmartContractName.DepositManager);
-			SmartContractsUtility.reDeployDepositManager(web3j, credentials, "MyCoin");
+			//final DepositManager depositManager = SmartContractsUtility.reDeployDepositManager(web3j, credentials, "MyCoin");
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}

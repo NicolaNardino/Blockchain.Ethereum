@@ -19,6 +19,10 @@ import com.projects.blockchain.ethereum.utility.SmartContractsUtility;
 import com.projects.blockchain.ethereum.utility.Utility;
 import com.projects.blockchain.ethereum.utility.Web3jContainer;
 
+/**
+ * Test cases around the functionalities of CoinManager and DepositManager.
+ * 
+ * */
 public final class CoinManagerTest {
 	private static Web3j web3j;
 	private static Credentials credentials;
@@ -36,6 +40,9 @@ public final class CoinManagerTest {
 		depositManager = (DepositManager)SmartContractsUtility.loadSmartContract(web3j, web3jContainer.getCredentials(), SmartContractName.DepositManager);
 	}
 	
+	/**
+	 * Basic test to check CoinManager message store functionality. 
+	 * */
 	@Test
 	@Ignore
 	public void testMessage() throws Exception {
@@ -44,10 +51,14 @@ public final class CoinManagerTest {
 		assertEquals(testMessage, coinManager.getMessage().send());
 	}
 	
+	/**
+	 * Mints some MyCoins and checks they actually show up in the test receiver balance. Mind that, the test receiver must by definition 
+	 * be the contract owner.  
+	 * */
 	@Test
 	@Ignore
 	public void testMint() throws Exception {
-		final String testReceiver = "0x99fedc28c33a8d00f7f0602baca0d24c3a17d9f6";//String.valueOf(random.nextInt(9999));
+		final String testReceiver = "0x99fedc28c33a8d00f7f0602baca0d24c3a17d9f6";
 		final BigInteger amount = BigInteger.valueOf(random.nextInt(999));
 		final BigInteger testReceiverInitialBalance = coinManager.balances(testReceiver).send();
 		coinManager.mint(testReceiver, amount).send();
@@ -57,6 +68,9 @@ public final class CoinManagerTest {
 		
 	}
 	
+	/**
+	 * Sends some MyCoins from a given sender to a receiver account.  
+	 * */
 	@Test
 	@Ignore
 	public void testSend() throws Exception {
@@ -72,29 +86,36 @@ public final class CoinManagerTest {
 		assertEquals(receiverBalance.add(receiverAmount), coinManager.balances(receiverAccount).send());
 	}
 	
+	/**
+	 * Sends WEIs to CoinManager by invoking its payable fallback function. 
+	 * */
 	@Test
 	@Ignore
 	public void testSendWeisToCoinManager() throws Exception {
 		final BigInteger initialBalance = coinManager.getBalance().send();
-		System.out.println("Initial balance: "+initialBalance+" weis.");
+		System.out.println("Initial balance: "+initialBalance+" WEIs.");
 		final BigInteger transferAmount = BigInteger.valueOf(random.nextInt(10) + 1);
 		Utility.ethTransferExplicitTransaction(web3j, credentials, SmartContractName.CoinManager.getAddress(), transferAmount, 10, 60000);
 		final BigInteger finalBalance = coinManager.getBalance().send();
 		assertEquals(initialBalance.add(transferAmount), finalBalance);
-		System.out.println("Final balance: "+finalBalance+" weis.");
+		System.out.println("Final balance: "+finalBalance+" WEIs.");
 	}
 	
+	/**
+	 * Sends WEIs to DepositManager passing by CoinManager. At the end of the transactions, no WEIS must be credited to CoinManager. 
+	 * */
 	@Test
-	public void testSendWeisToDepositManagerByCoinManager1() throws Exception {
+	public void testSendWeisToDepositManagerByCoinManager() throws Exception {
 		final BigInteger depositManagerInitialBalance = depositManager.getBalance().send();
-		System.out.println("Deposit Manager Initial Balance: "+depositManagerInitialBalance+" weis.");
 		final BigInteger coinManagerInitialBalance = coinManager.getBalance().send();
-		System.out.println("Coin Manager Initial Balance: "+coinManagerInitialBalance+" weis.");
+		System.out.println("Deposit Manager Initial Balance: "+depositManagerInitialBalance+" WEIs, Coin Manager Initial Balance: "+coinManagerInitialBalance+" WEIs.");
 		final BigInteger depositAmount = BigInteger.valueOf(random.nextInt(10) + 1);
 		System.out.println("Deposit Amount: "+depositAmount);
 		coinManager.sendToDepositManager(depositAmount).send();
 		final BigInteger depositManagerFinalBalance = depositManager.getBalance().send();
-		System.out.println("Deposit Manager Final Balance: "+depositManagerFinalBalance+" weis.");
+		final BigInteger coinManagerFinalBalance = coinManager.getBalance().send();
+		System.out.println("Deposit Manager Final Balance: "+depositManagerFinalBalance+" WEIs, Coin Manager Final Balance: "+coinManagerFinalBalance+" WEIs.");
 		assertEquals(depositManagerInitialBalance.add(depositAmount), depositManagerFinalBalance);
+		assertEquals(coinManagerInitialBalance, coinManagerFinalBalance);
 	}
 }

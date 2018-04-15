@@ -1,7 +1,7 @@
 package com.projects.blockchain.ethereum.utility;
 
 public enum SmartContractName {
-	CoinManager("0x418e027dead601abd75eae1ddad598a94dfff42f"), DepositManager("0x2e645c1c57150e532bcc861dd3576762ed48a86e");
+	CoinManager("0xea69de4c779d0d2f5945e9a3d1d677ac5e403b2c"), DepositManager("0xe9790e2fda7f591d5cea4f85aeb56c885f981550");
 	
 	private final String address;
 	private SmartContractName(final String address) {
