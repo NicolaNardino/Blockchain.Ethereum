@@ -53,3 +53,4 @@ MongoDBEventsRetriever can be used to monitor the Smart Contract and Ethereum ev
 ## Roadmap
 
 1. Add a back end storage layer to the web application, possibly NoSQL. --> done
+2. A small GUI allowing to transfer Ethers abd exercise CoinManager and DepositManager.
