@@ -9,6 +9,7 @@ Its key features are:
   - CoinManager is able to receive payments (WEIs) by the means of a fallback payable function.
   - DepositManger Smart Contract, which can receive payments from CoinManager. For this purpose, a second payable function has been added to CoinManager.
   - Java Servlets to transfer ethers and exercise the CoinManager.
+  - RESTful web service exposing CoinManager/ DepositManager features.
   - MongoDB data store for Smart Contract and Ethereum events.
 
 I've set up my Ethereum local environment as follows:
