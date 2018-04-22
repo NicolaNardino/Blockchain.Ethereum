@@ -4,6 +4,9 @@
   <artifactId>ethereum-node-connector</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>war</packaging>
+  <properties>
+		<resteasy.version>3.0.19.Final</resteasy.version>
+  </properties>
   <dependencies>
     <dependency>
   	<groupId>junit</groupId>
@@ -14,6 +17,12 @@
   		<groupId>org.web3j</groupId>
   		<artifactId>core</artifactId>
   		<version>3.2.0</version>
+	</dependency>
+	<dependency>
+		<groupId>org.jboss.resteasy</groupId>
+		<artifactId>resteasy-jaxrs</artifactId>
+		<version>${resteasy.version}</version>
+		<scope>provided</scope>
 	</dependency>
   </dependencies>
   <build>
