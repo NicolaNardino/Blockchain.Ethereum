@@ -31,10 +31,10 @@ At the moment, I've set up three externally controlled accounts and one smart co
 - 0x99fedc28c33a8d00f7f0602baca0d24c3a17d9f6
 - 0x9142a699d088be61c993ace813829d3d25deac2d
 - 0x0c3d6f479511F1AE5d8bee86E9e13965fB652157
-- Smart contract addresses change at every re-deployment. Currently, CoinManager is at 0x326704b84aaa3970400960d182610d69d162cdc9 and DepositManager at 0x8fb0dbe743127dbd20aab91a27d83576f5111990.
+- Smart contract addresses change at every re-deployment. Currently, CoinManager is at 0xea69de4c779d0d2f5945e9a3d1d677ac5e403b2c and DepositManager at 0xe9790e2fda7f591d5cea4f85aeb56c885f981550.
 
 ## Interactions between Smart Contracts
-CoinManager interacts with DepositManager by adding a DepositManager interface in CoinManager(.sol). Actually, the DepositManager type name in CoinManager could also be called differently, because what it counts is the address of DepositManager that will be used at run-time. This link is established when CoinManager gets created, i.e., the DepositManager address gets passed to CoinManager in its constructor. Alternatively, one could pass the address of DepositManager at run-time by adding an extra parameter to CoinManager.sendToDepositManager and casting it to DepositManager.
+CoinManager interacts with DepositManager by a DepositManager interface in CoinManager(.sol). Actually, the DepositManager type name in CoinManager doesn't matter, because what it counts is the address of DepositManager that will be used at run-time. This link is established at CoinManager creation time, i.e., the DepositManager address gets passed to CoinManager constructor. Alternatively, one could think of passing the address of DepositManager at run-time by adding an extra parameter to CoinManager.sendToDepositManager and casting it to DepositManager.
 
 ## How to run and test the DAPP
 There are two servlets that can be exercised by direct http requests as follows:
@@ -53,3 +53,4 @@ MongoDBEventsRetriever can be used to monitor the Smart Contract and Ethereum ev
 ## Roadmap
 
 1. Add a back end storage layer to the web application, possibly NoSQL. --> done
+2. A small GUI allowing to transfer Ethers abd exercise CoinManager and DepositManager.
