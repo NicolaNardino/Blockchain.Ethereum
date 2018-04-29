@@ -8,8 +8,8 @@ Its key features are:
   - CoinManager Smart Contract, which is able to create its own coin, mint coins and transfer such coins between accounts.   Developed in Solidity, it also uses inheritance.
   - CoinManager is able to receive payments (WEIs) by the means of a fallback payable function.
   - DepositManger Smart Contract, which can receive payments from CoinManager. For this purpose, a second payable function has been added to CoinManager.
-  - Java Servlets to transfer ethers and exercise the CoinManager.
-  - RESTful web service exposing CoinManager/ DepositManager features.
+  - Java servlets to transfer ethers and exercise CoinManager and DepositManager.
+  - RESTful web service exposing CoinManager/ DepositManager features, which is then called by the DepositManager exercising servlet.
   - MongoDB data store for Smart Contract and Ethereum events.
 
 I've set up my Ethereum local environment as follows:
@@ -32,15 +32,16 @@ At the moment, I've set up three externally controlled accounts and one smart co
 - 0x99fedc28c33a8d00f7f0602baca0d24c3a17d9f6
 - 0x9142a699d088be61c993ace813829d3d25deac2d
 - 0x0c3d6f479511F1AE5d8bee86E9e13965fB652157
-- Smart contract addresses change at every re-deployment. Currently, CoinManager is at 0xea69de4c779d0d2f5945e9a3d1d677ac5e403b2c and DepositManager at 0xe9790e2fda7f591d5cea4f85aeb56c885f981550.
+- Smart contract addresses change at every re-deployment. Currently, CoinManager is at 0x55e7b3536cf2bf4c2610464f0fd163de4c4b673d and DepositManager at 0xe9790e2fda7f591d5cea4f85aeb56c885f981550.
 
 ## Interactions between Smart Contracts
 CoinManager interacts with DepositManager by a DepositManager interface in CoinManager(.sol). Actually, the DepositManager type name in CoinManager doesn't matter, because what it counts is the address of DepositManager that will be used at run-time. This link is established at CoinManager creation time, i.e., the DepositManager address gets passed to CoinManager constructor. Alternatively, one could think of passing the address of DepositManager at run-time by adding an extra parameter to CoinManager.sendToDepositManager and casting it to DepositManager.
 
 ## How to run and test the DAPP
 There are two servlets that can be exercised by direct http requests as follows:
-1.  http://host:port/EthereumDAPP_PoC/EtherTransferServlet?TargetAccount=0x9142A699d088be61C993Ace813829D3D25DeAc2d&TransferAmount=10&TransferUnit=WEI : transfers 10 WEIs from the sender account (which is the one used to initialize the Credentials, defined by an account password and a wallet file path) and a target account, passed as servlet request parameter.
-2. http://host:port/EthereumDAPP_PoC/CoinManagerSmartContractServlet?OpType=TransferFund&TargetAccount=0x9142A699d088be61C993Ace813829D3D25DeAc2d&FundAmount=21 : this uses the CoinManager smart contract and deals with MyCoins. OpType can either be RaiseFund and TransferFund. The former can only makes sense if called by the smart contract owner and it's meant to create MyCoins out os thin air. The latter can then be used to transfer funds between accounts.
+1.  http://host:port/EthereumDAPP_PoC/EtherTransferServlet?TargetAccount=0x9142A699d088be61C993Ace813829D3D25DeAc2d&TransferAmount=10&TransferUnit=WEI: transfers 10 WEIs from the sender account (which is the one used to initialize the Credentials, defined by an account password and a wallet file path) and a target account, passed as servlet request parameter.
+2. http://host:port/EthereumDAPP_PoC/CoinManagerSmartContractServlet?OpType=TransferFund&TargetAccount=0x9142A699d088be61C993Ace813829D3D25DeAc2d&FundAmount=21: this uses the CoinManager smart contract and deals with MyCoins. OpType can either be RaiseFund and TransferFund. The former can only makes sense if called by the smart contract owner and it's meant to create MyCoins out os thin air. The latter can then be used to transfer funds between accounts.
+3. http://localhost:8080/EthereumDAPP_PoC/DepositManagerSmartContractServlet?OpType=Deposit&TargetAccount=0x9142A699d088be61C993Ace813829D3D25DeAc2d&Amount=23: exercises DepositManager by calling a RESTful web service. OpType can be eitther Deposit (deposits some WEIs to an account within the DepositManager) or DepositAccountBalance (gets the balance of an account within DepositManager). 
 
 The above two servlets can also be exercised by a test client, ServletTestClient, which can programmatically connect to the servlets and send (multiple) requests.
 CoinManagerTest can be used to unit-test the CoinManager.
