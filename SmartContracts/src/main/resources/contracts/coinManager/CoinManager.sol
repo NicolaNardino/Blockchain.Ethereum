@@ -42,6 +42,7 @@ contract CoinManager is BaseCoinManager {
     event Mint(address from, address to, uint amount);
     event WeiDeposited(address from, uint amount, uint balance);
     event SentToDepositManager(address from, uint amount);
+    event SentToDepositManagerFull(address sender, address receiver, uint amount);
 
 	function CoinManager(string _coinName, address _depositManager) BaseCoinManager(_coinName) public {
 		depositManager = DepositManager(_depositManager); 
@@ -73,5 +74,10 @@ contract CoinManager is BaseCoinManager {
     function sendToDepositManager() public payable {
         depositManager.deposit.value(msg.value)(msg.sender);
         emit SentToDepositManager(msg.sender, msg.value);
+    }
+    
+    function sendToDepositManager(address receiver) public payable {
+        depositManager.deposit.value(msg.value)(receiver);
+        emit SentToDepositManagerFull(msg.sender, receiver, msg.value);
     }
 }

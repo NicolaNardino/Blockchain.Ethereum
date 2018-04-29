@@ -37,4 +37,8 @@
     	<param-name>mongoDBEtherTransferEventsCollectionName</param-name>
     	<param-value>EtherTransferEventsCollection</param-value>
   	</context-param>
+  	<context-param>
+    	<param-name>depositManagerRESTfulBaseURL</param-name>
+    	<param-value>http://localhost:8080/EthereumDAPP_PoC/rest/depositmanager/</param-value>
+  	</context-param>
 </web-app>

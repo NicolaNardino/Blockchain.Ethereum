@@ -25,6 +25,7 @@ import com.projects.blockchain.ethereum.mongodb.MongoDBImplementation;
 import com.projects.blockchain.ethereum.mongodb.MongoDBInterface;
 import com.projects.blockchain.ethereum.poc.node_connector.util.ServletContextAttribute;
 import com.projects.blockchain.ethereum.smart_contracts.CoinManager;
+import com.projects.blockchain.ethereum.smart_contracts.DepositManager;
 import com.projects.blockchain.ethereum.utility.EtherTransferEventDetail;
 import com.projects.blockchain.ethereum.utility.EventDetail;
 import com.projects.blockchain.ethereum.utility.EventType;
@@ -41,7 +42,7 @@ import rx.Subscription;
  *<ul>
  *	<li>Subscribes to all transactions executed on the sender account.</li>
  *  <li>Subscribes to Mint and Sent events raised by the smart contract CoinManager.</li>
- *  <li>Publishes to the servlet context, instances of <code>Web3j</code>, <code>CoinManager</code> and <code>Credentials</code>, so to be re-used by all servlets.</li>
+ *  <li>Publishes to the servlet context, instances of <code>Web3j</code>, <code>CoinManager</code>, <code>DepositManager</code> and <code>Credentials</code>, so to be re-used by all servlets.</li>
  *  <li>Stores smart contract events to a Mongo DB collection.</li>
  *</ul>  
  *
@@ -61,11 +62,13 @@ public final class TransactionMonitoringContextListener implements ServletContex
     	final Web3jContainer web3jContainer = Utility.buildWeb3jContainer(sc.getInitParameter("NodeURL"), sc.getInitParameter("AccountPassword"), sc.getInitParameter("WalletFilePath"));
     	final Web3j web3j = web3jContainer.getWeb3j();
     	final CoinManager coinManager = (CoinManager)SmartContractsUtility.loadSmartContract(web3j, web3jContainer.getCredentials(), SmartContractName.CoinManager);
-    	mongoDB = new MongoDBImplementation(new MongoDBConnection(sc.getInitParameter("mongoDBHost"), 
-				Integer.valueOf(sc.getInitParameter("mongoDBPort")), sc.getInitParameter("mongoDBDatabaseName")), 
-				sc.getInitParameter("mongoDBSmartContractEventsCollectionName"), sc.getInitParameter("mongoDBEtherTransferEventsCollectionName"));
+    	final DepositManager depositManager = (DepositManager)SmartContractsUtility.loadSmartContract(web3j, web3jContainer.getCredentials(), SmartContractName.DepositManager);
 		sc.setAttribute(ServletContextAttribute.Web3jContainer.toString(), web3jContainer);
 		sc.setAttribute(ServletContextAttribute.CoinManager.toString(), coinManager);
+		sc.setAttribute(ServletContextAttribute.DepositManager.toString(), depositManager);
+		mongoDB = new MongoDBImplementation(new MongoDBConnection(sc.getInitParameter("mongoDBHost"), 
+				Integer.valueOf(sc.getInitParameter("mongoDBPort")), sc.getInitParameter("mongoDBDatabaseName")), 
+				sc.getInitParameter("mongoDBSmartContractEventsCollectionName"), sc.getInitParameter("mongoDBEtherTransferEventsCollectionName"));
 		etherTransactionsSubscription = web3j.catchUpToLatestAndSubscribeToNewTransactionsObservable(DefaultBlockParameterName.LATEST)
                 .filter(tx -> tx.getFrom().equals(sc.getInitParameter("SenderAccount")))
                 .subscribe(tx -> {
