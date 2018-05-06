@@ -27,6 +27,11 @@
 			<artifactId>resteasy-jaxb-provider</artifactId>
 			<version>${resteasy.version}</version>
 		</dependency>
+		<dependency>
+    		<groupId>org.jboss.resteasy</groupId>
+    		<artifactId>resteasy-jackson-provider</artifactId>
+    		<version>${resteasy.version}</version>
+		</dependency>
     <dependency>
   		<groupId>org.web3j</groupId>
   		<artifactId>core</artifactId>

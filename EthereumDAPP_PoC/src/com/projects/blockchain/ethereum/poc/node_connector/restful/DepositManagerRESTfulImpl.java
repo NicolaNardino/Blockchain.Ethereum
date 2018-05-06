@@ -16,8 +16,8 @@ import com.projects.blockchain.ethereum.restful.DepositData;
 import com.projects.blockchain.ethereum.smart_contracts.CoinManager;
 import com.projects.blockchain.ethereum.smart_contracts.DepositManager;
 
-@Path("/depositmanager")
-public final class DepositManagerProxyImpl implements DepositManagerProxy {
+@Path("/depositManager")
+public final class DepositManagerRESTfulImpl implements DepositManagerRESTful {
 
 	@Context 
 	private ServletContext sc;

@@ -7,11 +7,12 @@ import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 
 @ApplicationPath("/rest")
-public final class DepositManagerProxyApplication extends Application {
+public final class RESTfulRegistrationApplication extends Application {
 	private final Set<Object> singletons = new HashSet<Object>();
 
-	public DepositManagerProxyApplication() {
-		singletons.add(new DepositManagerProxyImpl());
+	public RESTfulRegistrationApplication() {
+		singletons.add(new DepositManagerRESTfulImpl());
+		singletons.add(new EventsRESTfulImpl());
 	}
 	
 	@Override

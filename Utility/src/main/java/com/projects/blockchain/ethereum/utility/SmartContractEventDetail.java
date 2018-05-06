@@ -3,13 +3,17 @@ package com.projects.blockchain.ethereum.utility;
 import java.math.BigInteger;
 import java.util.Date;
 
-public final class SmartContractEventDetail extends EventDetail {
+import org.codehaus.jackson.annotate.JsonCreator;
+import org.codehaus.jackson.annotate.JsonProperty;
+
+public final class SmartContractEventDetail extends EventDetail {	
 	private final String smartContractAddress;
 	private final EventType eventType;
 	
-	public SmartContractEventDetail(final String smartContractAddress, final String sourceAccount, final String targetAccount,
-			final BigInteger sourceAccountBalance, final BigInteger targetAccountBalance, final int amount,
-			final Date eventDate, final EventType eventType) {
+	@JsonCreator
+	public SmartContractEventDetail(@JsonProperty("smartContractAddress") final String smartContractAddress, @JsonProperty("sourceAccount") final String sourceAccount, 
+			@JsonProperty("targetAccount") final String targetAccount, @JsonProperty("sourceAccountBalance") final BigInteger sourceAccountBalance, @JsonProperty("targetAccountBalance") final BigInteger targetAccountBalance, 
+			@JsonProperty("amount") final int amount, @JsonProperty("eventDate") final Date eventDate, @JsonProperty("eventType") final EventType eventType) {
 		super(sourceAccount, targetAccount, amount, eventDate, sourceAccountBalance, targetAccountBalance);
 		this.smartContractAddress = smartContractAddress;
 		this.eventType = eventType;

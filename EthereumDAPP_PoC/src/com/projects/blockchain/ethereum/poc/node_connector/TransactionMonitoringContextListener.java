@@ -51,7 +51,7 @@ import rx.Subscription;
 @WebListener
 public final class TransactionMonitoringContextListener implements ServletContextListener {
     private Subscription etherTransactionsSubscription;
-    private Subscription coinManagerMintEventSubscription, coinManagerSentEventSubscription;
+    private Subscription coinManagerMintEventSubscription, coinManagerSentEventSubscription, depositManagerDepositedEventSubscription;
     private MongoDBInterface mongoDB;
     private final BlockingQueue<EventDetail> eventsQueue = new LinkedBlockingQueue<>();
     private final ScheduledExecutorService exec = Executors.newScheduledThreadPool(1);
@@ -69,6 +69,7 @@ public final class TransactionMonitoringContextListener implements ServletContex
 		mongoDB = new MongoDBImplementation(new MongoDBConnection(sc.getInitParameter("mongoDBHost"), 
 				Integer.valueOf(sc.getInitParameter("mongoDBPort")), sc.getInitParameter("mongoDBDatabaseName")), 
 				sc.getInitParameter("mongoDBSmartContractEventsCollectionName"), sc.getInitParameter("mongoDBEtherTransferEventsCollectionName"));
+		sc.setAttribute(ServletContextAttribute.MongoDBConnection.toString(), mongoDB);
 		etherTransactionsSubscription = web3j.catchUpToLatestAndSubscribeToNewTransactionsObservable(DefaultBlockParameterName.LATEST)
                 .filter(tx -> tx.getFrom().equals(sc.getInitParameter("SenderAccount")))
                 .subscribe(tx -> {
@@ -93,6 +94,11 @@ public final class TransactionMonitoringContextListener implements ServletContex
 					eventsQueue.offer(new SmartContractEventDetail(coinManager.getContractAddress(), 
 							ser.from, ser.to, getCoinManagerBalance(coinManager, ser.from), getCoinManagerBalance(coinManager, ser.to), 
 							ser.amount.intValue(), new Date(), EventType.Sent));
+				});
+		depositManagerDepositedEventSubscription = depositManager
+				.weiReceivedEventObservable(DefaultBlockParameterName.LATEST, DefaultBlockParameterName.LATEST)
+				.subscribe(ser -> {
+					System.out.println("Sent Event\nFrom: "+ser.from+", Amount: "+ser.amount);
 				});
 		exec.scheduleWithFixedDelay(this::addEventsToMongoDB, 1, 10, TimeUnit.SECONDS);
 	}
@@ -129,6 +135,12 @@ public final class TransactionMonitoringContextListener implements ServletContex
 		etherTransactionsSubscription.unsubscribe();
 		coinManagerMintEventSubscription.unsubscribe();
 		coinManagerSentEventSubscription.unsubscribe();
+		depositManagerDepositedEventSubscription.unsubscribe();
+		try {
+			((MongoDBImplementation)mongoDB).close();
+		} catch (final Exception e) {
+			e.printStackTrace();
+		}
 		System.out.println("Context Destroyed");
 	}
 	

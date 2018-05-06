@@ -3,6 +3,18 @@ package com.projects.blockchain.ethereum.utility;
 import java.math.BigInteger;
 import java.util.Date;
 
+import org.codehaus.jackson.annotate.JsonCreator;
+import org.codehaus.jackson.annotate.JsonProperty;
+
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonSubTypes({ 
+		  @Type(value = SmartContractEventDetail.class, name = "SmartContractEventDetail"), 
+		  @Type(value = EtherTransferEventDetail.class, name = "EtherTransferEventDetail") 
+		})
 public class EventDetail {
 	private final String sourceAccount;
 	private final String targetAccount;
@@ -11,8 +23,10 @@ public class EventDetail {
 	private final BigInteger sourceAccountBalance;
 	private final BigInteger targetAccountBalance;
 	
-	public EventDetail(final String sourceAccount, final String targetAccount, final int amount,
-			final Date eventDate, final BigInteger sourceAccountBalance, final BigInteger targetAccountBalance) {	
+	@JsonCreator
+	public EventDetail(@JsonProperty("sourceAccount") final String sourceAccount, @JsonProperty("targetAccount") final String targetAccount, 
+			@JsonProperty("amount") final int amount, @JsonProperty("eventDate") final Date eventDate, 
+			@JsonProperty("sourceAccountBalance") final BigInteger sourceAccountBalance, @JsonProperty("targetAccountBalance") final BigInteger targetAccountBalance) {	
 		this.sourceAccount = sourceAccount;
 		this.targetAccount = targetAccount;
 		this.amount = amount;
@@ -20,7 +34,7 @@ public class EventDetail {
 		this.sourceAccountBalance = sourceAccountBalance;
 		this.targetAccountBalance = targetAccountBalance;
 	}
-	
+		
 	public String getSourceAccount() {
 		return sourceAccount;
 	}

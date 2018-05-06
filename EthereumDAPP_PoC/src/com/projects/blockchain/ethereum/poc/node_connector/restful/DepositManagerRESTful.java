@@ -4,7 +4,7 @@ import javax.ws.rs.core.Response;
 
 import com.projects.blockchain.ethereum.restful.DepositData;
 
-public interface DepositManagerProxy {
+public interface DepositManagerRESTful {
 
 	/**
 	 * Deposit some WEIs into DepositManager internal storage for a given account.

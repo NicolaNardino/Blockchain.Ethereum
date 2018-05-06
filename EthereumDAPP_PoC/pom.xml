@@ -9,10 +9,10 @@
   </properties>
   <dependencies>
     <dependency>
-  	<groupId>junit</groupId>
-  	<artifactId>junit</artifactId>
-  	<version>4.12</version>
-</dependency>
+  		<groupId>junit</groupId>
+  		<artifactId>junit</artifactId>
+  		<version>4.12</version>
+	</dependency>
     <dependency>
   		<groupId>org.web3j</groupId>
   		<artifactId>core</artifactId>
@@ -24,6 +24,18 @@
 		<version>${resteasy.version}</version>
 		<scope>provided</scope>
 	</dependency>
+	<dependency>
+		<groupId>org.jboss.resteasy</groupId>
+		<artifactId>resteasy-jaxrs</artifactId>
+		<version>${resteasy.version}</version>
+		<scope>provided</scope>
+	</dependency>
+	<dependency>
+    	<groupId>org.jboss.resteasy</groupId>
+    	<artifactId>resteasy-jackson-provider</artifactId>
+    	<version>${resteasy.version}</version>
+	</dependency>
+	
   </dependencies>
   <build>
     <sourceDirectory>src</sourceDirectory>
