@@ -15,15 +15,18 @@ public final class ServletTestClient {
 	
 	public static void main(final String[] args) {
 		//parallelRuns(10, 9, 0, 0);
-		testEtherTransferServlet(10);
-		testCoinManagerServlet(15, OpType.RaiseFund);
-		testCoinManagerServlet(15, OpType.TransferFund);
+		//testEtherTransferServlet(10);
+		testCoinManagerServlet(50, OpType.TransferFund);
+		testCoinManagerServlet(50, OpType.RaiseFund);
 	}
 	
 	private static void testCoinManagerServlet(final int nrRequests, final OpType opType) {
 		IntStream.range(1, nrRequests).forEach(i-> {
 			System.out.println("Request nr.: "+i+" for "+opType);
-			System.out.println(Utility.servletCall(baseURL + "CoinManagerSmartContractServlet", "OpType="+opType+"&TargetAccount=0x9142A699d088be61C993Ace813829D3D25DeAc2d&FundAmount=10"));	
+			System.out.println(Utility.servletCall(baseURL + "CoinManagerSmartContractServlet", "OpType="+opType+"&TargetAccount=0x9142A699d088be61C993Ace813829D3D25DeAc2d&FundAmount=10"));
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {}
 		});
 	}
 	

@@ -98,7 +98,7 @@ public final class TransactionMonitoringContextListener implements ServletContex
 		depositManagerDepositedEventSubscription = depositManager
 				.weiReceivedEventObservable(DefaultBlockParameterName.LATEST, DefaultBlockParameterName.LATEST)
 				.subscribe(ser -> {
-					System.out.println("Sent Event\nFrom: "+ser.from+", Amount: "+ser.amount);
+					System.out.println("Wei Received\nFrom: "+ser.from+", Amount: "+ser.amount);
 				});
 		exec.scheduleWithFixedDelay(this::addEventsToMongoDB, 1, 10, TimeUnit.SECONDS);
 	}
@@ -156,7 +156,7 @@ public final class TransactionMonitoringContextListener implements ServletContex
 			return BigInteger.valueOf(-1);
 		}
     }
-    
+	
     private static BigInteger getEtherBalance(final Web3j web3j, final String address) {
     	try {
 			return web3j.ethGetBalance(address, DefaultBlockParameterName.LATEST).send().getBalance();

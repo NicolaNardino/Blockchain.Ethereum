@@ -56,7 +56,6 @@ public final class CoinManagerTest {
 	 * be the contract owner.  
 	 * */
 	@Test
-	@Ignore
 	public void testMint() throws Exception {
 		final String testReceiver = "0x99fedc28c33a8d00f7f0602baca0d24c3a17d9f6";
 		final BigInteger amount = BigInteger.valueOf(random.nextInt(999));
@@ -72,7 +71,6 @@ public final class CoinManagerTest {
 	 * Sends some MyCoins from a given sender to a receiver account.  
 	 * */
 	@Test
-	@Ignore
 	public void testSend() throws Exception {
 		final String senderAccount = "0x99fedc28c33a8d00f7f0602baca0d24c3a17d9f6";
 		final String receiverAccount = "0x9142A699d088be61C993Ace813829D3D25DeAc2d";
@@ -90,7 +88,6 @@ public final class CoinManagerTest {
 	 * Sends WEIs to CoinManager by invoking its payable fallback function. 
 	 * */
 	@Test
-	@Ignore
 	public void testSendWeisToCoinManager() throws Exception {
 		final BigInteger initialBalance = coinManager.getBalance().send();
 		System.out.println("Initial balance: "+initialBalance+" WEIs.");
