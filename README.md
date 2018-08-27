@@ -59,9 +59,10 @@ Maven is only used to build an executable jar.
 - java -jar target/Microservices-1.0.jar --> port set in application.properties.
 
 ## Development environment and tools
-- Ubuntu 16.04.3 LTS.
+- Ubuntu 16-04 - 18-04.
 - Eclipse Neon.
 - JBoss Wildfly 10.1.
+- Spring Boot 2.0.4.
 
 ## Roadmap
 
