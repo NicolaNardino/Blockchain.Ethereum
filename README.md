@@ -50,12 +50,13 @@ MongoDBEventsRetriever can be used to monitor the Smart Contract and Ethereum ev
 
 ## How to run the Spring Boot Microservices
 ### With Maven
-cd Microservices
-mvn clean package spring-boot:run -Dserver.port=9094
-### Outside Maven
-cd Microservices
-mvn clean package
-java -jar target/Microservices-1.0.jar --> port set in application.properties.
+- cd Microservices
+- mvn clean package spring-boot:run -Dserver.port=9094
+### Without Maven
+Maven is only used to build an executable jar.
+- cd Microservices
+- mvn clean package
+- java -jar target/Microservices-1.0.jar --> port set in application.properties.
 
 ## Development environment and tools
 - Ubuntu 16.04.3 LTS.
