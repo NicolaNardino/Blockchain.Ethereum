@@ -1,7 +1,7 @@
 # Welcome to Blockchain.Ethereum Web Application DApp PoC
 Java web application backed by the Ethereum network.
 
-Its key features are:
+Key features:
   - Connection to the Ethereum Network via a node running on localhost.
   - Transfer ethers between wallet accounts.
   - Transaction monitoring.
@@ -11,6 +11,7 @@ Its key features are:
   - Java servlets to transfer ethers and exercise CoinManager and DepositManager.
   - RESTful web service exposing CoinManager/ DepositManager features, which is then called by the DepositManager exercising servlet.
   - MongoDB data store for Smart Contract and Ethereum events.
+  - Spring Boot Microservices, exposing the MongoDB events.
 
 I've set up my Ethereum local environment as follows:
   - Run a full node by geth on the localhost and created two accounts: geth --rpcapi "personal,db,eth,net,web3" --rpc --rinkeby). Most notable here is the --rpc option by which it gets enabled the HTTP-RPC server on the node, then used by web3j to establish the connection from the web application.
@@ -47,6 +48,15 @@ The above two servlets can also be exercised by a test client, ServletTestClient
 CoinManagerTest can be used to unit-test the CoinManager.
 MongoDBEventsRetriever can be used to monitor the Smart Contract and Ethereum events stored by TransactionMonitoringContextListener.
 
+## How to run the Spring Boot Microservices
+### With Maven
+cd Microservices
+mvn clean package spring-boot:run -Dserver.port=9094
+### Outside Maven
+cd Microservices
+mvn clean package
+java -jar target/Microservices-1.0.jar --> port set in application.properties.
+
 ## Development environment and tools
 - Ubuntu 16.04.3 LTS.
 - Eclipse Neon.
@@ -56,3 +66,4 @@ MongoDBEventsRetriever can be used to monitor the Smart Contract and Ethereum ev
 
 1. Add a back end storage layer to the web application, possibly NoSQL. --> done
 2. A small GUI allowing to transfer Ethers abd exercise CoinManager and DepositManager.
+3. Run the Spring Boot Microservices in Docker container.
