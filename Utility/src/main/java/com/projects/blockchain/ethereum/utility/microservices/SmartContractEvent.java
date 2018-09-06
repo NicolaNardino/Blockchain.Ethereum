@@ -11,7 +11,7 @@ import com.projects.blockchain.ethereum.utility.EventType;
 public class SmartContractEvent {	
 	private String sourceAccount;
 	private String targetAccount;
-	private int amount;
+	private Integer amount;
 	private Date eventDate;
 	private BigInteger sourceAccountBalance;
 	private BigInteger targetAccountBalance;
@@ -21,7 +21,7 @@ public class SmartContractEvent {
 	public SmartContractEvent() {}
 	
 	public SmartContractEvent(final String sourceAccount, final String targetAccount, 
-			final int amount, final Date eventDate, 
+			final Integer amount, final Date eventDate, 
 			final BigInteger sourceAccountBalance, final BigInteger targetAccountBalance, final String smartContractAddress, final EventType eventType) {
 		this.sourceAccount = sourceAccount;
 		this.targetAccount = targetAccount;
@@ -41,7 +41,7 @@ public class SmartContractEvent {
 		return targetAccount;
 	}
 	
-	public int getAmount() {
+	public Integer getAmount() {
 		return amount;
 	}
 
@@ -73,7 +73,7 @@ public class SmartContractEvent {
 		this.targetAccount = targetAccount;
 	}
 
-	public void setAmount(int amount) {
+	public void setAmount(Integer amount) {
 		this.amount = amount;
 	}
 
