@@ -1,23 +1,24 @@
-package com.projects.blockchain.ethereum.poc.microservices.mongodb.util;
+package com.projects.blockchain.ethereum.utility.microservices;
 
 import java.math.BigInteger;
 import java.util.Date;
 
-import org.bson.types.ObjectId;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import com.projects.blockchain.ethereum.utility.EventType;
 
 @Document(collection = "SmartContractEventsCollection")
 public class SmartContractEvent {	
-	private final String sourceAccount;
-	private final String targetAccount;
-	private final int amount;
-	private final Date eventDate;
-	private final BigInteger sourceAccountBalance;
-	private final BigInteger targetAccountBalance;
-	private final String smartContractAddress;
-	private final EventType eventType;
+	private String sourceAccount;
+	private String targetAccount;
+	private int amount;
+	private Date eventDate;
+	private BigInteger sourceAccountBalance;
+	private BigInteger targetAccountBalance;
+	private String smartContractAddress;
+	private EventType eventType;
 	
+	public SmartContractEvent() {}
 	
 	public SmartContractEvent(final String sourceAccount, final String targetAccount, 
 			final int amount, final Date eventDate, 
@@ -31,7 +32,6 @@ public class SmartContractEvent {
 		this.smartContractAddress = smartContractAddress;
 		this.eventType = eventType;
 	}
-	
 
 	public String getSourceAccount() {
 		return sourceAccount;
@@ -65,6 +65,37 @@ public class SmartContractEvent {
 		return eventType;
 	}
 
+	public void setSourceAccount(String sourceAccount) {
+		this.sourceAccount = sourceAccount;
+	}
+
+	public void setTargetAccount(String targetAccount) {
+		this.targetAccount = targetAccount;
+	}
+
+	public void setAmount(int amount) {
+		this.amount = amount;
+	}
+
+	public void setEventDate(Date eventDate) {
+		this.eventDate = eventDate;
+	}
+
+	public void setSourceAccountBalance(BigInteger sourceAccountBalance) {
+		this.sourceAccountBalance = sourceAccountBalance;
+	}
+
+	public void setTargetAccountBalance(BigInteger targetAccountBalance) {
+		this.targetAccountBalance = targetAccountBalance;
+	}
+
+	public void setSmartContractAddress(String smartContractAddress) {
+		this.smartContractAddress = smartContractAddress;
+	}
+
+	public void setEventType(EventType eventType) {
+		this.eventType = eventType;
+	}
 
 	@Override
 	public String toString() {

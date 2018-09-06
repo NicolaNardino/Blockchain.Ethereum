@@ -16,8 +16,8 @@ public final class ServletTestClient {
 	public static void main(final String[] args) {
 		//parallelRuns(10, 9, 0, 0);
 		//testEtherTransferServlet(10);
-		testCoinManagerServlet(50, OpType.TransferFund);
-		testCoinManagerServlet(50, OpType.RaiseFund);
+		testCoinManagerServlet(500, OpType.TransferFund);
+		testCoinManagerServlet(500, OpType.RaiseFund);
 	}
 	
 	private static void testCoinManagerServlet(final int nrRequests, final OpType opType) {
@@ -25,7 +25,7 @@ public final class ServletTestClient {
 			System.out.println("Request nr.: "+i+" for "+opType);
 			System.out.println(Utility.servletCall(baseURL + "CoinManagerSmartContractServlet", "OpType="+opType+"&TargetAccount=0x9142A699d088be61C993Ace813829D3D25DeAc2d&FundAmount=10"));
 			try {
-				Thread.sleep(500);
+				Thread.sleep(1000);
 			} catch (InterruptedException e) {}
 		});
 	}

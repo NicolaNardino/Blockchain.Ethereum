@@ -3,13 +3,13 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.projects.blockchain.ethereum.poc</groupId>
-	<artifactId>Microservices</artifactId>
-	<version>1.0</version>
+	<groupId>com.projects.blockchain.ethereum.poc.microservices.mongodb</groupId>
+	<artifactId>microservicesClient</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>microservices</name>
-	<description>Microservices</description>
+	<name>MicroservicesClient</name>
+	<description>Microservices Client</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -26,47 +26,27 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-		<dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-mongodb</artifactId>
-        </dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-rest</artifactId>            
+    </dependency>
+ 
+    <dependency>
+        <groupId>com.fasterxml.jackson.dataformat</groupId>
+        <artifactId>jackson-dataformat-xml</artifactId>
+    </dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-actuator</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-configuration-processor</artifactId>
-			<optional>true</optional>
-		</dependency>
-		 <dependency>
-        <groupId>org.codehaus.jackson</groupId>
-        <artifactId>jackson-core-asl</artifactId>
-        <version>1.9.13</version>
-    </dependency>
-    <dependency>
-        <groupId>org.codehaus.jackson</groupId>
-        <artifactId>jackson-mapper-asl</artifactId>
-        <version>1.9.13</version>
-    </dependency>
-    <dependency>
-    	<groupId>com.fasterxml.jackson.dataformat</groupId>
-    	<artifactId>jackson-dataformat-xml</artifactId>
-	</dependency>
-	<dependency>
 			<groupId>com.projects.blockchain.ethereum</groupId>
   			<artifactId>utility</artifactId>
   			<version>0.0.1-SNAPSHOT</version>
-	</dependency>
+		</dependency>
 	</dependencies>
+
 	<build>
 		<plugins>
 			<plugin>

@@ -6,6 +6,12 @@
   <properties>
     <resteasy.version>3.0.19.Final</resteasy.version>
   </properties>
+  <parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.0.4.RELEASE</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
   <dependencies>
   	<dependency>
         <groupId>org.mongodb</groupId>
@@ -37,6 +43,10 @@
   		<artifactId>core</artifactId>
   		<version>3.2.0</version>
 	</dependency>
+		<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
+        </dependency>
   </dependencies>
   <build>
     <sourceDirectory>src</sourceDirectory>

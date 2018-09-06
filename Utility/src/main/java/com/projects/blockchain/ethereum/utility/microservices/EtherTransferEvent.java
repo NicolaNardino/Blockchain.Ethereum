@@ -1,4 +1,4 @@
-package com.projects.blockchain.ethereum.poc.microservices.mongodb.util;
+package com.projects.blockchain.ethereum.utility.microservices;
 
 import java.math.BigInteger;
 import java.util.Date;
@@ -7,17 +7,18 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "EtherTransferEventsCollection")
 public class EtherTransferEvent {
-	private final String sourceAccount;
-	private final String targetAccount;
-	private final Integer amount;
-	private final Date eventDate;
-	private final BigInteger sourceAccountBalance;
-	private final BigInteger targetAccountBalance;
-	private final String txHash;
-	private final BigInteger gas;
-	private final BigInteger gasPrice;	
+	private String sourceAccount;
+	private String targetAccount;
+	private Integer amount;
+	private Date eventDate;
+	private BigInteger sourceAccountBalance;
+	private BigInteger targetAccountBalance;
+	private String txHash;
+	private BigInteger gas;
+	private BigInteger gasPrice;	
 
-
+	public EtherTransferEvent() {}
+	
 	public EtherTransferEvent(final String sourceAccount, final String targetAccount, final Integer amount, final Date eventDate,
 			final BigInteger sourceAccountBalance, final BigInteger targetAccountBalance, final String txHash, final BigInteger gas,
 			final BigInteger gasPrice) {
@@ -76,6 +77,42 @@ public class EtherTransferEvent {
 		return gasPrice;
 	}
 
+
+	/*public void setSourceAccount(String sourceAccount) {
+		this.sourceAccount = sourceAccount;
+	}
+
+	public void setTargetAccount(String targetAccount) {
+		this.targetAccount = targetAccount;
+	}
+
+	public void setAmount(Integer amount) {
+		this.amount = amount;
+	}
+
+	public void setEventDate(Date eventDate) {
+		this.eventDate = eventDate;
+	}
+
+	public void setSourceAccountBalance(BigInteger sourceAccountBalance) {
+		this.sourceAccountBalance = sourceAccountBalance;
+	}
+
+	public void setTargetAccountBalance(BigInteger targetAccountBalance) {
+		this.targetAccountBalance = targetAccountBalance;
+	}
+
+	public void setTxHash(String txHash) {
+		this.txHash = txHash;
+	}
+
+	public void setGas(BigInteger gas) {
+		this.gas = gas;
+	}
+
+	public void setGasPrice(BigInteger gasPrice) {
+		this.gasPrice = gasPrice;
+	}*/
 
 	@Override
 	public String toString() {
