@@ -40,8 +40,6 @@ public final class EventsRetrieverRESTfulClient {
 	public static void main(final String[] args) throws JsonProcessingException {
 		final EventsRetrieverRESTfulClient client = new EventsRetrieverRESTfulClient("http://localhost:8080/EthereumDAPP_PoC/rest/events/");
 		client.getSmartContractEvents().stream().forEach(System.out::println);
-		//final SmartContractEventDetail w = new SmartContractEventDetail("", "", "", BigInteger.ONE, BigInteger.TEN,	 1, new Date(), com.projects.blockchain.ethereum.utility.EventType.Mint);
-		//client.addEvents(Arrays.asList(w));
 	}
 }
 

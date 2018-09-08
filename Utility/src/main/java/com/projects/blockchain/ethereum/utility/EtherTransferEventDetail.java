@@ -14,7 +14,7 @@ public final class EtherTransferEventDetail extends EventDetail {
 	@JsonCreator
 	public EtherTransferEventDetail(@JsonProperty("txHash") final String txHash, @JsonProperty("gas") final BigInteger gas, @JsonProperty("gasPrice") final BigInteger gasPrice, 
 			@JsonProperty("sourceAccount") final String sourceAccount, @JsonProperty("targetAccount") final String targetAccount, @JsonProperty("sourceAccountBalance") final BigInteger sourceAccountBalance, 
-			@JsonProperty("targetAccountBalance") final BigInteger targetAccountBalance, @JsonProperty("amount") final int amount, @JsonProperty("eventDate") final Date eventDate) {
+			@JsonProperty("targetAccountBalance") final BigInteger targetAccountBalance, @JsonProperty("amount") final Integer amount, @JsonProperty("eventDate") final Date eventDate) {
 		super(sourceAccount, targetAccount, amount, eventDate, sourceAccountBalance, targetAccountBalance);
 		this.txHash = txHash;
 		this.gas = gas;

@@ -24,13 +24,6 @@ public final class EventsRESTfulImpl {
 	@Context 
 	private ServletContext sc;
 	
-	/*@PUT
-	@Path("/add")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public void addEvents(final List<EventDetail> events) {
-		((MongoDBInterface)sc.getAttribute(ServletContextAttribute.MongoDBConnection.toString())).addEvents(events);
-	}*/
-	
 	@GET
 	@Path("/getSmartContractEvents")
 	@Produces(MediaType.APPLICATION_JSON)

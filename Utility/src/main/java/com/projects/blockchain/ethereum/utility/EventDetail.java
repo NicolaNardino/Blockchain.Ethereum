@@ -18,14 +18,14 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 public class EventDetail {
 	private final String sourceAccount;
 	private final String targetAccount;
-	private final int amount;
+	private final Integer amount;
 	private final Date eventDate;
 	private final BigInteger sourceAccountBalance;
 	private final BigInteger targetAccountBalance;
 	
 	@JsonCreator
 	public EventDetail(@JsonProperty("sourceAccount") final String sourceAccount, @JsonProperty("targetAccount") final String targetAccount, 
-			@JsonProperty("amount") final int amount, @JsonProperty("eventDate") final Date eventDate, 
+			@JsonProperty("amount") final Integer amount, @JsonProperty("eventDate") final Date eventDate, 
 			@JsonProperty("sourceAccountBalance") final BigInteger sourceAccountBalance, @JsonProperty("targetAccountBalance") final BigInteger targetAccountBalance) {	
 		this.sourceAccount = sourceAccount;
 		this.targetAccount = targetAccount;
@@ -43,7 +43,7 @@ public class EventDetail {
 		return targetAccount;
 	}
 	
-	public int getAmount() {
+	public Integer getAmount() {
 		return amount;
 	}
 

@@ -110,7 +110,7 @@ public final class MongoDBImplementation implements AutoCloseable, MongoDBInterf
 		        .append("TargetAccount",event.getTargetAccount())
 		        .append("SourceAccountBalance", event.getSourceAccountBalance().intValue())
 		        .append("TargetAccountBalance",event.getTargetAccountBalance().intValue())
-				.append("Amount", event.getAmount())
+				.append("Amount", event.getAmount().intValue())
 				.append("EventType", event.getEventType().getCode())
 				.append("EventDate", event.getEventDate())));
 		smartContractEventsCollection.insertMany(docs);
@@ -130,7 +130,7 @@ public final class MongoDBImplementation implements AutoCloseable, MongoDBInterf
 		        .append("TargetAccount",event.getTargetAccount())
 		        .append("SourceAccountBalance", event.getSourceAccountBalance().intValue())
 		        .append("TargetAccountBalance",event.getTargetAccountBalance().intValue())
-				.append("Amount", event.getAmount())
+				.append("Amount", event.getAmount().intValue())
 				.append("EventDate", event.getEventDate())));
 		etherTransferEventsCollection.insertMany(docs);
 		System.out.println(etherTransferEventDetails.size() + " EtherTransferEventDetails successfully stored in "+(System.currentTimeMillis() - startTime)+" ms.");
