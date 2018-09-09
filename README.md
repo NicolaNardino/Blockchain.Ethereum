@@ -3,13 +3,13 @@ Java web application backed by the Ethereum network.
 
 Key features:
   - Connection to the Ethereum Network via a node running on localhost.
-  - Transfer ethers between wallet accounts.
+  - Ethers transfer between wallet accounts.
   - Transaction monitoring.
-  - CoinManager Smart Contract, which is able to create its own coin, mint coins and transfer such coins between accounts.   Developed in Solidity, it also uses inheritance.
+  - CoinManager Smart Contract, able to create/ mint its own coin and transfer them between accounts. Developed in Solidity, it also uses inheritance.
   - CoinManager is able to receive payments (WEIs) by the means of a fallback payable function.
-  - DepositManger Smart Contract, which can receive payments from CoinManager. For this purpose, a second payable function has been added to CoinManager.
+  - DepositManger Smart Contract, able to receive payments from CoinManager. For this purpose, a second payable function has been added to CoinManager.
   - Java servlets to transfer ethers and exercise CoinManager and DepositManager.
-  - RESTful web service exposing CoinManager/ DepositManager features, which is then called by the DepositManager exercising servlet.
+  - JAX-RS RESTful web service exposing CoinManager/ DepositManager features.
   - MongoDB data store for Smart Contract and Ethereum events.
   - Spring Boot Microservices, exposing the MongoDB events.
 
@@ -67,5 +67,7 @@ Maven is only used to build an executable jar.
 ## Roadmap
 
 1. Add a back end storage layer to the web application, possibly NoSQL. --> done
-2. A small GUI allowing to transfer Ethers abd exercise CoinManager and DepositManager.
-3. Run the Spring Boot Microservices in Docker container.
+2. Run the Spring Boot Microservices in Docker container.
+3. A small GUI allowing to transfer Ethers abd exercise CoinManager and DepositManager.
+4. Javadoc.
+
