@@ -9,8 +9,8 @@ import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.projects.blockchain.ethereum.mongodb.MongoDBImplementation.CollectionType;
-import com.projects.blockchain.ethereum.utility.EtherTransferEventDetail;
-import com.projects.blockchain.ethereum.utility.SmartContractEventDetail;
+import com.projects.blockchain.ethereum.utility.microservices.EtherTransferEvent;
+import com.projects.blockchain.ethereum.utility.microservices.SmartContractEvent;
 
 /**
  * Client class for {@code EventsRESTfulImpl} restful web service.
@@ -25,12 +25,12 @@ public final class EventsRetrieverRESTfulClient {
 		this.restfulBaseURL = restfulBaseURL;
 	}
 	
-	public List<SmartContractEventDetail> getSmartContractEvents() {
-		return client.target(restfulBaseURL + "getSmartContractEvents").request().get().readEntity(new GenericType<List<SmartContractEventDetail>>() {});
+	public List<SmartContractEvent> getSmartContractEvents() {
+		return client.target(restfulBaseURL + "getSmartContractEvents").request().get().readEntity(new GenericType<List<SmartContractEvent>>() {});
 	}
 	
-	public List<EtherTransferEventDetail> getEtherTransferEvents() {
-		return client.target(restfulBaseURL + "getEtherTransferEvents").request().get().readEntity(new GenericType<List<EtherTransferEventDetail>>() {});
+	public List<EtherTransferEvent> getEtherTransferEvents() {
+		return client.target(restfulBaseURL + "getEtherTransferEvents").request().get().readEntity(new GenericType<List<EtherTransferEvent>>() {});
 	}
 	
 	public long deleteCollection(final CollectionType collectionType) {

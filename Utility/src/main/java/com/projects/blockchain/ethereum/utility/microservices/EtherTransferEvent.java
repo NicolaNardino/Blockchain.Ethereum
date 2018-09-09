@@ -51,7 +51,7 @@ public class EtherTransferEvent extends EventBase {
 
 	@Override
 	public String toString() {
-		return String.format("EtherTransferEvent1 [txHash=%s, gas=%s, gasPrice=%s, toString()=%s]", txHash, gas,
+		return String.format("EtherTransferEvent [txHash=%s, gas=%s, gasPrice=%s, toString()=%s]", txHash, gas,
 				gasPrice, super.toString());
 	}
 }

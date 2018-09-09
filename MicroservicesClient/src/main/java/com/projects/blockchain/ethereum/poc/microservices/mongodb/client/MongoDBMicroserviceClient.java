@@ -19,6 +19,9 @@ import com.projects.blockchain.ethereum.utility.microservices.EtherTransferEvent
 import com.projects.blockchain.ethereum.utility.microservices.EventsContainer;
 import com.projects.blockchain.ethereum.utility.microservices.SmartContractEvent;
 
+/**
+ * Singleton client to the Spring Boot Microservice allowing to interact with the MongoDB EventsDatabase. 
+ * */
 public enum MongoDBMicroserviceClient implements MongoDBMicroserviceClientInterface{
 	INSTANCE;
 
@@ -51,9 +54,9 @@ public enum MongoDBMicroserviceClient implements MongoDBMicroserviceClientInterf
 	public static void main(final String[] args) {
 		MongoDBMicroserviceClient.INSTANCE.addEvents(
 				 new EventsContainer<EtherTransferEvent>(Arrays.asList(
-						 new EtherTransferEvent("1234", "xxxxxxxxxx", 1, new Date(), BigInteger.ONE, BigInteger.ONE, "ewrere", BigInteger.ONE, BigInteger.ONE),
-						 new EtherTransferEvent("1234", "xxxxxxxxxx", 1, new Date(), BigInteger.ONE, BigInteger.ONE, "ewrere", BigInteger.ONE, BigInteger.ONE),
-						 new EtherTransferEvent("1234", "xxxxxxxxxx", 1, new Date(), BigInteger.ONE, BigInteger.ONE, "ewrere", BigInteger.ONE, BigInteger.TEN)
+						 new EtherTransferEvent("1234", "xxxxxxxxxx", 1, new Date(), BigInteger.ONE, BigInteger.ONE, "abc", BigInteger.ONE, BigInteger.ONE),
+						 new EtherTransferEvent("1234", "xxxxxxxxxx", 1, new Date(), BigInteger.ONE, BigInteger.ONE, "abc", BigInteger.ONE, BigInteger.ONE),
+						 new EtherTransferEvent("1234", "xxxxxxxxxx", 1, new Date(), BigInteger.ONE, BigInteger.ONE, "abc", BigInteger.ONE, BigInteger.TEN)
 						 )), 
 				"http://localhost:9094/events/addEtherTransferEvents");
 		MongoDBMicroserviceClient.INSTANCE.getEvents("http://localhost:9094/events/getEtherTransferEvents").forEach(System.out::println);

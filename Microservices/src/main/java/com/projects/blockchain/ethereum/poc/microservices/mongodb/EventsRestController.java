@@ -16,6 +16,9 @@ import com.projects.blockchain.ethereum.utility.microservices.EtherTransferEvent
 import com.projects.blockchain.ethereum.utility.microservices.EventsContainer;
 import com.projects.blockchain.ethereum.utility.microservices.SmartContractEvent;
 
+/**
+ * Spring Boot RESTful service allowing to interact with the MongoDB EventsDatabase.
+ * */
 @RestController
 @RequestMapping("/events")
 public final class EventsRestController {

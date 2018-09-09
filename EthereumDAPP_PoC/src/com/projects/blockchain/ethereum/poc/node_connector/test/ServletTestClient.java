@@ -14,10 +14,10 @@ public final class ServletTestClient {
 	private static final String baseURL = "http://localhost:8080/EthereumDAPP_PoC/";	
 	
 	public static void main(final String[] args) {
-		//parallelRuns(10, 9, 0, 0);
-		//testEtherTransferServlet(10);
+		parallelRuns(10, 9, 10, 10);
+		testEtherTransferServlet(10000);
 		testCoinManagerServlet(500, OpType.TransferFund);
-		testCoinManagerServlet(500, OpType.RaiseFund);
+		testCoinManagerServlet(5000, OpType.RaiseFund);
 	}
 	
 	private static void testCoinManagerServlet(final int nrRequests, final OpType opType) {
@@ -50,6 +50,11 @@ public final class ServletTestClient {
 		final int weis = ThreadLocalRandom.current().nextInt(999) + 1;
 		System.out.println("Request nr. "+i+" for "+weis+" WEIs.");
 		System.out.println(Utility.servletCall(baseURL + "EtherTransferServlet", "TargetAccount=0x9142A699d088be61C993Ace813829D3D25DeAc2d&TransferAmount="+weis+"&TransferUnit=WEI"));
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**

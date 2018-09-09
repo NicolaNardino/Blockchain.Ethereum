@@ -39,7 +39,7 @@ public final class DepositManagerSmartContractServlet extends HttpServlet {
 		final String targetAccount = request.getParameter("TargetAccount");
 		final BigInteger amount = new BigInteger(request.getParameter("Amount"));
 		response.setContentType("text/plain");
-		run(response.getWriter(), request.getServletContext().getInitParameter("depositManagerRESTfulBaseURL"), opType, targetAccount, amount);
+		run(response.getWriter(), request.getServletContext().getInitParameter("depositManagerRESTfulBaseURI"), opType, targetAccount, amount);
 	}
 
 	private static void run(final PrintWriter writer, final String depositManagerRESTfulBaseURL, final OpType opType, final String targetAccount, final BigInteger amount) {

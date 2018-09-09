@@ -3,9 +3,9 @@ package com.projects.blockchain.ethereum.mongodb;
 import java.util.List;
 
 import com.projects.blockchain.ethereum.mongodb.MongoDBImplementation.CollectionType;
-import com.projects.blockchain.ethereum.utility.EtherTransferEventDetail;
-import com.projects.blockchain.ethereum.utility.EventDetail;
-import com.projects.blockchain.ethereum.utility.SmartContractEventDetail;
+import com.projects.blockchain.ethereum.utility.microservices.EtherTransferEvent;
+import com.projects.blockchain.ethereum.utility.microservices.EventBase;
+import com.projects.blockchain.ethereum.utility.microservices.SmartContractEvent;
 
 /**
  * It provides set of methods to interact with a MongoDB database.
@@ -17,21 +17,21 @@ public interface MongoDBInterface {
 	 * 
 	 * @param events List of events to add to the MongoDB collection. 
 	 * */
-	void addEvents(List<EventDetail> events);
+	void addEvents(List<EventBase> events);
 	
 	/**
 	 * Gets all events out of EventsDatabase/SmartContractEventDetailsCollection.
 	 * 
 	 * @return All events out of the SmartContractEventDetailsCollection. 
 	 * */
-	public List<SmartContractEventDetail> getSmartContractEvents();
+	public List<SmartContractEvent> getSmartContractEvents();
 	
 	/**
 	 * Gets all events out of EventsDatabase/EtherTransferEventDetailsCollection.
 	 * 
 	 * @return All events out of the EtherTransferEventDetailsCollection. 
 	 * */
-	public List<EtherTransferEventDetail> getEtherTransferEvents();
+	public List<EtherTransferEvent> getEtherTransferEvents();
 
 	/**
 	 * Deletes the content of a given MongoDB collection.

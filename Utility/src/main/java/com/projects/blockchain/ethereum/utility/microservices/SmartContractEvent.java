@@ -14,8 +14,8 @@ public class SmartContractEvent extends EventBase {
 	
 	public SmartContractEvent() {}
 	
-	public SmartContractEvent(final String sourceAccount, final String targetAccount, final Integer amount, final Date eventDate, 
-			final BigInteger sourceAccountBalance, final BigInteger targetAccountBalance, final String smartContractAddress, final EventType eventType) {
+	public SmartContractEvent(String sourceAccount, String targetAccount, Integer amount, Date eventDate, 
+			BigInteger sourceAccountBalance, BigInteger targetAccountBalance, String smartContractAddress, EventType eventType) {
 		super(sourceAccount, targetAccount, amount, eventDate, sourceAccountBalance, targetAccountBalance);
 		this.smartContractAddress = smartContractAddress;
 		this.eventType = eventType;

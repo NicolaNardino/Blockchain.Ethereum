@@ -5,6 +5,7 @@
 	<projects>
 		<project>SmartContracts</project>
 		<project>Utility</project>
+		<project>MicroservicesClient</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

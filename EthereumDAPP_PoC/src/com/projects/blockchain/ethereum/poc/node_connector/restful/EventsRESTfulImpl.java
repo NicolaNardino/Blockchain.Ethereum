@@ -15,9 +15,12 @@ import javax.ws.rs.core.MediaType;
 import com.projects.blockchain.ethereum.mongodb.MongoDBImplementation.CollectionType;
 import com.projects.blockchain.ethereum.mongodb.MongoDBInterface;
 import com.projects.blockchain.ethereum.poc.node_connector.util.ServletContextAttribute;
-import com.projects.blockchain.ethereum.utility.EtherTransferEventDetail;
-import com.projects.blockchain.ethereum.utility.SmartContractEventDetail;
+import com.projects.blockchain.ethereum.utility.microservices.EtherTransferEvent;
+import com.projects.blockchain.ethereum.utility.microservices.SmartContractEvent;
 
+/**
+ * Standard JAX-RS implementation, where the MongoDB connection comes from the servlet context. It's been replaced by a Spring Boot implementation. 
+ * */
 @Path("/events")
 public final class EventsRESTfulImpl {
 
@@ -27,14 +30,14 @@ public final class EventsRESTfulImpl {
 	@GET
 	@Path("/getSmartContractEvents")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<SmartContractEventDetail> getSmartContractEvents() {
+	public List<SmartContractEvent> getSmartContractEvents() {
 		return ((MongoDBInterface)sc.getAttribute(ServletContextAttribute.MongoDBConnection.toString())).getSmartContractEvents();
 	}
 	
 	@GET
 	@Path("/getEtherTransferEvents")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<EtherTransferEventDetail> getEtherTransferEvents() {
+	public List<EtherTransferEvent> getEtherTransferEvents() {
 		return ((MongoDBInterface)sc.getAttribute(ServletContextAttribute.MongoDBConnection.toString())).getEtherTransferEvents();
 	}
 	

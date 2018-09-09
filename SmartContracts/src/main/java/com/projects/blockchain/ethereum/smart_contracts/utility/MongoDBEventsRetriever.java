@@ -14,8 +14,8 @@ import java.util.stream.Stream;
 import com.projects.blockchain.ethereum.mongodb.MongoDBConnection;
 import com.projects.blockchain.ethereum.mongodb.MongoDBImplementation;
 import com.projects.blockchain.ethereum.utility.EventType;
-import com.projects.blockchain.ethereum.utility.SmartContractEventDetail;
 import com.projects.blockchain.ethereum.utility.Utility;
+import com.projects.blockchain.ethereum.utility.microservices.SmartContractEvent;
 
 /**
  * Every X seconds, it extracts prints out all <code>CoinManager</code> and
@@ -49,16 +49,16 @@ public final class MongoDBEventsRetriever implements AutoCloseable {
 	private void printEvents() {
 		System.out.println("Ether transfer events.");
 		mongoDB.getEtherTransferEvents().stream().forEach(System.out::println);
-		final Stream<SmartContractEventDetail> smartContractEvents = mongoDB.getSmartContractEvents().stream()
+		final Stream<SmartContractEvent> smartContractEvents = mongoDB.getSmartContractEvents().stream()
 				.filter(e -> e.getEventType() != null);
-		final Map<EventType, List<SmartContractEventDetail>> smartContractEventsGroupByEventType = smartContractEvents
-				.collect(Collectors.groupingBy(SmartContractEventDetail::getEventType));
+		final Map<EventType, List<SmartContractEvent>> smartContractEventsGroupByEventType = smartContractEvents
+				.collect(Collectors.groupingBy(SmartContractEvent::getEventType));
 		System.out.println("Coin Manager raise fund events.");
-		final List<SmartContractEventDetail> mintEvents = smartContractEventsGroupByEventType.get(EventType.Mint);
+		final List<SmartContractEvent> mintEvents = smartContractEventsGroupByEventType.get(EventType.Mint);
 		if (mintEvents != null)
 			mintEvents.stream().forEach(System.out::println);
 		System.out.println("Coin Manager transfer fund events.");
-		final List<SmartContractEventDetail> sentEvents = smartContractEventsGroupByEventType.get(EventType.Sent);
+		final List<SmartContractEvent> sentEvents = smartContractEventsGroupByEventType.get(EventType.Sent);
 		if (sentEvents != null)
 			sentEvents.stream().forEach(System.out::println);
 	}

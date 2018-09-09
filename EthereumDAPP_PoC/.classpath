@@ -24,5 +24,6 @@
 	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/SmartContracts"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Utility"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/MicroservicesClient"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
