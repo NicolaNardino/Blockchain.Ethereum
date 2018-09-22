@@ -89,7 +89,8 @@ The image build generates the Dockerfile based on pom.xml variables, so that it 
 ## Roadmap
 
 1. Add a back end storage layer to the web application, possibly NoSQL. --> done
-2. Run the Spring Boot Microservices in Docker container.
-3. A small GUI allowing to transfer Ethers abd exercise CoinManager and DepositManager.
-4. Javadoc.
+2. Containerize the Spring Boot Microservices by Docker. --> done
+3. Add container orchestration by Kubernetes.
+4. A small GUI allowing to transfer Ethers abd exercise CoinManager and DepositManager.
+5. Javadoc.
 
