@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.projects.blockchain.ethereum.poc</groupId>
+	<artifactId>events_service</artifactId>
+	<version>1.0</version>
+	<packaging>jar</packaging>
+
+	<name>events_service</name>
+	<description>Microservice providing access to the events MongoDB.</description>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.0.4.RELEASE</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.8</java.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
+        </dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<optional>true</optional>
+		</dependency>
+		 <dependency>
+        <groupId>org.codehaus.jackson</groupId>
+        <artifactId>jackson-core-asl</artifactId>
+        <version>1.9.13</version>
+    </dependency>
+    <dependency>
+        <groupId>org.codehaus.jackson</groupId>
+        <artifactId>jackson-mapper-asl</artifactId>
+        <version>1.9.13</version>
+    </dependency>
+    <dependency>
+    	<groupId>com.fasterxml.jackson.dataformat</groupId>
+    	<artifactId>jackson-dataformat-xml</artifactId>
+	</dependency>
+	<dependency>
+			<groupId>com.projects.blockchain.ethereum</groupId>
+  			<artifactId>utility</artifactId>
+  			<version>0.0.1-SNAPSHOT</version>
+	</dependency>
+	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>io.fabric8</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+				<version>0.20.1</version>
+				<configuration>
+					<images>
+						<image>
+							<name>nicola.nardino/events_service:${project.version}</name>
+							<alias>EventsService</alias>
+							<build>
+								<from>jeanblanchard/java:8</from>
+								<assembly>
+									<targetDir>/deployments</targetDir>
+									<descriptorRef>artifact</descriptorRef>
+								</assembly>
+								<!--<workdir>deployments</workdir>-->
+								<maintainer>Nicola Nardino</maintainer>
+								<cmd>java -jar deployments/${project.name}-${project.version}.jar</cmd>
+							</build>
+							<run>
+								<ports>
+									<port>9094:9094</port>
+								</ports>
+							</run>
+						</image>
+					</images>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

@@ -24,7 +24,7 @@ import org.web3j.protocol.core.methods.response.Transaction;
 import com.projects.blockchain.ethereum.mongodb.MongoDBConnection;
 import com.projects.blockchain.ethereum.mongodb.MongoDBImplementation;
 import com.projects.blockchain.ethereum.mongodb.MongoDBInterface;
-import com.projects.blockchain.ethereum.poc.microservices.mongodb.client.MongoDBMicroserviceClient;
+import com.projects.blockchain.ethereum.poc.events_service_client.mongodb.MongoDBEventsServiceClient;
 import com.projects.blockchain.ethereum.poc.node_connector.util.ServletContextAttribute;
 import com.projects.blockchain.ethereum.smart_contracts.CoinManager;
 import com.projects.blockchain.ethereum.smart_contracts.DepositManager;
@@ -110,9 +110,9 @@ public final class TransactionMonitoringContextListener implements ServletContex
 			if (events.size() > 0) {
 				System.out.println("Drained "+events.size()+" events.");
 				try {
-					MongoDBMicroserviceClient.INSTANCE.addEvents(events.stream().filter(EtherTransferEvent.class::isInstance).map(EtherTransferEvent.class::cast).
+					MongoDBEventsServiceClient.INSTANCE.addEvents(events.stream().filter(EtherTransferEvent.class::isInstance).map(EtherTransferEvent.class::cast).
 							collect(Collectors.toList()), addEtherTransferEventsURL);
-					MongoDBMicroserviceClient.INSTANCE.addEvents(events.stream().filter(SmartContractEvent.class::isInstance).map(SmartContractEvent.class::cast).
+					MongoDBEventsServiceClient.INSTANCE.addEvents(events.stream().filter(SmartContractEvent.class::isInstance).map(SmartContractEvent.class::cast).
 					collect(Collectors.toList()), addSmartContractEventsURL);	
 				}
 				catch(Exception e) {

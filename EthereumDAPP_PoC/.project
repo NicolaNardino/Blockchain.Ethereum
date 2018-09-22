@@ -5,7 +5,7 @@
 	<projects>
 		<project>SmartContracts</project>
 		<project>Utility</project>
-		<project>MicroservicesClient</project>
+		<project>EventsServiceClient</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
