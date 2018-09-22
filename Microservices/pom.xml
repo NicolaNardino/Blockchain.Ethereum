@@ -8,7 +8,7 @@
 	<version>1.0</version>
 	<packaging>jar</packaging>
 
-	<name>microservices</name>
+	<name>Microservices</name>
 	<description>Microservices</description>
 
 	<parent>
@@ -73,8 +73,34 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			<plugin>
+				<groupId>io.fabric8</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+				<version>0.20.1</version>
+				<configuration>
+					<images>
+						<image>
+							<name>nicola.nardino/microservices:${project.version}</name>
+							<alias>Microservices</alias>
+							<build>
+								<from>jeanblanchard/java:8</from>
+								<assembly>
+									<targetDir>/deployments</targetDir>
+									<descriptorRef>artifact</descriptorRef>
+								</assembly>
+								<!--<workdir>deployments</workdir>-->
+								<maintainer>Nicola Nardino</maintainer>
+								<cmd>java -jar deployments/${project.name}-${project.version}.jar</cmd>
+							</build>
+							<run>
+								<ports>
+									<port>9094:9094</port>
+								</ports>
+							</run>
+						</image>
+					</images>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
-
-
 </project>

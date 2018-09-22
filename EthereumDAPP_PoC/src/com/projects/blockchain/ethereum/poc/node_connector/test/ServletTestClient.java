@@ -14,8 +14,8 @@ public final class ServletTestClient {
 	private static final String baseURL = "http://localhost:8080/EthereumDAPP_PoC/";	
 	
 	public static void main(final String[] args) {
-		parallelRuns(10, 9, 10, 10);
-		testEtherTransferServlet(10000);
+		//parallelRuns(10, 9, 10, 10);
+		//testEtherTransferServlet(10000);
 		testCoinManagerServlet(500, OpType.TransferFund);
 		testCoinManagerServlet(5000, OpType.RaiseFund);
 	}
