@@ -98,6 +98,7 @@ docker run --link=my-mongo-container --name events-service -it --network=host ni
 - Eclipse Neon.
 - JBoss Wildfly 10.1.
 - Spring Boot 2.0.4.
+- Docker. 
 
 ## Roadmap
 
