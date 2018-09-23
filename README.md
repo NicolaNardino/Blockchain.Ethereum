@@ -94,10 +94,10 @@ docker run --link=my-mongo-container --name events-service -it --network=host ni
 ```
 
 ## Development environment and tools
-- Ubuntu 16.04 - 18.04.
-- Eclipse Neon.
-- JBoss Wildfly 10.1.
-- Spring Boot 2.0.4.
+- Ubuntu. 
+- Eclipse. 
+- JBoss Wildfly. 
+- Spring Boot. 
 - Docker. 
 
 ## Roadmap
