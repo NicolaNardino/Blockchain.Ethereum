@@ -78,7 +78,7 @@ The image build generates the Dockerfile based on pom.xml variables, so that it 
   CMD java -jar deployments/events_service-1.0.jar
 ```
 ### MongoDB access from the containerized EventsService
-Given that the events service requires MongoDB, if that doesn't runs in a container too, the above run doesn't work. In that case, one would have to run container with the host network, as follows:
+Given that the events service requires MongoDB, if that doesn't run in a container too, the above run doesn't work. In that case, one would have to run the container with the host network, as follows:
 ```unix
 docker run -it --name events-service --network=host nicola.nardino/events_service:1.0
 ```
@@ -86,7 +86,7 @@ The ideal solution would be to have MongoDB running in its own container, as fol
 ```unix
 docker run --network=host --name my-mongo-container -d -v ~/data/docker/mongodb:/data/bin -p 27017:27017 mongo
 ```
-In order not to loose data store in the MongoDB EventsDatabase when the MongoDB container gets shutdown, I've used a volume to map localhost data repository ~/data/docker/mongodb to the MongoDB container one, /data/bin.
+In order not to loose data store in the MongoDB EventsDatabase when the MongoDB container gets shut down, I've used a volume to map the localhost data repository ~/data/docker/mongodb to the MongoDB container one, /data/bin.
 
 The linking between the two containers is done by sharing the host network. The now-deprecated solution would have been to use the --link option, so to link a source to a destination container, as follows:
 ```unix
