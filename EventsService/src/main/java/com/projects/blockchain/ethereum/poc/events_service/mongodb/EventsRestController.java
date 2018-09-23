@@ -16,6 +16,9 @@ import com.projects.blockchain.ethereum.utility.microservices.EtherTransferEvent
 import com.projects.blockchain.ethereum.utility.microservices.EventsContainer;
 import com.projects.blockchain.ethereum.utility.microservices.SmartContractEvent;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+
 /**
  * Spring Boot RESTful service allowing to interact with the MongoDB EventsDatabase.
  * */
@@ -28,17 +31,20 @@ public final class EventsRestController {
 	@Autowired
 	private EtherTransferEventsRepository etherTransferRepository;
 	
+	@ApiOperation(value = "Finds EtherTransferEvents by source account", response = EtherTransferEvent.class, responseContainer = "List")
 	@RequestMapping(method = RequestMethod.GET, value = "/getEtherTransferEventBySourceAccount/{sourceAccount}", 
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-	public List<EtherTransferEvent> getEtherTransferBySourceAccount(@PathVariable final String sourceAccount) {
+	public List<EtherTransferEvent> getEtherTransferBySourceAccount(@ApiParam(value = "source account", required = true) @PathVariable final String sourceAccount) {
 		return etherTransferRepository.findBySourceAccount(sourceAccount);
 	}
 	
+	@ApiOperation(value = "Returns all EtherTransferEvents", response = EtherTransferEvent.class, responseContainer = "List")
 	@RequestMapping(method = RequestMethod.GET, value = "/getEtherTransferEvents", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public List<EtherTransferEvent> getEtherTransferEvents() {
 		return etherTransferRepository.findAll();
 	}
 	
+	@ApiOperation(value = "Adds an EtherTransferEvent to the MongoDB repository.")
 	@RequestMapping(method = RequestMethod.POST, value = "/addEtherTransferEvent")
 	public ResponseEntity<String> addEtherTransferEvent(@RequestBody final EtherTransferEvent etherTransferEvent) {
 		try {
@@ -50,6 +56,7 @@ public final class EventsRestController {
 		}
 	}
 	
+	@ApiOperation(value = "Adds a list EtherTransferEvents to the MongoDB repository, passed by a wrapper object")
 	@RequestMapping(method = RequestMethod.POST, value = "/addEtherTransferEvents")
 	public ResponseEntity<String> addEtherTransferEvents(@RequestBody final EventsContainer<EtherTransferEvent> etherTransferEvents) {
 		try {
@@ -61,6 +68,7 @@ public final class EventsRestController {
 		}
 	}
 	
+	@ApiOperation(value = "Adds a list SmartContractEvents to the MongoDB repository, passed by a wrapper object")
 	@RequestMapping(method = RequestMethod.POST, value = "/addSmartContractEvents")
 	public ResponseEntity<String> addSmartContractEvents(@RequestBody final EventsContainer<SmartContractEvent> etherTransferEvents) {
 		try {
@@ -72,11 +80,13 @@ public final class EventsRestController {
 		}
 	}
 	
+	@ApiOperation(value = "Returns all SmartContractEvents", response = SmartContractEvent.class, responseContainer = "List")
 	@RequestMapping(method = RequestMethod.GET, value = "/getSmartContractEvents", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public List<SmartContractEvent> getSmartContractEvents() {
 		return smartContractsRepository.findAll();
 	}
 	
+	@ApiOperation(value = "Adds an SmartContractEvent to the MongoDB repository.")
 	@RequestMapping(method = RequestMethod.POST, value = "/addSmartContractEvent")
 	public ResponseEntity<String> addSmartContractEvent(@RequestBody final SmartContractEvent smartContractEvent) {
 		try {
