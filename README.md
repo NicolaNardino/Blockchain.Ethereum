@@ -12,7 +12,7 @@ Key features:
   - JAX-RS RESTful web service exposing CoinManager/ DepositManager features.
   - MongoDB data store for Smart Contract and Ethereum events.
   - Spring Boot Microservices, exposing the MongoDB events. Swagger for API documentation.
-  - Containerization of the microservices, with Docker.
+  - Microservices containerization with Docker.
 
 I've set up my Ethereum local environment as follows:
   - Run a full node by geth on the localhost and created two accounts: geth --rpcapi "personal,db,eth,net,web3" --rpc --rinkeby). Most notable here is the --rpc option by which it gets enabled the HTTP-RPC server on the node, then used by web3j to establish the connection from the web application.
