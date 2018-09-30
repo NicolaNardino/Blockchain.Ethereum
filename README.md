@@ -88,7 +88,7 @@ docker run -it --name events-service --network=host nicolanardino/events_service
 ```
 The ideal solution would be to have MongoDB running in its own container, as follows:
 ```
-docker run --network=host --name my-mongo-container -d -v ~/data/docker/mongodb:/data/bin -p 27017:27017 mongo
+docker run --network=host --name my-mongo-container -d -v ~/data/docker/mongodb:/data/db -p 27017:27017 mongo
 ```
 In order not to loose data store in the MongoDB EventsDatabase when the MongoDB container gets shut down, I've used a volume to map the localhost data repository ~/data/docker/mongodb to the MongoDB container one, /data/bin.
 
