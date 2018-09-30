@@ -96,6 +96,7 @@ The linking between the two containers is done by sharing the host network. The 
 ```
 docker run --link=my-mongo-container --name events-service -it --network=host nicolanardino/events_service:1.0
 ```
+Another way of building a multi-container application, so also providing the linking between containers, is through [Docker Compose](https://docs.docker.com/compose/overview/).
 
 ## Development environment and tools
 - Ubuntu. 
