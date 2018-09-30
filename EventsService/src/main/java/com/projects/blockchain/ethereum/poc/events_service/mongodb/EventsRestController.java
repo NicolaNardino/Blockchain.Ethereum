@@ -95,7 +95,12 @@ public final class EventsRestController {
 		}
 		catch(final Exception e) {
 			return new ResponseEntity<String>("Smart contract save failure.\n"+e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		
+		}	
+	}
+	
+	@ApiOperation(value = "Used in the context of check the container health,", response = String.class)
+	@RequestMapping(method = RequestMethod.GET, value = "/healthcheck")
+	public ResponseEntity<String> healthcheck() {
+		return new ResponseEntity<String>("Up", HttpStatus.OK);
 	}
 }

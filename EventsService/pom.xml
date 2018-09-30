@@ -91,17 +91,28 @@
 				<configuration>
 					<images>
 						<image>
-							<name>nicola.nardino/events_service:${project.version}</name>
+							<name>nicolanardino/events_service:${project.version}</name>
 							<alias>EventsService</alias>
 							<build>
-								<from>jeanblanchard/java:8</from>
+								<from>nicolanardino/ubuntu-oracle-java-8:latest</from>
 								<assembly>
 									<targetDir>/deployments</targetDir>
 									<descriptorRef>artifact</descriptorRef>
 								</assembly>
-								<!--<workdir>deployments</workdir>-->
-								<maintainer>Nicola Nardino</maintainer>
+								<maintainer>Nicola Nardino, https://github.com/NicolaNardino</maintainer>
 								<cmd>java -jar deployments/${project.name}-${project.version}.jar</cmd>
+								<healthCheck>
+                  					<interval>15</interval>
+                  					<timeout>10s</timeout>
+                  					<retries>3</retries>
+                  					<cmd>curl -f http://localhost:9094/events/healthcheck || exit 1</cmd>
+                				</healthCheck>
+                				<optimise>true</optimise>
+                				<runCmds>
+									<runCmd>apt-get update</runCmd>
+									<runCmd>apt-get install -y curl</runCmd>
+									<runCmd>apt-get clean</runCmd>
+								</runCmds>
 							</build>
 							<run>
 								<ports>
