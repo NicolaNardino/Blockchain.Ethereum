@@ -99,6 +99,8 @@ docker run --link=my-mongo-container --name events-service -it --network=host ni
 Another way of building a multi-container application, so also providing the linking between containers, is through [Docker Compose](https://docs.docker.com/compose/overview/).
 
 ### Docker Compose
+Below docker-compose.yml file links the containers "links" attribute, but it could be done through the networks attributes too.
+
 ```
 version: '3.0'
 
@@ -122,7 +124,6 @@ services:
      ports:
        - "9094:9094"
 ```
-In the above docker-compose.yaml file the link between containers gets established through the links attribute, but it could be done through the networks attributes too.
 
 ## Development environment and tools
 - Ubuntu. 
