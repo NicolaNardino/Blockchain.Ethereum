@@ -9,9 +9,6 @@
         <dependent-module archiveName="Utility.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/Utility/Utility">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module deploy-path="/WEB-INF/lib" handle="module:/resource/EventsServiceClient/EventsServiceClient">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
         <property name="java-output-path" value="/EthereumDAPP_PoC/WebContent/WEB-INF/classes"/>
         <property name="context-root" value="ethereum-node-connector"/>
     </wb-module>

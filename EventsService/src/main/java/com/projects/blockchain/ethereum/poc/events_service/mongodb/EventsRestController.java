@@ -25,7 +25,6 @@ import io.swagger.annotations.ApiParam;
 @RestController
 @RequestMapping("/events")
 public final class EventsRestController {
-	
 	@Autowired
 	private SmartContractEventsRepository smartContractsRepository;
 	@Autowired
@@ -98,7 +97,7 @@ public final class EventsRestController {
 		}	
 	}
 	
-	@ApiOperation(value = "Used in the context of check the container health,", response = String.class)
+	@ApiOperation(value = "Used to check the container health", response = String.class)
 	@RequestMapping(method = RequestMethod.GET, value = "/healthcheck")
 	public ResponseEntity<String> healthcheck() {
 		return new ResponseEntity<String>("Up", HttpStatus.OK);

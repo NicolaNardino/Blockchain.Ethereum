@@ -3,7 +3,7 @@ package com.projects.blockchain.ethereum.poc.node_connector.test;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.IntStream;
 
-import com.projects.blockchain.ethereum.poc.node_connector.util.OpType;
+import com.projects.blockchain.ethereum.utility.OpType;
 import com.projects.blockchain.ethereum.utility.Utility;
 
 /**

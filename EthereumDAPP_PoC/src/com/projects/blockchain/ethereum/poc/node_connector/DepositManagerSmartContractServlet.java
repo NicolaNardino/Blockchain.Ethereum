@@ -10,10 +10,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.projects.blockchain.ethereum.poc.node_connector.util.OpType;
 import com.projects.blockchain.ethereum.restful.DepositData;
 import com.projects.blockchain.ethereum.restful.DepositManagerRESTfulClient;
 import com.projects.blockchain.ethereum.smart_contracts.DepositManager;
+import com.projects.blockchain.ethereum.utility.OpType;
 
 /**
  * It interacts with @{code {@link DepositManager} through a RESTful web service. 

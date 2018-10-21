@@ -1,4 +1,4 @@
-package com.projects.blockchain.ethereum.poc.node_connector.util;
+package com.projects.blockchain.ethereum.utility;
 
 public enum OpType {
 	RaiseFund, TransferFund, Deposit, DepositAccountBalance

@@ -23,6 +23,11 @@
     	<artifactId>commons-lang</artifactId>
     	<version>2.6</version>
 	</dependency>
+	<dependency>
+			<groupId>com.projects.blockchain.ethereum</groupId>
+  			<artifactId>utility</artifactId>
+  			<version>0.0.1-SNAPSHOT</version>
+	</dependency>
   </dependencies>
   <build>
     <sourceDirectory>src</sourceDirectory>

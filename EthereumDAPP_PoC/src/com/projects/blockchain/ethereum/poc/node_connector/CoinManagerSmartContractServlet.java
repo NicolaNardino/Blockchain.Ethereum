@@ -12,9 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
-import com.projects.blockchain.ethereum.poc.node_connector.util.OpType;
 import com.projects.blockchain.ethereum.poc.node_connector.util.ServletContextAttribute;
 import com.projects.blockchain.ethereum.smart_contracts.CoinManager;
+import com.projects.blockchain.ethereum.utility.OpType;
 import com.projects.blockchain.ethereum.utility.Web3jContainer;
 
 /**
