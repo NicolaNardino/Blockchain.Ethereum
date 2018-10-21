@@ -9,7 +9,7 @@ Key features:
   - CoinManager is able to receive payments (WEIs) by the means of a fallback payable function.
   - DepositManger Smart Contract, able to receive payments from CoinManager. For this purpose, a second payable function has been added to CoinManager.
   - Java servlets to transfer ethers and exercise CoinManager and DepositManager.
-  - JAX-RS RESTful web services exposing CoinManager/ DepositManager features. Those are being replaced with Spring Boot Microservices (EthererumService and EthererumServiceClient projects).
+  - JAX-RS RESTful web services exposing CoinManager/ DepositManager features. Those are being replaced by Spring Boot Microservices (EthererumService and EthererumServiceClient projects).
   - MongoDB data store for Smart Contract and Ethereum events.
   - Spring Boot Microservices for interacting with Ethereum in the context of ETHER transfers and smart contracts handling. 
   - Spring Boot Microservices exposing the MongoDB events. 
