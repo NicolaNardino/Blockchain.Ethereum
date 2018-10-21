@@ -2,23 +2,14 @@ package com.projects.blockchain.ethereum.poc.microservices.client;
 
 import java.math.BigDecimal;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 /**
  * Ether transfer client. 
  * */
-@Service
 public enum EtherTransferServiceClient implements EtherTransferServiceClientInterface {
 	INSTANCE;
 			

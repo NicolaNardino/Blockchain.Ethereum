@@ -18,7 +18,6 @@ import com.projects.blockchain.ethereum.restful.DepositData;
 /**
  * Coin Manager service client. 
  * */
-@Service
 public enum CoinManagerServiceClient implements CoinManagerServiceClientInterface {
 	INSTANCE;
 			
