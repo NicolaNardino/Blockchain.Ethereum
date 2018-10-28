@@ -141,6 +141,7 @@ services:
 1. Add a back end storage layer to the web application, possibly NoSQL. --> done
 2. Containerize the Spring Boot Microservices by Docker. --> done
 3. Add container orchestration by Kubernetes.
-4. Add a GUI allowing to transfer Ethers abd exercise CoinManager and DepositManager.
-5. Improve Javadoc.
+4. Set up a Kubernetes cluster in AWS.
+5. Add a GUI allowing to transfer Ethers abd exercise CoinManager and DepositManager.
+6. Improve Javadoc.
 
