@@ -7,8 +7,6 @@ services:
         restart: always
         volumes:
           - ~/data/docker/mongodb:/data/db
-        ports:
-            - 27017:27017
         network_mode: "host"
    eventsService:
      image: nicolanardino/events_service:1.0
@@ -16,15 +14,11 @@ services:
      depends_on:
        - mongodb
      restart: always
-     ports:
-       - "9094:9094"
      network_mode: "host"
    ethereumService:
      image: nicolanardino/ethereum_service:1.0
      container_name: ethereum-service
      restart: always
-     ports:
-       - "9095:9095"
      volumes:
           - /home/main/.ethereum/rinkeby/keystore:/home/main/.ethereum/rinkeby/keystore
      network_mode: "host"
