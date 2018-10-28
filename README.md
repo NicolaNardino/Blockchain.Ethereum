@@ -118,7 +118,7 @@ Host mode and volumes mapping can be specified in the pom.xml within the run tag
       </bind>
     </volumes>
  </run>
-  ```           
+ ```           
 No need to specify any port mapping because that is an implicit feature of the host network, otherwise the following would be needed:
  ```
 <run>
