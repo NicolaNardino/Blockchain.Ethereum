@@ -119,7 +119,7 @@ Host mode and volumes mapping can be specified in the pom.xml within the run tag
 		 </volumes>
  </run>
   ```           
-No need to specify any port mapping because that is an implicit feature of the host network, other the following would be needed:
+No need to specify any port mapping because that is an implicit feature of the host network, otherwise the following would be needed:
  ```
 <run>
 ...
@@ -129,6 +129,8 @@ No need to specify any port mapping because that is an implicit feature of the h
 	 </ports>
  </run>
   ```
+ The actual ports are picked up through the Spring Boot application.properties files.
+ 
  Maver generated Dockerfile:
  ```
  FROM nicolanardino/ubuntu-openjdk-8:1.0
@@ -153,8 +155,6 @@ services:
         restart: always
         volumes:
           - ~/data/docker/mongodb:/data/db
-        ports:
-            - 27017:27017
         network_mode: "host"
    eventsService:
      image: nicolanardino/events_service:1.0
@@ -162,20 +162,34 @@ services:
      depends_on:
        - mongodb
      restart: always
-     ports:
-       - "9094:9094"
      network_mode: "host"
    ethereumService:
      image: nicolanardino/ethereum_service:1.0
      container_name: ethereum-service
      restart: always
-     ports:
-       - "9095:9095"
      volumes:
           - /home/main/.ethereum/rinkeby/keystore:/home/main/.ethereum/rinkeby/keystore
      network_mode: "host"
 ```
 
+Same as discussed above about the ports mapping: it's not needed as long as the network_mode attribute is set to host. Other it'd have been:
+
+mongodb:
+```
+ports:
+       - "27017:27017"
+```
+
+eventsService:
+```
+ports:
+       - "9094:9094"
+```    
+ethererumService:
+```
+ports:
+       - "9095:9095"
+```
 ## Development environment and tools
 - Ubuntu. 
 - Eclipse. 
@@ -185,10 +199,8 @@ services:
 
 ## Roadmap
 
-1. Add a back end storage layer to the web application, possibly NoSQL. --> done
-2. Containerize the Spring Boot Microservices by Docker. --> done
-3. Add container orchestration by Kubernetes.
-4. Set up a Kubernetes cluster in AWS.
-5. Add a GUI allowing to transfer Ethers abd exercise CoinManager and DepositManager.
-6. Improve Javadoc.
+1. Add container orchestration by Kubernetes.
+2. Set up a Kubernetes cluster in AWS.
+3. Add a GUI allowing to transfer Ethers abd exercise CoinManager and DepositManager.
+4. Improve Javadoc.
 
