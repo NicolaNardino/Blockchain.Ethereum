@@ -109,24 +109,24 @@ Instead of the Oracle JDK 8, I've used OpenJDK 8 [nicolanardino/ubuntu-openjdk-8
 Host mode and volumes mapping can be specified in the pom.xml within the run tag, separately from the image build section:
 ```
 <run>
-		<network>
-				<mode>host</mode>
-		</network>
-		<volumes>
-			  <bind>
-					  <volume>/home/main/.ethereum/rinkeby/keystore:/home/main/.ethereum/rinkeby/keystore</volume>
-				</bind>
-		 </volumes>
+   <network>
+      <mode>host</mode>
+   </network>
+   <volumes>
+      <bind>
+         <volume>/home/main/.ethereum/rinkeby/keystore:/home/main/.ethereum/rinkeby/keystore</volume>
+      </bind>
+    </volumes>
  </run>
   ```           
 No need to specify any port mapping because that is an implicit feature of the host network, otherwise the following would be needed:
  ```
 <run>
 ...
-   <ports>
-	    <port>9095:9095</port> <!--service port-->
-		  <port>8045:8045</port> <!--Ethererum node-->
-	 </ports>
+   <ports> 
+      <port>9095:9095</port> <!--service port-->
+      <port>8045:8045</port> <!--Ethererum node-->
+    </ports>
  </run>
   ```
  The actual ports are picked up through the Spring Boot application.properties files.
