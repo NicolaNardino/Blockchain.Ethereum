@@ -4,11 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.projects.blockchain.ethereum.poc</groupId>
-	<artifactId>ethererum_service</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<artifactId>ethereum_service</artifactId>
+	<version>1.0</version>
 	<packaging>jar</packaging>
 
-	<name>EthereumService</name>
+	<name>ethereum_service</name>
 	<description>Ethereum services</description>
 
 	<parent>
@@ -77,6 +77,55 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>io.fabric8</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+				<version>0.20.1</version>
+				<configuration>
+					<images>
+						<image>
+							<name>nicolanardino/ethereum_service:${project.version}</name>
+							<alias>EthereumService</alias>
+							<build>
+								<from>nicolanardino/ubuntu-openjdk-8:1.0</from>
+								<assembly>
+									<targetDir>/deployments</targetDir>
+									<descriptorRef>artifact</descriptorRef>
+								</assembly>
+								<maintainer>Nicola Nardino, https://github.com/NicolaNardino</maintainer>
+								<cmd>java -jar deployments/${project.name}-${project.version}.jar</cmd>
+								<healthCheck>
+                  					<interval>15</interval>
+                  					<timeout>10s</timeout>
+                  					<retries>3</retries>
+                  					<cmd>curl -f http://localhost:9095/ethereum/healthcheck || exit 1</cmd>
+                				</healthCheck>
+                				<optimise>true</optimise>
+                				<runCmds>
+									<runCmd>apt-get update</runCmd>
+									<runCmd>apt-get install -y curl</runCmd>
+									<runCmd>apt-get clean</runCmd>
+								</runCmds>
+							</build>
+							<run>
+								<network>
+									<mode>host</mode>
+								</network>
+								<!--No need to explicitly do the ports mapping host:container because of using the host network mode.
+								<ports>
+									<port>9095:9095</port> service port.
+									<port>8045:8045</port> Ethererum node.
+								</ports>-->
+								<volumes>
+									<bind>
+										<volume>/home/main/.ethereum/rinkeby/keystore:/home/main/.ethereum/rinkeby/keystore</volume>
+									</bind>
+								</volumes>
+							</run>
+						</image>
+					</images>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

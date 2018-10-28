@@ -94,7 +94,7 @@
 							<name>nicolanardino/events_service:${project.version}</name>
 							<alias>EventsService</alias>
 							<build>
-								<from>nicolanardino/ubuntu-oracle-java-8:latest</from>
+								<from>nicolanardino/ubuntu-openjdk-8:1.0docker</from>
 								<assembly>
 									<targetDir>/deployments</targetDir>
 									<descriptorRef>artifact</descriptorRef>
@@ -115,9 +115,12 @@
 								</runCmds>
 							</build>
 							<run>
-								<ports>
+								<network>
+									<mode>host</mode>
+								</network>
+								<!--<ports>
 									<port>9094:9094</port>
-								</ports>
+								</ports>-->
 							</run>
 						</image>
 					</images>
