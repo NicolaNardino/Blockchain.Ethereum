@@ -103,9 +103,45 @@ docker run --link=my-mongo-container --name events-service -it --network=host ni
 ```
 Another way of building a multi-container application, so also providing the linking between containers, is through [Docker Compose](https://docs.docker.com/compose/overview/) (see below).
 
+## Ethererum Service Spring Boot Microservice
+I'll skip some general topics already covered for the EventsService an focus on some others.
+Instead of the Oracle JDK 8, I've used OpenJDK 8 [nicolanardino/ubuntu-openjdk-8:1.0](https://hub.docker.com/r/nicolanardino/ubuntu-openjdk-8), which I've then used in EventsService too.
+Host mode and volumes mapping can be specified in the pom.xml within the run tag, separately from the image build section:
+```
+<run>
+		<network>
+				<mode>host</mode>
+		</network>
+		<volumes>
+			  <bind>
+					  <volume>/home/main/.ethereum/rinkeby/keystore:/home/main/.ethereum/rinkeby/keystore</volume>
+				</bind>
+		 </volumes>
+ </run>
+  ```           
+No need to specify any port mapping because that is an implicit feature of the host network, other the following would be needed:
+ ```
+<run>
+...
+   <ports>
+	    <port>9095:9095</port> <!--service port-->
+		  <port>8045:8045</port> <!--Ethererum node-->
+	 </ports>
+ </run>
+  ```
+ Maver generated Dockerfile:
+ ```
+ FROM nicolanardino/ubuntu-openjdk-8:1.0
+ MAINTAINER Nicola Nardino, https://github.com/NicolaNardino
+ COPY maven /deployments/
+ RUN apt-get update && apt-get install -y curl && apt-get clean
+ HEALTHCHECK --interval=15s --timeout=10s --retries=3 CMD curl -f http://localhost:9095/ethereum/healthcheck || exit 1
+ CMD java -jar deployments/ethereum_service-1.0.jar
+ ```
+
 ## Docker Compose
-Below docker-compose.yml file is the way to build a multi-container docker application. The link between mongodb and eventsService is done through the host network. 
-Note the volume mapping in ethererumService needed to let the container have access to the Ethererum wallet account.
+Below docker-compose.yml file is the way to build a multi-container docker application. The link between mongodb and eventsService is done through the host network, while the start-up order is specified by the depends_on attribute in eventsService.
+Note the volume mapping in ethererumService needed to let the container have access to the Ethererum wallet account. 
 
 ```
 version: '3.4'
