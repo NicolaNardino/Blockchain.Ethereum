@@ -21,10 +21,14 @@ import io.swagger.annotations.ApiParam;
  * */
 @RestController
 @RequestMapping("/ethererum/deposit_manager")
-public final class DepositManagerRestController {
+public final class DepositManagerRestController implements SmartContractManagerRestControllerInterface {
 	@Autowired
 	private DepositManagerService depositManagerService;
 	
+	/* (non-Javadoc)
+	 * @see com.projects.blockchain.ethereum.poc.ethereum_service.controller.SmartContractManager#getAccountBalance(java.lang.String)
+	 */
+	@Override
 	@ApiOperation(value = "Gets the balance of an account within DepositManager.")
 	@RequestMapping(method = RequestMethod.GET, value = "/getAccountBalance/{account}", produces = {MediaType.APPLICATION_JSON_VALUE})
 	public ResponseEntity<BigInteger> getAccountBalance(
@@ -32,12 +36,20 @@ public final class DepositManagerRestController {
 		return new ResponseEntity<BigInteger>(depositManagerService.getAccountBalance(account), HttpStatus.OK);	
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.projects.blockchain.ethereum.poc.ethereum_service.controller.SmartContractManager#getBalance()
+	 */
+	@Override
 	@ApiOperation(value = "Gets CoinManager balance.")
 	@RequestMapping(method = RequestMethod.GET, value = "/getBalance", produces = {MediaType.APPLICATION_JSON_VALUE})
 	public ResponseEntity<BigInteger> getBalance() throws Exception {
 		return new ResponseEntity<BigInteger>(depositManagerService.getBalance(), HttpStatus.OK);	
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.projects.blockchain.ethereum.poc.ethereum_service.controller.SmartContractManager#getOwner()
+	 */
+	@Override
 	@ApiOperation(value = "Gets CoinManager owner address.")
 	@RequestMapping(method = RequestMethod.GET, value = "/getOwner", produces = {MediaType.APPLICATION_JSON_VALUE})
 	public ResponseEntity<String> getOwner() {

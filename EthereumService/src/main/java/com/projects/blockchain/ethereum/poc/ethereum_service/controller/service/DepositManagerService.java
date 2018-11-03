@@ -11,7 +11,7 @@ import com.projects.blockchain.ethereum.utility.SmartContractName;
 import com.projects.blockchain.ethereum.utility.SmartContractsUtility;
 
 @Service
-public final class DepositManagerService extends EthereumContextServiceBase implements SmartContractServiceBase {
+public final class DepositManagerService extends EthereumContextServiceBase implements SmartContractServiceInterface {
 
 	private DepositManager depositManager;
 	private String depositManagerOwner;

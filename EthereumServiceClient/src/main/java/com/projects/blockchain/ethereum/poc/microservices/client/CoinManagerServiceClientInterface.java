@@ -4,26 +4,7 @@ import java.math.BigInteger;
 
 import com.projects.blockchain.ethereum.restful.DepositData;
 
-public interface CoinManagerServiceClientInterface {
-
-	/**
-	 * Gets Coin Manager owner account.
-	 * 
-	 * @param url getOwner URL.
-	 * 
-	 * @return Owner account.
-	 * */
-	String getOwner(String url);
-
-	/**
-	 * Gets the balance of an account within Coin Manager.
-	 * 
-	 * @param url getAccountBalance URL.
-	 * @param account Account within Coin Manager. 
-	 * 
-	 * @return Account balance.
-	 * */
-	BigInteger getAccountBalance(String url, String account);
+public interface CoinManagerServiceClientInterface extends SmartContractManagerServiceClientInterface {
 
 	/**
 	 * It can be used for both raising and transferring funds within Coin Manager. 
@@ -43,5 +24,4 @@ public interface CoinManagerServiceClientInterface {
 	 * @return True if the deposit succeeded.
 	 * */
 	boolean deposit(String url, DepositData depositData);
-
 }

@@ -26,10 +26,14 @@ import io.swagger.annotations.ApiParam;
  * */
 @RestController
 @RequestMapping("/ethererum/coin_manager")
-public final class CoinManagerRestController {
+public final class CoinManagerRestController implements CoinManagerRestControllerInterface {
 	@Autowired
 	private CoinManagerService coinManagerService;
 	
+	/* (non-Javadoc)
+	 * @see com.projects.blockchain.ethereum.poc.ethereum_service.controller.CoinManagerRestControllerInterface#coinManagerRaiseFund(java.lang.String, java.math.BigInteger)
+	 */
+	@Override
 	@ApiOperation(value = "Mints a given amount in MyCoins.")
 	@RequestMapping(method = RequestMethod.GET, value = "/raiseFund", produces = {MediaType.TEXT_PLAIN_VALUE})
 	public ResponseEntity<String> coinManagerRaiseFund(
@@ -39,6 +43,10 @@ public final class CoinManagerRestController {
 		return new ResponseEntity<String>(tr.getTransactionHash(), HttpStatus.OK);	
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.projects.blockchain.ethereum.poc.ethereum_service.controller.CoinManagerRestControllerInterface#coinManagerTransferFundFromOwnerAccount(java.lang.String, java.math.BigInteger)
+	 */
+	@Override
 	@ApiOperation(value = "Transfers MyCoins from CoinManager owner account to another.")
 	@RequestMapping(method = RequestMethod.GET, value = "/transferFund", produces = {MediaType.TEXT_PLAIN_VALUE})
 	public ResponseEntity<String> coinManagerTransferFundFromOwnerAccount(
@@ -48,12 +56,20 @@ public final class CoinManagerRestController {
 		return new ResponseEntity<String>(tr.getTransactionHash(), HttpStatus.OK);	
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.projects.blockchain.ethereum.poc.ethereum_service.controller.CoinManagerRestControllerInterface#getOwner()
+	 */
+	@Override
 	@ApiOperation(value = "Gets the CoinManager owner address.")
 	@RequestMapping(method = RequestMethod.GET, value = "/getOwner", produces = {MediaType.TEXT_PLAIN_VALUE})
 	public ResponseEntity<String> getOwner() {
 		return new ResponseEntity<String>(coinManagerService.getOwner(), HttpStatus.OK);	
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.projects.blockchain.ethereum.poc.ethereum_service.controller.CoinManagerRestControllerInterface#getAccountBalance(java.lang.String)
+	 */
+	@Override
 	@ApiOperation(value = "Gets the balance of an account within CoinManager.")
 	@RequestMapping(method = RequestMethod.GET, value = "/getAccountBalance/{account}", produces = {MediaType.APPLICATION_JSON_VALUE})
 	public ResponseEntity<BigInteger> getAccountBalance(
@@ -61,6 +77,10 @@ public final class CoinManagerRestController {
 		return new ResponseEntity<BigInteger>(coinManagerService.getAccountBalance(account), HttpStatus.OK);	
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.projects.blockchain.ethereum.poc.ethereum_service.controller.CoinManagerRestControllerInterface#deposit(com.projects.blockchain.ethereum.restful.DepositData)
+	 */
+	@Override
 	@ApiOperation(value = "Deposits some WEIs to an accoun within DepositManager via CoinManager.")
 	@RequestMapping(method = RequestMethod.PUT, value = "/deposit")
 	public ResponseEntity<String> deposit(
@@ -68,5 +88,15 @@ public final class CoinManagerRestController {
 			@RequestBody final DepositData depositData) throws Exception {
 		coinManagerService.sendToDepositManager(depositData);
 		return new ResponseEntity<String>("Deposited "+depositData.getAmount()+" to "+depositData.getTargetAccount(), HttpStatus.OK);	
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.projects.blockchain.ethereum.poc.ethereum_service.controller.CoinManagerRestControllerInterface#getBalance()
+	 */
+	@Override
+	@ApiOperation(value = "Gets CoinManager balance.")
+	@RequestMapping(method = RequestMethod.GET, value = "/getBalance", produces = {MediaType.APPLICATION_JSON_VALUE})
+	public ResponseEntity<BigInteger> getBalance() throws Exception {
+		return new ResponseEntity<BigInteger>(coinManagerService.getBalance(), HttpStatus.OK);	
 	}
 }

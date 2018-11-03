@@ -38,12 +38,11 @@ public enum EtherTransferServiceClient implements EtherTransferServiceClientInte
 		        .queryParam("targetAccount", targetAccount)
 		        .queryParam("transferAmount", transferAmount)
 		        .queryParam("transferUnit", transferUnit);
-		return Utility.getFromRestTemplateExchange(restTemplate, headers, builder.toString());
+		return Utility.getFromRestTemplateExchange(restTemplate, headers, builder.toUriString());
 	} 
 	
 	public static void main(final String[] args) {
 		System.out.println(EtherTransferServiceClient.INSTANCE.getInfo("http://localhost:9095/ethererum/getInfo"));
-		System.out.println(EtherTransferServiceClient.INSTANCE.transfer("http://localhost:9095/ethererum/transfer", 
-				"0x0c3d6f479511F1AE5d8bee86E9e13965fB652157", BigDecimal.TEN, "WEI"));
+		System.out.println(EtherTransferServiceClient.INSTANCE.transfer("http://localhost:9095/ethererum/transfer", "0x0c3d6f479511F1AE5d8bee86E9e13965fB652157", BigDecimal.TEN, "WEI"));
 	}
 }

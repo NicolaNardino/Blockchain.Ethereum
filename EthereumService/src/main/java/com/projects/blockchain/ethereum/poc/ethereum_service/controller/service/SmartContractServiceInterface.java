@@ -2,7 +2,7 @@ package com.projects.blockchain.ethereum.poc.ethereum_service.controller.service
 
 import java.math.BigInteger;
 
-public interface SmartContractServiceBase {
+public interface SmartContractServiceInterface {
 
 	BigInteger getAccountBalance(String accountInDepositManager) throws Exception;
 

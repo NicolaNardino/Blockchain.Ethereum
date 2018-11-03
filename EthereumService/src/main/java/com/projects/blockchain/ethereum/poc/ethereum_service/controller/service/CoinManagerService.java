@@ -14,7 +14,7 @@ import com.projects.blockchain.ethereum.utility.SmartContractName;
 import com.projects.blockchain.ethereum.utility.SmartContractsUtility;
 
 @Service
-public final class CoinManagerService extends EthereumContextServiceBase implements SmartContractServiceBase {
+public final class CoinManagerService extends EthereumContextServiceBase implements SmartContractServiceInterface {
 
 	private CoinManager coinManager;
 	private String coinManagerOwner;

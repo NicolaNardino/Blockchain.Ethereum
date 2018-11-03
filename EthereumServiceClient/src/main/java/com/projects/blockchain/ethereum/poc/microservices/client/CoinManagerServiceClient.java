@@ -9,14 +9,13 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.projects.blockchain.ethereum.restful.DepositData;
 
 /**
- * Coin Manager service client. 
+ * CoinManager service client. 
  * */
 public enum CoinManagerServiceClient implements CoinManagerServiceClientInterface {
 	INSTANCE;
@@ -67,8 +66,14 @@ public enum CoinManagerServiceClient implements CoinManagerServiceClientInterfac
 		return (response.getStatusCode() == HttpStatus.OK); 
 	}
 	
+	@Override
+	public BigInteger getBalance(final String url) {
+		return  new BigInteger(Utility.getFromRestTemplateForEntity(restTemplate, url));
+	}
+	
 	public static void main(final String[] args) {
 		System.out.println(CoinManagerServiceClient.INSTANCE.getOwner("http://localhost:9095//ethererum/coin_manager/getOwner"));
+		System.out.println(CoinManagerServiceClient.INSTANCE.getBalance("http://localhost:9095//ethererum/coin_manager/getBalance"));
 		System.out.println(CoinManagerServiceClient.INSTANCE.getAccountBalance("http://localhost:9095//ethererum/coin_manager/getAccountBalance", "0x0c3d6f479511F1AE5d8bee86E9e13965fB652157"));
 		
 		System.out.println(CoinManagerServiceClient.INSTANCE.raiseOrTransferFund("http://localhost:9095//ethererum/coin_manager/transferFund", 
