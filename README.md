@@ -287,6 +287,66 @@ kubectl logs ethereum-service-8465b65f5b-5rvgq
 # Open a shell to the running container.
 kubectl exec -it ethereum-service-6f494c8d9b-vvhrq -- /bin/bash
 ```
+For instance, the Pod:
+```
+main@Terminator:~/Projects/BlockchainWorkspace$ kubectl get pods
+NAME                                READY     STATUS    RESTARTS   AGE
+ethereum-service-6f494c8d9b-vvhrq   1/1       Running   0          1h
+
+main@Terminator:~/Projects/BlockchainWorkspace$ sudo kubectl describe pod ethereum-service-6f494c8d9b-vvhrq
+Name:		ethereum-service-6f494c8d9b-vvhrq
+Namespace:	default
+Node:		minikube/192.168.0.19
+Start Time:	Sun, 04 Nov 2018 17:00:15 +0100
+Labels:		app=ethereum-service
+		pod-template-hash=2905074856
+		tier=ethereum-service
+Status:		Running
+IP:		192.168.0.19
+Controllers:	<none>
+Containers:
+  ethereum-service:
+    Container ID:	docker://8497424b578fa870ac19be7fc0bd09a3b329cbea286bc5bb8359b814ed8fa066
+    Image:		nicolanardino/ethereum_service:1.0
+    Image ID:		docker-pullable://nicolanardino/ethereum_service@sha256:17dd4cfc09e920eb6bfc313c4732d80d28dcfb4c58304d78ce2accedc3ee4731
+    Port:		9095/TCP
+    Requests:
+      cpu:		250m
+      memory:		128Mi
+    State:		Running
+      Started:		Sun, 04 Nov 2018 17:00:24 +0100
+    Ready:		True
+    Restart Count:	0
+    Volume Mounts:
+      /home/main/.ethereum/rinkeby/keystore from keystore (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from default-token-9jrj9 (ro)
+    Environment Variables:
+      GET_HOSTS_FROM:	dns
+Conditions:
+  Type		Status
+  Initialized 	True 
+  Ready 	True 
+  PodScheduled 	True 
+Volumes:
+  keystore:
+    Type:	HostPath (bare host directory volume)
+    Path:	/home/main/.ethereum/rinkeby/keystore
+  default-token-9jrj9:
+    Type:	Secret (a volume populated by a Secret)
+    SecretName:	default-token-9jrj9
+QoS Class:	Burstable
+Tolerations:	<none>
+Events:
+  FirstSeen	LastSeen	Count	From			SubObjectPath				Type		Reason			Message
+  ---------	--------	-----	----			-------------				--------	------			-------
+  1h		1h		1	{default-scheduler }						Normal		Scheduled		Successfully assigned ethereum-service-6f494c8d9b-vvhrq to minikube
+  1h		1h		1	{kubelet minikube}						Normal		SuccessfulMountVolume	MountVolume.SetUp succeeded for volume "keystore" 
+  1h		1h		1	{kubelet minikube}						Normal		SuccessfulMountVolume	MountVolume.SetUp succeeded for volume "default-token-9jrj9" 
+  1h		1h		1	{kubelet minikube}	spec.containers{ethereum-service}	Normal		Pulled			Container image "nicolanardino/ethereum_service:1.0" already present on machine
+  1h		1h		1	{kubelet minikube}	spec.containers{ethereum-service}	Normal		Created			Created container
+  1h		1h		1	{kubelet minikube}	spec.containers{ethereum-service}	Normal		Started			Started container
+
+```
 
 ## Development environment and tools
 - Ubuntu. 
