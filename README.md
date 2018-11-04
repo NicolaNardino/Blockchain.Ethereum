@@ -101,7 +101,7 @@ The linking between the two containers is done by sharing the host network. The 
 ```
 docker run --link=my-mongo-container --name events-service -it --network=host nicolanardino/events_service:1.0
 ```
-Another way of building a multi-container application, so also providing the linking between containers, is through [Docker Compose](https://docs.docker.com/compose/overview/) (see below).
+In order to build a multi-container application, also providing the linking between containers, is through [Docker Compose](https://docs.docker.com/compose/overview/) (see below).
 
 ## Ethererum Service Spring Boot Microservice
 I'll skip some general topics already covered for the EventsService an focus on some others.
@@ -190,17 +190,112 @@ ethererumService:
 ports:
        - "9095:9095"
 ```
+
+## Kubernetes Ethereum Service set-up
+In order to run a Kubernetes cluster in my Ubuntu machine, I've installed and configured [Minikube](https://kubernetes.io/docs/setup/minikube/) and let it run within the default virtual machine, [virtualbox](https://www.virtualbox.org/wiki/Downloads).
+[Kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) and other tools would have to be installed as well, but I won't go through the whole (painful) process of setting the environment up. There are plenty of books and/ or on-line resources on that.
+
+```
+# Start Minikube cluster
+minikube start --vm-driver=virtualbox #default value.
+# Service configuration
+kubectl create -f service.yml
+# Pod deployment
+kubectl create -f deployment.yml
+```
+Kubernetes *.yml are in Utility/src/main/resources.
+Service.yml:
+
+```
+apiVersion: v1
+kind: Service
+metadata:
+  name: ethereum-service
+  labels:
+    app: ethereum-service
+    tier: ethereum
+spec:
+  type: NodePort
+  ports:
+    - port: 9095
+  selector:
+    app: ethereum-service
+    tier: ethereum
+```
+
+Deployment.yml:
+```
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: ethereum-service
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: ethereum-service
+        tier: ethereum
+    spec:
+      hostNetwork: true
+      containers:
+      - name: ethereum-service
+        image: nicolanardino/ethereum_service:1.0
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+        - mountPath: /home/main/.ethereum/rinkeby/keystore
+          name: keystore
+        resources:
+          requests:
+            cpu: 250m
+            memory: 128Mi
+        env:
+        - name: GET_HOSTS_FROM
+          value: dns
+        ports:
+        - containerPort: 9095
+      volumes:
+      - name: keystore
+        hostPath:
+          path: /home/main/.ethereum/rinkeby/keystore
+          type: Directory
+```
+Key points of the above deployment:
+  - "imagePullPolicy: IfNotPresent": pulls nicolanardino/ethereum_service:1.0 from DockerHub or, if available, from the local file system. For the sake of completeness, I've uploaded [ethereum-service](https://hub.docker.com/r/nicolanardino/ethereum_service/) on my DockerHub account.
+  - "hostNetwork: true": it's the same meaning of using the host network in Docker, i.e., needed to access services running on the localhost, which is the case of the Ethereum node.
+  - Volume set-up needed to access the Wallet keystore.
+  - CPU and Memory limits.
+  
+A few useful commands:
+```
+minikube ip
+# Get external service URL.
+minikube service ethereum-service --url
+kubectl get services
+kubectl get nodes
+kubectl describe service ethereum-service
+kubectl get deployments
+kubectl describe deployment ethereum-service
+kubectl get pods
+kubectl delete deployment ethereum-service
+# Given Pod name = ethereum-service-6f494c8d9b-vvhrq
+# Get logs.
+kubectl logs ethereum-service-8465b65f5b-5rvgq
+# Open a shell to the running container.
+kubectl exec -it ethereum-service-6f494c8d9b-vvhrq -- /bin/bash
+```
+
 ## Development environment and tools
 - Ubuntu. 
 - Eclipse. 
 - JBoss Wildfly. 
 - Spring Boot. 
-- Docker and Docker-Compose. 
+- Docker and Docker-Compose.
+- Kubernetes.
 
 ## Roadmap
 
-1. Add container orchestration by Kubernetes.
-2. Set up a Kubernetes cluster in AWS.
-3. Add a GUI allowing to transfer Ethers abd exercise CoinManager and DepositManager.
-4. Improve Javadoc.
+1. Set up a Kubernetes cluster in AWS cloud.
+2. Add a GUI allowing to transfer Ethers and exercise CoinManager and DepositManager.
+3. Improve Javadoc.
 
