@@ -224,6 +224,8 @@ spec:
     tier: ethereum
 ```
 
+Where "type: NodePort" allows to expose the service outside the cluster through a port allocated by the Kubernetes master from a given range of ports (default: 30000-32767).
+
 Deployment.yml:
 ```
 apiVersion: extensions/v1beta1
@@ -261,7 +263,7 @@ spec:
           path: /home/main/.ethereum/rinkeby/keystore
           type: Directory
 ```
-Key points of the above deployment:
+Key points in the above deployment:
   - "imagePullPolicy: IfNotPresent": pulls nicolanardino/ethereum_service:1.0 from DockerHub or, if available, from the local file system. For the sake of completeness, I've uploaded [ethereum-service](https://hub.docker.com/r/nicolanardino/ethereum_service/) on my DockerHub account.
   - "hostNetwork: true": it's the same meaning of using the host network in Docker, i.e., needed to access services running on the localhost, which is the case of the Ethereum node.
   - Volume set-up needed to access the Wallet keystore.
