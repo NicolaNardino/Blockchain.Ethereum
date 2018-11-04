@@ -235,7 +235,7 @@ spec:
     metadata:
       labels:
         app: ethereum-service
-        tier: ethereum-service
+        tier: ethereum
     spec:
       hostNetwork: true
       containers:
