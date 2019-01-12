@@ -360,5 +360,4 @@ Events:
 
 1. Set up a Kubernetes cluster in AWS cloud.
 2. Add a GUI allowing to transfer Ethers and exercise CoinManager and DepositManager.
-3. Improve Javadoc.
 
